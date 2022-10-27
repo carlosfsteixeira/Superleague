@@ -1,48 +1,118 @@
 ﻿@model Superleague.Models.TeamViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "New Team";
 }
 
-<h1>Create</h1>
+<head>
+    <link rel="stylesheet" href="~/css/teamCreate.css" />
+</head>
 
-<h4>Team</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Team.Name" class="control-label"></label>
-                <input asp-for="Team.Name" class="form-control" />
-                <span asp-validation-for="Team.Name" class="text-danger"></span>
+<body>
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="container-fluid">
+
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800">New Team</h1>
+        </div>
+
+        <div class="row py-5">
+
+            <div class="col-lg-8">
+
+                <div class="card shadow mb-4">
+
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Club Info</h6>
+                    </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-lg-2">
+                                    <p>This is Title of the Topic</p>
+                                </div>
+                                <div class="col-sm-9 col-md-9 col-lg-10">
+                                    <p>This is Title of the Topic</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid col-md-12">
+
+
+                            @*<div class="col-md-6 tab-pane show fade active justify-content-center text-center">
+                                <img id="output" style="width:140px; height:160px" class="border-primary mx-auto d-flex my-2" onchange="readURL(this)" />
+                                <label asp-for="Team.ImageURL" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
+                                <input type="file" id="uploadBox" name="file" asp-for="ImageFile" class="form-control" accept="image/jpeg, image/png" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                            </div>
+
+                            <div class="col-md-6 border" style="border-radius: 5px;">
+                                <h5>Details</h5>
+                                <div class="form-group col-md-12">
+                                    <input asp-for="Team.Name" class="form-control" placeholder="Team Name" />
+                                    <span asp-validation-for="Team.Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input asp-for="Team.Venue" class="form-control" placeholder="Venue" />
+                                    <span asp-validation-for="Team.Venue" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-md-12" style="margin-top: -6px;">
+                                    <select asp-for="Team.CountryId" asp-items="@Model.CountryList" class="col-mx-6 select">
+                                        <option disabled selected> Country </option>
+                                    </select>
+                                    <span asp-validation-for="Team.CountryId" class="text-danger"></span>
+                                </div>
+                            </div>*@
+
+                            @*<div class="col-md-6 border">
+                                fsdfdsfsdf
+                            </div>
+
+                            <div class="col-md-6 border">
+                                fsdfsdfdsf
+                            </div>*@
+
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="text-center">
+                                <div class="form-group col-md-12">
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-secondary float-right" value="  Add  " />
+                                    <a asp-action="Index" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="Team.Venue" class="control-label"></label>
-                <input asp-for="Team.Venue" class="form-control" />
-                <span asp-validation-for="Team.Venue" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" class="form-control" type="file" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Team.Country" class="control-label" placeholder="Country"></label>
-                <select asp-for="Team.CountryId" class="form-control" asp-items="@Model.CountryList"></select>
-                <span asp-validation-for="Team.CountryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                    
+        </div>
+
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+        <script>
+            function ValidateInput() {
+                if (document.getElementById("uploadBox").value == "") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'No image was uploaded!',
+                    });
+                    return false;
+                }
+                return true;
+            }
+        </script>
+
+
+</body>

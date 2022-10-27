@@ -1,42 +1,354 @@
 ﻿@model Superleague.Models.TeamViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = $"{Model.Team.Name}";
 }
 
-<h1>Details</h1>
+<head>
+    <link rel="stylesheet" href="~/css/teamDetails.css" />
+</head>
 
-<div>
-    <h4>Team</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Team.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Team.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Team.Venue)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Team.Venue)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Team.ImageURL)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Team.ImageURL)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Team.CountryId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Team.Country.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Team.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<body id="page-top">
+
+    <form asp-action="Details" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Team.Id" hidden />
+        <input asp-for="Team.ImageURL" hidden />
+
+        <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">@Model.Team.Name</h1>
+            </div>
+
+            <div class="row">
+
+                <!-- Pending Requests Card Example -->
+                <div class="col-xl-4 col-md-4 mb-4">
+                    <div class="card border-left-success shadow h-100">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="font-weight-bold text-success text-uppercase mb-1">
+                                        Wins
+                                    </div>
+                                    <div class="h3 mb-0 font-weight-bold text-gray-800 text-center">18</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa fa-star fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Requests Card Example -->
+                <div class="col-xl-4 col-md-4 mb-4">
+                    <div class="card border-left-warning shadow h-100">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="font-weight-bold text-warning text-uppercase mb-1">
+                                        Drawn
+                                    </div>
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800 text-center">18</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa-solid fa-star-half-stroke fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Requests Card Example -->
+                <div class="col-xl-4 col-md-4 mb-4">
+                    <div class="card border-left-danger shadow h-100">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="font-weight-bold text-danger text-uppercase mb-1">
+                                        Lost
+                                    </div>
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800 text-center">18</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa-regular fa-star fa-2x text-gray-300" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-4">
+
+                    <!-- Basic Card Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Club Overview</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="container col-md-12">
+                                <div class="col-4">
+                                    <img src="@Model.Team.ImageURL" class="border-primary d-flex image" />
+                                </div>
+                                <div class="col-8">
+                                    <h4><b>@Model.Team.Name</b></h4>
+                                    <h6><i class="fa-solid fa-house-user"></i> @Model.Team.Venue</h6>
+                                    <h6><i class="fa-solid fa-map-location-dot"></i> @Model.Team.Country.Name</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-8">
+
+                    <div class="container-fluid border shadow justify-content-center mb-4">
+
+                        <div class="row col-12">
+                            <ul class="nav nav-pills nav-justified w-100">
+                                <li class="nav-item"><a href="#player-tab" class="nav-link active" data-toggle="pill">Players</a></li>
+                                <li class="nav-item"><a href="#staff-tab" class="nav-link" data-toggle="pill">Staff</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="tab-content col-12">
+
+                            <!-- Player tab start-->
+
+                            <div class="tab-pane show fade active" id="player-tab">
+
+                                @if (Model.PlayerList.Any())
+                                {
+                                    <div class="container tbl-container">
+                                        <div class="row tbl-fixed">
+
+                                            <table id="" class="table-striped table-sortable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+
+                                                        </th>
+                                                        <th>
+                                                            Name
+                                                        </th>
+                                                        <th>
+                                                            Number
+                                                        </th>
+                                                        <th>
+                                                            Position
+                                                        </th>
+                                                        <th>
+                                                            Country
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.PlayerList)
+                                                    {
+                                                        <tr>
+                                                            <td style="width: 15px;">
+                                                                <img src="@Url.Content(item.ImageURL)" alt="Image" class="image1" />
+                                                            </td>
+                                                            <td>
+                                                                @item.Name
+                                                            </td>
+                                                            <td>
+                                                                @item.Number
+                                                            </td>
+                                                            <td>
+                                                                @item.Position.Description
+                                                            </td>
+                                                            <td>
+                                                                @item.Country.Name
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="container justify-content-center col-12 py-5">
+                                        <div class="py-3 text-center">
+                                            <h6 class="text-dark"><i class="fa-solid fa-circle-exclamation"></i> No players yet</h6>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+
+                            <!-- Staff tab start-->
+
+                            <div class="tab-pane show fade" id="staff-tab">
+
+                                @if (Model.StaffList.Any())
+                                {
+                                    <div class="container tbl-container">
+                                        <div class="row tbl-fixed">
+
+                                            <table id="" class="table-striped table-sortable">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Name</th>
+                                                        <th>Function</th>
+                                                        <th>Country</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.StaffList)
+                                                    {
+                                                        <tr>
+                                                            <td style="width: 15px;">
+                                                                <img src="@Url.Content(item.ImageURL)" alt="Image" class="image1" />
+                                                            </td>
+                                                            <td>
+                                                                @item.Name
+                                                            </td>
+                                                            <td>
+                                                                @item.Function.Description
+                                                            </td>
+                                                            <td>
+                                                                @item.Country.Name
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="container justify-content-center col-12 py-5">
+                                        <div class="py-3 text-center">
+                                            <h6 class="text-dark"><i class="fa-solid fa-circle-exclamation"></i> No staff yet</h6>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+           
+
+            <div class="row">
+
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-3 col-md-4 mb-4">
+                    <div class="card border-left-dark shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                        Played
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">4</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings (Annual) Card Example -->
+                <div class="col-xl-3 col-md-4 mb-4">
+                    <div class="card border-left-dark shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                        Scored
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa-solid fa-crosshairs fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings (Annual) Card Example -->
+                <div class="col-xl-3 col-md-4 mb-4">
+                    <div class="card border-left-dark shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                        Goal Average/Match
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa-regular fa-futbol fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings (Annual) Card Example -->
+                <div class="col-xl-3 col-md-4 mb-4">
+                    <div class="card border-left-dark shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                        Booked (Yellow + Red Cards)
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">8</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa-solid fa-id-badge fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+              
+
+               
+            </div>
+
+        </div>
+    </form>
+
+
+</body>
+
+<script src="~/js/tablesort.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

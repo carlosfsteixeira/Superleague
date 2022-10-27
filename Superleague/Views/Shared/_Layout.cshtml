@@ -16,6 +16,8 @@
 
     <!-- Custom styles for this template-->
     <link href="~/theme/css/sb-admin-2.min.css" rel="stylesheet" asp-append-version="true">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
 </head>
 <body id="page-top">
 
@@ -26,7 +28,7 @@
         <ul class="navbar-nav bg-dark sidebar sidebar-dark accordion" style="background-color:black !important" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
                 <div class="sidebar-brand-text mx-3">Super League</div>
             </a>
 
@@ -35,7 +37,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" asp-controller="Home" asp-action="Index">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -74,8 +76,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Manage Clubs</h6>
                         <a class="collapse-item" asp-area="" asp-controller="Teams" asp-action="Index">View All</a>
-                        <a class="collapse-item" href="cards.html">Players</a>
-                        <a class="collapse-item" href="cards.html">Staff</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Players" asp-action="Index">Players</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Staffs" asp-action="Index">Staff</a>
                     </div>
                 </div>
             </li>
@@ -91,9 +93,9 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Customize</h6>
-                        <a class="collapse-item" href="#">Player Positions</a>
-                        <a class="collapse-item" href="#">Staff Functions</a>
-                        <a class="collapse-item" href="#">Countries</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Positions" asp-action="Index">Player Positions</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Functions" asp-action="Index">Staff Functions</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a>
                     </div>
                 </div>
             </li>
@@ -208,7 +210,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    <partial name="_Notification" />
                     <main role="main" class="pb-3">
                         @RenderBody()
                     </main>
@@ -276,6 +278,10 @@
     <!-- Page level custom scripts -->
     <script src="~/theme/js/demo/chart-area-demo.js"></script>
     <script src="~/theme/js/demo/chart-pie-demo.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 </body>
 

@@ -36,6 +36,8 @@ namespace Superleague
 
             services.AddScoped<IUserHelper, UserHelper>();
 
+            services.AddScoped<IImageHelper, ImageHelper>();
+
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IFunctionRepository, FunctionRepository>();

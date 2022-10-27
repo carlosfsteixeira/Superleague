@@ -1,0 +1,150 @@
+﻿input[type=text] {
+    width: 100%;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+    input[type=text]:focus {
+        border-color: black;
+        box-shadow: 0 0 2px black;
+    }
+
+input[type=file] {
+    display: none;
+}
+
+label {
+    height: 30px;
+    width: auto;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    border-color: royalblue;
+    margin: 6px 0;
+    outline: none;
+    padding: 2px;
+    box-sizing: border-box;
+    background-color: royalblue;
+    color: white;
+    justify-content: center;
+    align-items: center;
+}
+
+    label:hover {
+        background-color: royalblue;
+        border-color: royalblue;
+    }
+
+.select {
+    width: 100%;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    padding: 6px;
+    box-sizing: border-box;
+    height: 40px;
+}
+
+    .select:focus {
+        border-color: black;
+        box-shadow: 0 0 2px black;
+    }
+
+.nav-pills .nav-link.active {
+    /*  background-color: #009879 !important;*/
+    /*background-color: lightgray !important;*/
+    font: 700;
+ /*   color: black;*/
+}
+
+.nav-pills .nav-link {
+    color: black;
+}
+
+.image1 {
+    width: 40px;
+    height: 50px;
+}
+
+.tbl-container {
+    width: 850px;
+    max-height: 450px;
+}
+
+.tbl-fixed {
+    overflow-y: scroll;
+    overflow-x: auto;
+    max-height: 450px;
+}
+
+table {
+    width: 850px;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+    table th {
+        position: sticky;
+        top: 0px;
+        background-color: lightgray;
+        text-align: center;
+        border: 1px;
+        color: black;
+    }
+
+    table td {
+        text-align: center;
+    }
+
+    table tr:nth-child(even):hover {
+        background-color: #009879;
+        color: white;
+    }
+
+    table tr:nth-child(odd):hover {
+        background-color: #009879;
+        color: white;
+    }
+
+.table-sortable th {
+    cursor: pointer;
+}
+
+.table-sortable .th-sort-asc::after {
+    content: "\25b4";
+}
+
+.table-sortable .th-sort-desc::after {
+    content: "\25be";
+}
+
+.table-sortable .th-sort-asc::after,
+.table-sortable .th-sort-desc::after {
+    margin-left: 5px;
+}
+
+.table-sortable .th-sort-asc,
+.table-sortable .th-sort-desc {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+input[type=search] {
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    padding: 8px;
+    box-sizing: border-box;
+    margin-bottom: -20px;
+    height: 40px;
+}
+
+    input[type=search]:focus {
+        border-color: #009879;
+        box-shadow: 0 0 8px #009879;
+        margin-bottom: -20px;
+    }

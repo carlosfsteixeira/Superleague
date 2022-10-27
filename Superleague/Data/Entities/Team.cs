@@ -17,10 +17,12 @@ namespace Superleague.Data.Entities
         [StringLength(50)]
         public string Venue { get; set; }
 
+        [Required]
         [Display(Name = "Image")]
         [ValidateNever]
         public string ImageURL { get; set; }
 
+        [Required]
         [Display(Name = "Country")]
         public int? CountryId { get; set; }
         [ForeignKey("CountryId")]

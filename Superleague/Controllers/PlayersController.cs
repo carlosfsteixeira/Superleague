@@ -7,32 +7,69 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
+using Superleague.Helpers;
+using Superleague.Models;
 
 namespace Superleague.Controllers
 {
     public class PlayersController : Controller
     {
-        private readonly IPlayerRepository _context;
+        private readonly IPlayerRepository _playerRepository;
+        private readonly ITeamRepository _teamRepository;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IPositionRepository _positionRepository;
+        private readonly IImageHelper _imageHelper;
 
-        public PlayersController(IPlayerRepository context)
+        public PlayersController(IPlayerRepository playerRepository,
+                                    ITeamRepository teamRepository,
+                                    ICountryRepository countryRepository,
+                                    IPositionRepository positionRepository,
+                                    IImageHelper imageHelper)
         {
-            _context = context;
+            _playerRepository = playerRepository;
+            _teamRepository = teamRepository;
+            _countryRepository = countryRepository;
+            _positionRepository = positionRepository;
+            _imageHelper = imageHelper;
         }
 
         // GET: Players
         public IActionResult Index()
         {
-            return View(_context.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Position).Include(p => p.Team));
+            return View(_playerRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Position).Include(p => p.Team));
+
+            //var playerList = _playerRepository.GetAll().Include("Country.Position.Team").OrderBy(e => e.Name);
+
+            //return View(playerList);
         }
 
         // GET: Players/Create
         public IActionResult Create()
         {
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name");
-            //ViewData["PositionId"] = new SelectList(_context.Positions, "Id", "Description");
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name");
+            PlayerViewModel playerViewModel = new()
+            {
+                Player = new(),
 
-            return View();
+                TeamList = _teamRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString(),
+                }),
+
+                PositionList = _positionRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Description,
+                    Value = i.Id.ToString(),
+                }),
+
+                CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString(),
+                }),
+            };
+
+            return View(playerViewModel);
         }
 
         // POST: Players/Create
@@ -40,20 +77,27 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Player player)
+        public async Task<IActionResult> Create(PlayerViewModel model, int id)
         {
+            model.Player.TeamId = id;
+
             if (ModelState.IsValid)
             {
-                await _context.CreateAsync(player);
+                var path = string.Empty;
 
-                return RedirectToAction(nameof(Index));
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "players");
+
+                    model.Player.ImageURL = path;
+                }
+
+                await _playerRepository.CreateAsync(model.Player);
+
+                return RedirectToAction("Index", new { id = model.TeamId });
             }
 
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", player.CountryId);
-            //ViewData["PositionId"] = new SelectList(_context.Positions, "Id", "Description", player.PositionId);
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", player.TeamId);
-
-            return View(player);
+            return View(model);
         }
 
         // GET: Players/Edit/5
@@ -64,9 +108,25 @@ namespace Superleague.Controllers
                 return NotFound();
             }
 
-            var player = await _context.GetByIdAsync(id.Value);
+            PlayerViewModel playerViewModel = new()
+            {
+                Player = new(),
 
-            if (player == null)
+                PositionList = _positionRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Description,
+                    Value = i.Id.ToString(),
+                }),
+                CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString(),
+                }),
+            };
+
+            playerViewModel.Player = await _playerRepository.GetByIdAsync(id.Value);
+
+            if (playerViewModel == null)
             {
                 return NotFound();
             }
@@ -75,7 +135,7 @@ namespace Superleague.Controllers
             //ViewData["PositionId"] = new SelectList(_context.Positions, "Id", "Description", player.PositionId);
             //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", player.TeamId);
 
-            return View(player);
+            return View(playerViewModel);
         }
 
         // POST: Players/Edit/5
@@ -83,22 +143,24 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Player player)
+        public async Task<IActionResult> Edit(PlayerViewModel model)
         {
-            if (id != player.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _context.UpdateAsync(player);
+                    var path = model.Player.ImageURL;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "players");
+                    }
+
+                    await _playerRepository.UpdateAsync(model.Player);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _context.ExistAsync(player.Id))
+                    if (!await _playerRepository.ExistAsync(model.Player.Id))
                     {
                         return NotFound();
                     }
@@ -114,7 +176,7 @@ namespace Superleague.Controllers
             //ViewData["PositionId"] = new SelectList(_context.Positions, "Id", "Description", player.PositionId);
             //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", player.TeamId);
 
-            return View(player);
+            return View(model);
         }
 
         // GET: Players/Delete/5
@@ -125,7 +187,7 @@ namespace Superleague.Controllers
                 return NotFound();
             }
 
-            var player = await _context.GetByIdAsync(id.Value);
+            var player = await _playerRepository.GetByIdAsync(id.Value);
 
             //var player = await _context.Players
             //    .Include(p => p.Country)
@@ -146,9 +208,9 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var player = await _context.GetByIdAsync(id);
+            var player = await _playerRepository.GetByIdAsync(id);
 
-            await _context.DeleteAsync(player);
+            await _playerRepository.DeleteAsync(player);
 
             return RedirectToAction(nameof(Index));
         }

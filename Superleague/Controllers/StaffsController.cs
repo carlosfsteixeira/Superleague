@@ -8,32 +8,65 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
+using Superleague.Helpers;
+using Superleague.Models;
 
 namespace Superleague.Controllers
 {
     public class StaffsController : Controller
     {
-        private readonly IStaffRepository _context;
+        private readonly IStaffRepository _staffRepository;
+        private readonly ITeamRepository _teamRepository;
+        private readonly ICountryRepository _countryRepository;
+        private readonly IFunctionRepository _functionRepository;
+        private readonly IImageHelper _imageHelper;
 
-        public StaffsController(IStaffRepository context)
+        public StaffsController(IStaffRepository staffRepository,
+                                    ITeamRepository teamRepository,
+                                    ICountryRepository countryRepository,
+                                    IFunctionRepository functionRepository,
+                                    IImageHelper imageHelper)
         {
-            _context = context;
+            _staffRepository = staffRepository;
+            _teamRepository = teamRepository;
+            _countryRepository = countryRepository;
+            _functionRepository = functionRepository;
+            _imageHelper = imageHelper;
         }
 
         // GET: Staffs
         public IActionResult Index()
         {
-            return View(_context.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Function).Include(p => p.Team));
+            return View(_staffRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Function).Include(p => p.Team));
         }
 
         // GET: Staffs/Create
         public IActionResult Create()
         {
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name");
-            //ViewData["FunctionId"] = new SelectList(_context.Functions, "Id", "Description");
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name");
+            StaffViewModel staffViewModel = new()
+            {
+                Staff = new(),
 
-            return View();
+                TeamList = _teamRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString(),
+                }),
+
+                FunctionList = _functionRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Description,
+                    Value = i.Id.ToString(),
+                }),
+
+                CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString(),
+                }),
+            };
+
+            return View(staffViewModel);
         }
 
         // POST: Staffs/Create
@@ -41,20 +74,27 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Staff staff)
+        public async Task<IActionResult> Create(StaffViewModel model, int id)
         {
+            model.Staff.TeamId = id;
+
             if (ModelState.IsValid)
             {
-                await _context.CreateAsync(staff);
+                var path = string.Empty;
 
-                return RedirectToAction(nameof(Index));
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "staff");
+
+                    model.Staff.ImageURL = path;
+                }
+
+                await _staffRepository.CreateAsync(model.Staff);
+
+                return RedirectToAction("Index", new { id = model.TeamId });
             }
 
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", staff.CountryId);
-            //ViewData["FunctionId"] = new SelectList(_context.Functions, "Id", "Description", staff.FunctionId);
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", staff.TeamId);
-
-            return View(staff);
+            return View(model);
         }
 
         // GET: Staffs/Edit/5
@@ -65,9 +105,25 @@ namespace Superleague.Controllers
                 return NotFound();
             }
 
-            var staff = await _context.GetByIdAsync(id.Value);
+            StaffViewModel staffViewModel = new()
+            {
+                Staff = new(),
 
-            if (staff == null)
+                FunctionList = _functionRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Description,
+                    Value = i.Id.ToString(),
+                }),
+                CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString(),
+                }),
+            };
+
+            staffViewModel.Staff = await _staffRepository.GetByIdAsync(id.Value);
+
+            if (staffViewModel == null)
             {
                 return NotFound();
             }
@@ -76,7 +132,7 @@ namespace Superleague.Controllers
             //ViewData["FunctionId"] = new SelectList(_context.Functions, "Id", "Description", staff.FunctionId);
             //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", staff.TeamId);
 
-            return View(staff);
+            return View(staffViewModel);
         }
 
         // POST: Staffs/Edit/5
@@ -84,22 +140,24 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Staff staff)
+        public async Task<IActionResult> Edit(StaffViewModel model)
         {
-            if (id != staff.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _context.UpdateAsync(staff);
+                    var path = model.Staff.ImageURL;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "staff");
+                    }
+
+                    await _staffRepository.UpdateAsync(model.Staff);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _context.ExistAsync(staff.Id))
+                    if (!await _staffRepository.ExistAsync(model.Staff.Id))
                     {
                         return NotFound();
                     }
@@ -114,7 +172,7 @@ namespace Superleague.Controllers
             //ViewData["FunctionId"] = new SelectList(_context.Functions, "Id", "Description", staff.FunctionId);
             //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", staff.TeamId);
 
-            return View(staff);
+            return View(model);
         }
 
         // GET: Staffs/Delete/5
@@ -125,7 +183,7 @@ namespace Superleague.Controllers
                 return NotFound();
             }
 
-            var staff = await _context.GetByIdAsync(id.Value);
+            var staff = await _staffRepository.GetByIdAsync(id.Value);
 
             //var staff = await _context.Staffs
             //    .Include(s => s.Country)
@@ -146,9 +204,9 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var staff = await _context.GetByIdAsync(id);
+            var staff = await _staffRepository.GetByIdAsync(id);
 
-            await _context.DeleteAsync(staff);
+            await _staffRepository.DeleteAsync(staff);
 
             return RedirectToAction(nameof(Index));
         }

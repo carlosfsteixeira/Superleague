@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
+using Superleague.Helpers;
 using Superleague.Models;
 
 namespace Superleague.Controllers
@@ -18,16 +19,19 @@ namespace Superleague.Controllers
         private readonly ICountryRepository _countryRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly IStaffRepository _staffRepository;
+        private readonly IImageHelper _imageHelper;
 
         public TeamsController(ITeamRepository teamRepository, 
                                ICountryRepository countryRepository, 
                                IPlayerRepository playerRepository, 
-                               IStaffRepository staffRepository)
+                               IStaffRepository staffRepository,
+                               IImageHelper imageHelper)
         {
             _teamRepository = teamRepository;
             _countryRepository = countryRepository;
             _playerRepository = playerRepository;
             _staffRepository = staffRepository;
+            _imageHelper = imageHelper;
         }
 
         // GET: Teams
@@ -50,9 +54,9 @@ namespace Superleague.Controllers
             {
                 Team = new(),
 
-                PlayerList = _playerRepository.GetAll().Include("Country.Position").Where(e => e.TeamId == id).OrderBy(e => e.Name),
+                PlayerList = _playerRepository.GetAll().Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
-                StaffList = _staffRepository.GetAll().Include("Country.Function").Where(e => e.TeamId == id).OrderBy(e => e.Name),
+                StaffList = _staffRepository.GetAll().Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
                 CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
                 {
@@ -103,18 +107,7 @@ namespace Superleague.Controllers
 
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
-                    var guid = Guid.NewGuid().ToString();
-
-                    var file = $"{guid}.jpg";
-
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\teams", file);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await model.ImageFile.CopyToAsync(stream);
-                    }
-
-                    path = $"~/images/teams/{file}";
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "teams");
 
                     model.Team.ImageURL = path;
                 }
@@ -139,9 +132,9 @@ namespace Superleague.Controllers
             {
                 Team = new(),
 
-                PlayerList = _playerRepository.GetAll().Include("Country.Position").Where(e => e.TeamId == id).OrderBy(e => e.Name),
+                PlayerList = _playerRepository.GetAll().Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
-                StaffList = _staffRepository.GetAll().Include("Country.Function").Where(e => e.TeamId == id).OrderBy(e => e.Name),
+                StaffList = _staffRepository.GetAll().Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
                 CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
                 {
@@ -169,7 +162,6 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(TeamViewModel model)
         {
-
             if (ModelState.IsValid)
             {
                 try
@@ -178,20 +170,8 @@ namespace Superleague.Controllers
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
-                        var guid = Guid.NewGuid().ToString();
-
-                        var file = $"{guid}.jpg";
-
-                        path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\teams", file);
-
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            await model.ImageFile.CopyToAsync(stream);
-                        }
-
-                        path = $"~/images/teams/{file}";
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "teams");
                     }
-
 
                     await _teamRepository.UpdateAsync(model.Team);
                 }
