@@ -20,9 +20,9 @@
 
         <div class="row py-5">
 
-            <div class="col-lg-8">
+            <div class="col-lg-5">
 
-                <div class="card shadow mb-4">
+                <div class="card shadow border-left-primary mb-4">
 
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Club Info</h6>
@@ -30,56 +30,39 @@
 
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-3 col-md-3 col-lg-2">
-                                    <p>This is Title of the Topic</p>
+                                <div class="col-md-9 col-lg-4">
+                               
+                                        <img id="output" style="width:140px; height:160px" class="border-primary my-1 ml-4" onchange="readURL(this)" />
+                                        <label class="text-center ml-4" asp-for="Team.ImageURL" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
+                                        <input type="file" id="uploadBox" name="file" asp-for="ImageFile" class="form-control" accept="image/jpeg, image/png" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                 
+                                       
                                 </div>
-                                <div class="col-sm-9 col-md-9 col-lg-10">
-                                    <p>This is Title of the Topic</p>
+                                <div class="col-md-9 col-lg-7 py-2">
+                                    <h5>Details</h5>
+                                    <div class="form-group col-md-12">
+                                        <input asp-for="Team.Name" class="form-control" placeholder="Team Name" />
+                                        <span asp-validation-for="Team.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <input asp-for="Team.Venue" class="form-control" placeholder="Venue" />
+                                        <span asp-validation-for="Team.Venue" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-12" style="margin-top: -6px;">
+                                        <select asp-for="Team.CountryId" asp-items="@Model.CountryList" class="col-mx-6 select">
+                                            <option disabled selected> Country </option>
+                                        </select>
+                                        <span asp-validation-for="Team.CountryId" class="text-danger"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="container-fluid col-md-12">
-
-
-                            @*<div class="col-md-6 tab-pane show fade active justify-content-center text-center">
-                                <img id="output" style="width:140px; height:160px" class="border-primary mx-auto d-flex my-2" onchange="readURL(this)" />
-                                <label asp-for="Team.ImageURL" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
-                                <input type="file" id="uploadBox" name="file" asp-for="ImageFile" class="form-control" accept="image/jpeg, image/png" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
-                            </div>
-
-                            <div class="col-md-6 border" style="border-radius: 5px;">
-                                <h5>Details</h5>
-                                <div class="form-group col-md-12">
-                                    <input asp-for="Team.Name" class="form-control" placeholder="Team Name" />
-                                    <span asp-validation-for="Team.Name" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <input asp-for="Team.Venue" class="form-control" placeholder="Venue" />
-                                    <span asp-validation-for="Team.Venue" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-md-12" style="margin-top: -6px;">
-                                    <select asp-for="Team.CountryId" asp-items="@Model.CountryList" class="col-mx-6 select">
-                                        <option disabled selected> Country </option>
-                                    </select>
-                                    <span asp-validation-for="Team.CountryId" class="text-danger"></span>
-                                </div>
-                            </div>*@
-
-                            @*<div class="col-md-6 border">
-                                fsdfdsfsdf
-                            </div>
-
-                            <div class="col-md-6 border">
-                                fsdfsdfdsf
-                            </div>*@
-
-                        </div>
 
                         <div class="card-footer">
                             <div class="text-center">
                                 <div class="form-group col-md-12">
-                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-secondary float-right" value="  Add  " />
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-primary float-right" value="  Add  " />
                                     <a asp-action="Index" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
                                 </div>
                             </div>

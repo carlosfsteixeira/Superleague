@@ -19,7 +19,7 @@ input[type=file] {
 
 label {
     height: 30px;
-    width: auto;
+    width: 140px;
     border: 2px solid #aaa;
     border-radius: 4px;
     border-color: royalblue;
@@ -36,6 +36,7 @@ label {
     label:hover {
         background-color: royalblue;
         border-color: royalblue;
+        cursor: pointer;
     }
 
 .select {
@@ -47,6 +48,10 @@ label {
     padding: 6px;
     box-sizing: border-box;
     height: 40px;
+}
+
+.select:hover {
+    cursor:pointer;
 }
 
     .select:focus {
