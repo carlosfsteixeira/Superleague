@@ -20,7 +20,7 @@
 
         <div class="row py-5">
 
-            <div class="col-lg-5">
+            <div class="col-lg-6">
 
                 <div class="card shadow border-left-primary mb-4">
 
@@ -34,7 +34,7 @@
                                
                                         <img id="output" style="width:140px; height:160px" class="border-primary my-1 ml-4" onchange="readURL(this)" />
                                         <label class="text-center ml-4" asp-for="Team.ImageURL" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
-                                        <input type="file" id="uploadBox" name="file" asp-for="ImageFile" class="form-control" accept="image/jpeg, image/png" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                    <input type="file" id="uploadBox" name="file" asp-for="Team.ImageURL" class="form-control" accept="image/jpeg, image/png" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
                                  
                                        
                                 </div>

@@ -23,6 +23,8 @@ namespace Superleague.Data
 
         public DbSet<Staff> Staffs { get; set; }
 
+        public DbSet<User> User { get; set; }
+
         //public DbSet<Statistics> Statistics { get; set; }
 
         //public DbSet<Result> Results { get; set; }

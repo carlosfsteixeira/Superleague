@@ -30,6 +30,8 @@ namespace Superleague
         {
             services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+            services.AddTransient<SeedDb>();
+
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>();
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

@@ -9,8 +9,8 @@ namespace Superleague.Models
 {
     public class TeamViewModel
     {
-        [Display(Name="Image")]
-        public IFormFile ImageFile { get; set; }
+        //[Display(Name="Image")]
+        //public IFormFile ImageFile { get; set; }
 
         public Team Team { get; set; }
 

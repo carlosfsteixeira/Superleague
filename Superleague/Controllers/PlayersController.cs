@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +12,7 @@ using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
+using static System.Net.WebRequestMethods;
 
 namespace Superleague.Controllers
 {
@@ -19,18 +23,21 @@ namespace Superleague.Controllers
         private readonly ICountryRepository _countryRepository;
         private readonly IPositionRepository _positionRepository;
         private readonly IImageHelper _imageHelper;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
         public PlayersController(IPlayerRepository playerRepository,
                                     ITeamRepository teamRepository,
                                     ICountryRepository countryRepository,
                                     IPositionRepository positionRepository,
-                                    IImageHelper imageHelper)
+                                    IImageHelper imageHelper,
+                                    IWebHostEnvironment hostEnvironment)
         {
             _playerRepository = playerRepository;
             _teamRepository = teamRepository;
             _countryRepository = countryRepository;
             _positionRepository = positionRepository;
             _imageHelper = imageHelper;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Players
@@ -77,22 +84,33 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PlayerViewModel model, int id)
+        public async Task<IActionResult> Create(PlayerViewModel model, IFormFile? file, int id)
         {
             model.Player.TeamId = id;
 
             if (ModelState.IsValid)
             {
-                var path = string.Empty;
+                string wwwRootPath = _hostEnvironment.WebRootPath;
 
-                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                if (file != null)
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "players");
+                    string fileName = Guid.NewGuid().ToString();
 
-                    model.Player.ImageURL = path;
+                    var upload = Path.Combine(wwwRootPath, @"images\players");
+
+                    var extension = Path.GetExtension(file.FileName);
+
+                    using (var fileStreams = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        file.CopyTo(fileStreams);
+                    }
+
+                    model.Player.ImageURL = @"\images\players\" + fileName + extension;
                 }
 
                 await _playerRepository.CreateAsync(model.Player);
+
+                TempData["success"] = $"New player added";
 
                 return RedirectToAction("Index", new { id = model.TeamId });
             }
@@ -143,17 +161,38 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(PlayerViewModel model)
+        public async Task<IActionResult> Edit(PlayerViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var path = model.Player.ImageURL;
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
 
-                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    if (file != null)
                     {
-                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "players");
+                        string fileName = Guid.NewGuid().ToString();
+
+                        var upload = Path.Combine(wwwRootPath, @"images\players");
+
+                        var extension = Path.GetExtension(file.FileName);
+
+                        if (model.Player.ImageURL != null)
+                        {
+                            var currentImagePath = Path.Combine(wwwRootPath, model.Player.ImageURL.TrimStart('\\'));
+
+                            if (System.IO.File.Exists(currentImagePath))
+                            {
+                                System.IO.File.Delete(currentImagePath);
+                            }
+                        }
+
+                        using (var fileStreams = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        {
+                            file.CopyTo(fileStreams);
+                        }
+
+                        model.Player.ImageURL = @"\images\players\" + fileName + extension;
                     }
 
                     await _playerRepository.UpdateAsync(model.Player);
@@ -169,6 +208,8 @@ namespace Superleague.Controllers
                         throw;
                     }
                 }
+                TempData["success"] = $"{model.Player.Name} updated";
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -211,6 +252,8 @@ namespace Superleague.Controllers
             var player = await _playerRepository.GetByIdAsync(id);
 
             await _playerRepository.DeleteAsync(player);
+
+            TempData["success"] = $"{player.Name} removed";
 
             return RedirectToAction(nameof(Index));
         }

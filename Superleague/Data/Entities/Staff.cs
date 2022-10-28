@@ -13,6 +13,7 @@ namespace Superleague.Data.Entities
         [StringLength(50)]
         public string Name { get; set; }
 
+        [Required]
         [Display(Name = "Image")]
         [ValidateNever]
         public string ImageURL { get; set; }

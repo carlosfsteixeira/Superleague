@@ -22,7 +22,7 @@ namespace Superleague.Data.Entities
         [ValidateNever]
         public string ImageURL { get; set; }
 
-        [Required]
+        
         [Display(Name = "Country")]
         public int? CountryId { get; set; }
         [ForeignKey("CountryId")]

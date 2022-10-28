@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +13,7 @@ using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
+using static System.Net.WebRequestMethods;
 
 namespace Superleague.Controllers
 {
@@ -20,18 +24,21 @@ namespace Superleague.Controllers
         private readonly ICountryRepository _countryRepository;
         private readonly IFunctionRepository _functionRepository;
         private readonly IImageHelper _imageHelper;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
         public StaffsController(IStaffRepository staffRepository,
                                     ITeamRepository teamRepository,
                                     ICountryRepository countryRepository,
                                     IFunctionRepository functionRepository,
-                                    IImageHelper imageHelper)
+                                    IImageHelper imageHelper,
+                                    IWebHostEnvironment hostEnvironment)
         {
             _staffRepository = staffRepository;
             _teamRepository = teamRepository;
             _countryRepository = countryRepository;
             _functionRepository = functionRepository;
             _imageHelper = imageHelper;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Staffs
@@ -74,22 +81,33 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(StaffViewModel model, int id)
+        public async Task<IActionResult> Create(StaffViewModel model, IFormFile? file, int id)
         {
             model.Staff.TeamId = id;
 
             if (ModelState.IsValid)
             {
-                var path = string.Empty;
+                string wwwRootPath = _hostEnvironment.WebRootPath;
 
-                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                if (file != null)
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "staff");
+                    string fileName = Guid.NewGuid().ToString();
 
-                    model.Staff.ImageURL = path;
+                    var upload = Path.Combine(wwwRootPath, @"images\staff");
+
+                    var extension = Path.GetExtension(file.FileName);
+
+                    using (var fileStreams = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        file.CopyTo(fileStreams);
+                    }
+
+                    model.Staff.ImageURL = @"\images\staff\" + fileName + extension;
                 }
 
                 await _staffRepository.CreateAsync(model.Staff);
+
+                TempData["success"] = $"New member added";
 
                 return RedirectToAction("Index", new { id = model.TeamId });
             }
@@ -140,17 +158,38 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(StaffViewModel model)
+        public async Task<IActionResult> Edit(StaffViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var path = model.Staff.ImageURL;
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
 
-                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    if (file != null)
                     {
-                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "staff");
+                        string fileName = Guid.NewGuid().ToString();
+
+                        var upload = Path.Combine(wwwRootPath, @"images\staff");
+
+                        var extension = Path.GetExtension(file.FileName);
+
+                        if (model.Staff.ImageURL != null)
+                        {
+                            var currentImagePath = Path.Combine(wwwRootPath, model.Staff.ImageURL.TrimStart('\\'));
+
+                            if (System.IO.File.Exists(currentImagePath))
+                            {
+                                System.IO.File.Delete(currentImagePath);
+                            }
+                        }
+
+                        using (var fileStreams = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        {
+                            file.CopyTo(fileStreams);
+                        }
+
+                        model.Staff.ImageURL = @"\images\staff\" + fileName + extension;
                     }
 
                     await _staffRepository.UpdateAsync(model.Staff);
@@ -166,6 +205,8 @@ namespace Superleague.Controllers
                         throw;
                     }
                 }
+                TempData["success"] = $"{model.Staff.Name} updated";
+
                 return RedirectToAction(nameof(Index));
             }
             //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", staff.CountryId);
@@ -207,6 +248,8 @@ namespace Superleague.Controllers
             var staff = await _staffRepository.GetByIdAsync(id);
 
             await _staffRepository.DeleteAsync(staff);
+
+            TempData["success"] = $"{staff.Name} updated";
 
             return RedirectToAction(nameof(Index));
         }

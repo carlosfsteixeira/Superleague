@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,18 +22,21 @@ namespace Superleague.Controllers
         private readonly IPlayerRepository _playerRepository;
         private readonly IStaffRepository _staffRepository;
         private readonly IImageHelper _imageHelper;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
         public TeamsController(ITeamRepository teamRepository, 
                                ICountryRepository countryRepository, 
                                IPlayerRepository playerRepository, 
                                IStaffRepository staffRepository,
-                               IImageHelper imageHelper)
+                               IImageHelper imageHelper,
+                               IWebHostEnvironment hostEnvironment)
         {
             _teamRepository = teamRepository;
             _countryRepository = countryRepository;
             _playerRepository = playerRepository;
             _staffRepository = staffRepository;
             _imageHelper = imageHelper;
+            _hostEnvironment = hostEnvironment;
         }
 
         // GET: Teams
@@ -99,20 +104,31 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TeamViewModel model)
+        public async Task<IActionResult> Create(TeamViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                var path = string.Empty;
+                string wwwRootPath = _hostEnvironment.WebRootPath;
 
-                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                if (file != null)
                 {
-                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "teams");
+                    string fileName = Guid.NewGuid().ToString();
 
-                    model.Team.ImageURL = path;
+                    var upload = Path.Combine(wwwRootPath, @"images\teams");
+
+                    var extension = Path.GetExtension(file.FileName);
+
+                    using (var fileStreams = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        file.CopyTo(fileStreams);
+                    }
+
+                    model.Team.ImageURL = @"\images\teams\" + fileName + extension;
                 }
 
                 await _teamRepository.CreateAsync(model.Team);
+
+                TempData["success"] = $"New team added";
 
                 return RedirectToAction(nameof(Index));
             }
@@ -160,17 +176,38 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(TeamViewModel model)
+        public async Task<IActionResult> Edit(TeamViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var path = model.Team.ImageURL;
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
 
-                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    if (file != null)
                     {
-                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "teams");
+                        string fileName = Guid.NewGuid().ToString();
+
+                        var upload = Path.Combine(wwwRootPath, @"images\teams");
+
+                        var extension = Path.GetExtension(file.FileName);
+
+                        if (model.Team.ImageURL != null)
+                        {
+                            var currentImagePath = Path.Combine(wwwRootPath, model.Team.ImageURL.TrimStart('\\'));
+
+                            if (System.IO.File.Exists(currentImagePath))
+                            {
+                                System.IO.File.Delete(currentImagePath);
+                            }
+                        }
+
+                        using (var fileStreams = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                        {
+                            file.CopyTo(fileStreams);
+                        }
+
+                        model.Team.ImageURL = @"\images\teams\" + fileName + extension;
                     }
 
                     await _teamRepository.UpdateAsync(model.Team);
@@ -186,6 +223,9 @@ namespace Superleague.Controllers
                         throw;
                     }
                 }
+
+                TempData["success"] = $"{model.Team.Name} updated";
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -220,6 +260,8 @@ namespace Superleague.Controllers
             var team = await _teamRepository.GetByIdAsync(id);
 
             await _teamRepository.DeleteAsync(team);
+
+            TempData["success"] = $"{team.Name} removed";
 
             return RedirectToAction(nameof(Index));
         }
