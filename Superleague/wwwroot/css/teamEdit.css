@@ -19,7 +19,7 @@ input[type=file] {
 
 label {
     height: 30px;
-    width: 140px;
+    width: 100px;
     border: 2px solid #aaa;
     border-radius: 4px;
     border-color: royalblue;

@@ -1,20 +1,33 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json.Schema;
+using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
+using System.IO;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Superleague.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ITeamRepository _teamRepository;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public AccountController(IUserHelper userHelper)
+        public AccountController(IUserHelper userHelper, RoleManager<IdentityRole> roleManager, ITeamRepository teamRepository, IWebHostEnvironment hostEnvironment)
         {
             _userHelper = userHelper;
+            _roleManager = roleManager;
+            _teamRepository = teamRepository;
+            _hostEnvironment = hostEnvironment;
         }
 
         public IActionResult Login()
@@ -59,15 +72,48 @@ namespace Superleague.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            RegisterViewModel model = new RegisterViewModel
+            {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i,
+                }),
+
+                ClubList = _teamRepository.GetAll().Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString(),
+                }),
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+
+                    var upload = Path.Combine(wwwRootPath, @"images\archive\users");
+
+                    var extension = Path.GetExtension(file.FileName);
+
+                    using (var fileStreams = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+                    {
+                        file.CopyTo(fileStreams);
+                    }
+
+                    model.ImageURL = @"\images\archive\users" + fileName + extension;
+                }
+
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
 
                 if (user == null)
                 {
@@ -75,15 +121,12 @@ namespace Superleague.Controllers
                     {
                         FirstName = model.FirstName,
                         LastName = model.LastName,
-                        Email = model.Username,
-                        UserName = model.Username,
-                        ImageURL = @"images\archive\user.png",
+                        Email = model.Email,
+                        PhoneNumber = model.PhoneNumber,
+                        UserName = model.Email,
+                        ImageURL = model.ImageURL,
+                        Role = model.Role,
                     };
-
-                    //if (Input.Role == WebConstants.ClubRole)
-                    //{
-                    //    user.Team.Id = Input.Team.Id;
-                    //}
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
 
@@ -94,24 +137,19 @@ namespace Superleague.Controllers
                         return View(model);
                     }
 
-                    var loginViewModel = new LoginViewModel
+                    if (model.Role == "Club")
                     {
-                        Password = model.Password,
-                        RememberMe = false,
-                        Username = model.Username,
-                    };
-
-                    var result2 = await _userHelper.LoginAsync(loginViewModel);
-
-                    if (result2.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Home");
+                        user.TeamId = model.TeamId;
                     }
 
-                    ModelState.AddModelError(string.Empty, "Unable to login");
-                }
+                    await _userHelper.AddUserToRoleAsync(user, model.Role);
 
+                    TempData["success"] = $"New user created";
+
+                    //return RedirectToAction(nameof(Index));
+                }
             }
+            ModelState.AddModelError(string.Empty, "This email address is already in use by another account");
 
             return View(model);
         }

@@ -1875,6 +1875,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\images\archive\users\" />
     <Folder Include="wwwroot\images\staff\" />
     <Folder Include="wwwroot\images\players\" />
     <Folder Include="wwwroot\images\teams\" />

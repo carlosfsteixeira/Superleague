@@ -19,9 +19,13 @@ namespace Superleague.Models
         [StringLength(30), MinLength(2)]
         public string LastName { get; set; }
 
-        [Required]
         [DataType(DataType.EmailAddress)]
         public string Username { get; set; }
+
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string Email { get; set; }
 
         [Required]
         [MinLength(8)]
@@ -30,9 +34,15 @@ namespace Superleague.Models
 
         [Required]
         [Compare("Password")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
         public string ImageURL { get; set; }
+
+        [StringLength(9, ErrorMessage = "Invalid phone number", MinimumLength = 9)]
+        public string PhoneNumber { get; set; }
+
+        public int? TeamId { get; set; }
 
         public virtual Team? Team { get; set; }
 
