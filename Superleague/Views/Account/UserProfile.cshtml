@@ -1,8 +1,127 @@
 ﻿@model Superleague.Models.UserProfileViewModel
 
 @{
-    ViewData["Title"] = "UserProfile";
+    ViewData["Title"] = "User Profile";
 }
 
-<h1>ChangeUser</h1>
+<head>
+    <style>
+        label {
+            height: 30px;
+            width: 150px;
+            border: 2px solid #aaa;
+            border-radius: 4px;
+            border-color: royalblue;
+            outline: none;
+            padding: 2px;
+            box-sizing: border-box;
+            background-color: royalblue;
+            color: white;
+            justify-content: center;
+            align-items: center;
+        }
+
+            label:hover {
+                background-color: royalblue;
+                border-color: royalblue;
+                cursor: pointer;
+            }
+
+        input[type=file] {
+            display: none;
+        }
+
+        .select {
+            width: 100%;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            outline: none;
+            padding: 4px;
+            box-sizing: border-box;
+            height: 35px;
+        }
+
+            .select:focus {
+                border-color: black;
+                box-shadow: 0 0 2px;
+            }
+
+            .select:hover {
+                cursor: pointer;
+            }
+    </style>
+</head>
+
+<body id="page-top">
+
+    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="User.Id" hidden />
+            <input asp-for="User.ImageURL" hidden />
+
+        <div class="container-fluid">
+
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h3 class="mb-0 text-gray-800">User Settings</h3>
+            </div>
+
+            <div class="row py-5">
+
+                <div class="col-lg-6">
+
+                    <div class="card shadow border-left-primary mb-4">
+
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">User Info</h6>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9 col-lg-4">
+
+                                    <img src="User.ImageURL" id="output" style="width:150px; height:160px" class="border-primary mx-auto d-flex my-2 ml-2" onchange="readURL(this)" />
+                                    <label asp-for="ImageURL" class="text-center ml-2" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
+                                    <input type="file" id="uploadBox" name="file" asp-for="ImageURL" class="form-control" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+
+                                </div>
+
+                                <div class="col-md-9 col-lg-7 py-3">
+                                    <h5>Details</h5>
+                                    <div class="form-group col-md-12 py-1">
+                                        <input asp-for="FirstName" class="form-control" />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <input asp-for="LastName" class="form-control" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="text-center">
+                                <div class="form-group col-md-12">
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-primary float-right" value="Update" />
+                                    <a asp-action="ListUsers" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</body>
+
+
+
+
+
 

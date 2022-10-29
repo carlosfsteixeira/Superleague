@@ -17,7 +17,9 @@
     <link href="~/theme/css/sb-admin-2.min.css" rel="stylesheet" asp-append-version="true">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
 </head>
+
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -59,7 +61,7 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Manage Users</h6>
-                        <a class="collapse-item" href="buttons.html">View All</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Account" asp-action="ListUsers">View All</a>
                         <a class="collapse-item" asp-area="" asp-controller="Account" asp-action="Register">Add New</a>
                     </div>
                 </div>
@@ -171,22 +173,23 @@
                     </button>
 
                     <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
-                        @if (this.User.Identity.IsAuthenticated)
-                        {
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav ml-auto">
+
+                            <div class="topbar-divider d-none d-sm-block"></div>
+
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">@this.User.Identity.Name</span>
-                                    <img class="img-profile rounded-circle" src="@this.User.Identity." alt="image">
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="mr-2 d-none d-lg-inline text-gray-800">Hello, @User.Identity.Name</span>
+@*                                    <img class="img-profile rounded-circle" src="@Url.Content(Model.ImageURL)" alt="image">*@
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="userDropdown">
+                                    aria-labelledby="userDropdown">
                                     <a class="dropdown-item" asp-controller="Account" asp-action="UserProfile">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Profile
@@ -198,16 +201,8 @@
                                     </a>
                                 </div>
                             </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link" asp-controller="Account" asp-action="Login" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Login</span>
-                                </a>
-                            </li>
-                        }
-                    </ul>
+                        </ul>
+                    }
 
                 </nav>
                 <!-- End of Topbar -->
@@ -279,6 +274,9 @@
 
     <!-- Page level plugins -->
     <script src="~/theme/vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/demo/datatables-demo.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="~/theme/js/demo/chart-area-demo.js"></script>

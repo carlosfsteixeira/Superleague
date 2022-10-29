@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Schema;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
-using System.IO;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace Superleague.Controllers
 {
@@ -19,17 +19,20 @@ namespace Superleague.Controllers
     {
         private readonly IUserHelper _userHelper;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<User> _userManager;
         private readonly ITeamRepository _teamRepository;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public AccountController(IUserHelper userHelper, RoleManager<IdentityRole> roleManager, ITeamRepository teamRepository, IWebHostEnvironment hostEnvironment)
+        public AccountController(IUserHelper userHelper, RoleManager<IdentityRole> roleManager, UserManager<User> userManager, ITeamRepository teamRepository, IWebHostEnvironment hostEnvironment)
         {
             _userHelper = userHelper;
             _roleManager = roleManager;
+            _userManager = userManager;
             _teamRepository = teamRepository;
             _hostEnvironment = hostEnvironment;
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
@@ -41,6 +44,7 @@ namespace Superleague.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -54,7 +58,7 @@ namespace Superleague.Controllers
                         return Redirect(this.Request.Query["ReturnUrl"].First());
                     }
 
-                    return this.RedirectToAction("Index", "Home");  
+                    return this.RedirectToAction("Index", "Home");
                 }
             }
 
@@ -146,12 +150,28 @@ namespace Superleague.Controllers
 
                     TempData["success"] = $"New user created";
 
-                    //return RedirectToAction(nameof(Index));
+                    return RedirectToAction("ListUsers");
                 }
             }
+
             ModelState.AddModelError(string.Empty, "This email address is already in use by another account");
 
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult GetListUsers()
+        {
+            var users = _userManager.Users;
+
+            return Json(new { data = users });
+            //return View(users);
+        }
+
+        [HttpGet]
+        public IActionResult ListUsers()
+        {
+            return View();
         }
 
         public async Task<IActionResult> UserProfile()
@@ -180,7 +200,7 @@ namespace Superleague.Controllers
                 if (user != null)
                 {
                     user.FirstName = model.FirstName;
-                    user.LastName = model.LastName ;
+                    user.LastName = model.LastName;
                     user.ImageURL = model.ImageURL;
 
                     var response = await _userHelper.UpdateUserAsync(user);

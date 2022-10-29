@@ -1,0 +1,50 @@
+﻿@*@model IEnumerable<Superleague.Data.Entities.User>*@
+
+@{
+    ViewData["Title"] = "ListUsers";
+}
+
+<style>
+    .styled-table thead tr {
+        background-color: royalblue;
+        color: #ffffff;
+    }
+</style>
+
+<body id="page-top">
+
+    <div class="container-fluid">
+
+        <div class="d-sm-flex align-items-center justify-content-between">
+            <h1 class="h3 mb-0 text-gray-800 my-2">User List</h1>
+        </div>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tblUsers" class="table styled-table table-striped" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Team</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+</body>
+
+@section Scripts{
+    <script src="~/js/users.js"></script>
+}
+
