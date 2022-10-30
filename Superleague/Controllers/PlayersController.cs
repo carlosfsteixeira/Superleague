@@ -108,11 +108,22 @@ namespace Superleague.Controllers
                     model.Player.ImageURL = @"\images\players\" + fileName + extension;
                 }
 
-                await _playerRepository.CreateAsync(model.Player);
+                var playerNumberExists = _playerRepository.GetAll().Where(t => t.Number == model.Player.Number).Count();
 
-                TempData["success"] = $"New player added";
+                if (playerNumberExists >= 1)
+                {
+                    ModelState.AddModelError("Player.Number", "This number is already in use");
 
-                return RedirectToAction("Index", new { id = model.TeamId });
+                    return View(model);
+                }
+                else
+                {
+                    await _playerRepository.CreateAsync(model.Player);
+
+                    TempData["success"] = $"New player added";
+
+                    return RedirectToAction("Index", new { id = model.TeamId });
+                }
             }
 
             return View(model);
@@ -161,7 +172,7 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(PlayerViewModel model, IFormFile? file)
+        public async Task<IActionResult> Edit(PlayerViewModel model, IFormFile? file, int id)
         {
             if (ModelState.IsValid)
             {
@@ -195,7 +206,58 @@ namespace Superleague.Controllers
                         model.Player.ImageURL = @"\images\players\" + fileName + extension;
                     }
 
+                    var playerFromBD = _playerRepository.GetAll().Where(t => t.Id == id).FirstOrDefault();
+
+                    if (playerFromBD.Name != model.Player.Name)
+                    {
+                        playerFromBD.Name = model.Player.Name;
+                    }
+
+                    if (playerFromBD.Number != model.Player.Number)
+                    {
+                        var playerNumberExists = _playerRepository.GetAll().Where(t => t.Number == model.Player.Number).Count();
+
+                        if (playerNumberExists >= 1)
+                        {
+                            ModelState.AddModelError("Player.Number", "This number is already in use");
+
+                            PlayerViewModel playerViewModel = new()
+                            {
+                                Player = new(),
+
+                                PositionList = _positionRepository.GetAll().Select(i => new SelectListItem
+                                {
+                                    Text = i.Description,
+                                    Value = i.Id.ToString(),
+                                }),
+                                CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                                {
+                                    Text = i.Name,
+                                    Value = i.Id.ToString(),
+                                }),
+                            };
+
+                            return View(playerViewModel);
+                        }
+
+                        playerFromBD.Number = model.Player.Number;
+                    }
+
+                    if (playerFromBD.PositionId != model.Player.PositionId)
+                    {
+                        playerFromBD.PositionId = model.Player.PositionId;
+                    }
+
+                    if (playerFromBD.CountryId != model.Player.CountryId)
+                    {
+                        playerFromBD.CountryId = model.Player.CountryId;
+                    }
+
                     await _playerRepository.UpdateAsync(model.Player);
+
+                    TempData["success"] = $"{model.Player.Name} updated";
+
+                    return RedirectToAction("Index", new { id = model.TeamId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -208,14 +270,8 @@ namespace Superleague.Controllers
                         throw;
                     }
                 }
-                TempData["success"] = $"{model.Player.Name} updated";
-
-                return RedirectToAction(nameof(Index));
+              
             }
-
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", player.CountryId);
-            //ViewData["PositionId"] = new SelectList(_context.Positions, "Id", "Description", player.PositionId);
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", player.TeamId);
 
             return View(model);
         }
@@ -229,12 +285,6 @@ namespace Superleague.Controllers
             }
 
             var player = await _playerRepository.GetByIdAsync(id.Value);
-
-            //var player = await _context.Players
-            //    .Include(p => p.Country)
-            //    .Include(p => p.Position)
-            //    .Include(p => p.Team)
-            //    .FirstOrDefaultAsync(m => m.Id == id);
 
             if (player == null)
             {
@@ -256,6 +306,14 @@ namespace Superleague.Controllers
             TempData["success"] = $"{player.Name} removed";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var players = _playerRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Position).Include(p => p.Team);
+
+            return Json(new { data = players });
         }
     }
 }

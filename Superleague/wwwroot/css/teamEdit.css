@@ -9,7 +9,7 @@
 }
 
     input[type=text]:focus {
-        border-color: black;
+        border-color: royalblue;
         box-shadow: 0 0 2px black;
     }
 
@@ -55,15 +55,12 @@ label {
 }
 
     .select:focus {
-        border-color: black;
+        border-color: royalblue;
         box-shadow: 0 0 2px black;
     }
 
 .nav-pills .nav-link.active {
-    /*  background-color: #009879 !important;*/
-    /*background-color: lightgray !important;*/
     font: 700;
- /*   color: black;*/
 }
 
 .nav-pills .nav-link {
@@ -76,18 +73,18 @@ label {
 }
 
 .tbl-container {
-    width: 850px;
-    max-height: 450px;
+    width: fit-content;
+    max-height: 500px;
 }
 
 .tbl-fixed {
     overflow-y: scroll;
     overflow-x: auto;
-    max-height: 450px;
+    max-height: 500px;
 }
 
 table {
-    width: 850px;
+    width: fit-content;
     border-collapse: collapse;
     border-spacing: 0;
 }
@@ -106,13 +103,13 @@ table {
     }
 
     table tr:nth-child(even):hover {
-        background-color: #009879;
-        color: white;
+        background-color: lightblue;
+        color: black;
     }
 
     table tr:nth-child(odd):hover {
-        background-color: #009879;
-        color: white;
+        background-color: lightblue;
+        color: black;
     }
 
 .table-sortable th {
@@ -145,11 +142,11 @@ input[type=search] {
     padding: 8px;
     box-sizing: border-box;
     margin-bottom: -20px;
-    height: 40px;
+    height: 35px;
 }
 
     input[type=search]:focus {
-        border-color: #009879;
-        box-shadow: 0 0 8px #009879;
+        border-color: royalblue;
+        box-shadow: 0 0 2px royalblue;
         margin-bottom: -20px;
     }

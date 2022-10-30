@@ -30,31 +30,12 @@
         input[type=file] {
             display: none;
         }
-
-        .select {
-            width: 100%;
-            border: 1px solid #aaa;
-            border-radius: 4px;
-            outline: none;
-            padding: 4px;
-            box-sizing: border-box;
-            height: 35px;
-        }
-
-            .select:focus {
-                border-color: black;
-                box-shadow: 0 0 2px;
-            }
-
-            .select:hover {
-                cursor: pointer;
-            }
     </style>
 </head>
 
 <body id="page-top">
 
-    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+    <form method="post" asp-action="UserProfile" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input asp-for="User.Id" hidden />
             <input asp-for="User.ImageURL" hidden />
@@ -76,12 +57,15 @@
                         </div>
 
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row ml-2">
                                 <div class="col-md-9 col-lg-4">
 
-                                    <img src="User.ImageURL" id="output" style="width:150px; height:160px" class="border-primary mx-auto d-flex my-2 ml-2" onchange="readURL(this)" />
-                                    <label asp-for="ImageURL" class="text-center ml-2" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
-                                    <input type="file" id="uploadBox" name="file" asp-for="ImageURL" class="form-control" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                    <div class="container justify-content-center">
+                                    <img src="User.ImageURL" id="output" style="width:150px; height:160px" class="border-primary my-2" onchange="readURL(this)" />
+                                    <label asp-for="ImageURL" class="text-center" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
+                                    
+                                        <input type="file" id="uploadBox" name="file" asp-for="ImageURL" class="form-control" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+                                    </div>
 
                                 </div>
 
@@ -120,7 +104,11 @@
 
 </body>
 
-
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 
 
 

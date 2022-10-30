@@ -45,6 +45,7 @@ namespace Superleague.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -74,6 +75,8 @@ namespace Superleague.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        // Users
         public IActionResult Register()
         {
             RegisterViewModel model = new RegisterViewModel
@@ -95,6 +98,7 @@ namespace Superleague.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
@@ -191,6 +195,7 @@ namespace Superleague.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserProfile(UserProfileViewModel model)
         {
             if (ModelState.IsValid)
@@ -219,12 +224,15 @@ namespace Superleague.Controllers
             return View(model);
         }
 
+
+        // Password
         public IActionResult ChangePassword()
         {
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)

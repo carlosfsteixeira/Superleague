@@ -34,125 +34,127 @@
                             </div>
                             <hr />
                         </div>
-                        <h5 style="margin-top: -15px; margin-bottom: 15px">Details</h5>
-                        <div class="form-group col-md-12">
-                            <input asp-for="Team.Name" class="form-control" placeholder="Team Name" />
-                            <span asp-validation-for="Team.Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <input asp-for="Team.Venue" class="form-control" placeholder="Venue" />
-                            <span asp-validation-for="Team.Venue" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-md-12" style="margin-top: -6px;">
-                            <select asp-for="Team.CountryId" asp-items="@Model.CountryList" class="col-mx-6 select">
-                                <option disabled selected> Select Country </option>
-                            </select>
-                            <span asp-validation-for="Team.CountryId" class="text-danger"></span>
-                        </div>
-                        <hr />
-                        <div class="text-center">
-                            <div class="form-group col-md-12" style="padding-bottom: 8%">
-                                <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-primary float-right" value="Update" />
-                                <a asp-action="Index" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
-                            </div>
-                        </div>
                     </div>
-
                 </div>
 
-           
+                <div class="col-lg-4 mb-4">
+                    <h5 style="margin-top: -15px; margin-bottom: 15px">Details</h5>
+                    <div class="form-group col-md-12">
+                        <input asp-for="Team.Name" class="form-control" placeholder="Team Name" />
+                        <span asp-validation-for="Team.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <input asp-for="Team.Venue" class="form-control" placeholder="Venue" />
+                        <span asp-validation-for="Team.Venue" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-12" style="margin-top: -6px;">
+                        <select asp-for="Team.CountryId" asp-items="@Model.CountryList" class="col-mx-6 select">
+                            <option disabled selected> Select Country </option>
+                        </select>
+                        <span asp-validation-for="Team.CountryId" class="text-danger"></span>
+                    </div>
+                    <hr />
+                    <div class="text-center">
+                        <div class="form-group col-md-12" style="padding-bottom: 8%">
+                            <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-success float-right" value="Update" />
+                            <a asp-action="Index" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row">
 
-            <div class="col-lg-8 mb-4">
+                <div class="col-lg-7 mb-4">
 
                     <div class="container-fluid border shadow justify-content-center mb-4" style="border-radius: 5px;">
 
-                    <div class="row col-12">
-                        <ul class="nav nav-pills nav-justified w-100">
-                            <li class="nav-item"><a href="#player-tab" class="nav-link active" data-toggle="pill">Players</a></li>
-                            <li class="nav-item"><a href="#staff-tab" class="nav-link" data-toggle="pill">Staff</a></li>
-                        </ul>
-                    </div>
+                        <div class="row col-12">
+                            <ul class="nav nav-pills nav-justified w-100">
+                                <li class="nav-item"><a href="#player-tab" class="nav-link active" data-toggle="pill">Players</a></li>
+                                <li class="nav-item"><a href="#staff-tab" class="nav-link" data-toggle="pill">Staff</a></li>
+                            </ul>
+                        </div>
 
-                    <div class="tab-content col-12">
+                        <div class="tab-content col-12">
 
-                        <!-- Player tab start-->
+                            <!-- Player tab start-->
 
-                        <div class="tab-pane show fade active" id="player-tab">
+                            <div class="tab-pane show fade active" id="player-tab">
 
-                            @if (Model.PlayerList.Any())
-                            {
-                                <div class="py-2" style="margin-bottom: -20px;">
-                                    <div class="text-md-right mr-5">
-                                        <div class="float-left ml-5">
-                                            <a asp-controller="Player" asp-action="Create" asp-route-id="@Model.Team.Id" class="btn btn-outline-dark w-auto" style="margin-bottom: -35px ">
-                                                Add New
-                                            </a>
+                                @if (Model.PlayerList.Any())
+                                {
+                                    <div class="py-2" style="margin-bottom: -20px;">
+                                        <div class="text-md-right mr-5">
+                                            <div class="float-left ml-5">
+                                                <a asp-controller="Players" asp-action="Create" asp-route-id="@Model.Team.Id" class="btn btn-sm btn-success w-auto" style="margin-bottom: -35px ">
+                                                    Add New
+                                                </a>
+                                            </div>
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <input type="search" id="myInput" onkeyup="myFunction()" placeholder="Search name" class="search">
                                         </div>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                        <input type="search" id="myInput" onkeyup="myFunction()" placeholder="Search name" class="search">
                                     </div>
-                                </div>
 
-                                <div class="container tbl-container py-5">
-                                    <div class="row tbl-fixed">
-                                        <table id="myTable" class="table-striped table-sortable">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                    </th>
-                                                    <th>Name</th>
-                                                    <th>Number</th>
-                                                    <th>Position</th>
-                                                    <th>Country</th>
-                                                    <th class="text-center">Edit</th>
-                                                    <th class="text-center">Delete</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var item in Model.PlayerList)
-                                                {
+                                    <div class="container tbl-container py-5">
+                                        <div class="row tbl-fixed">
+                                            <table id="myTable" class="table-striped table-sortable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                        </th>
+                                                        <th>Name</th>
+                                                        <th>Number</th>
+                                                        <th>Position</th>
+                                                        <th>Country</th>
+                                                        <th class="text-center">Edit</th>
+                                                        <th class="text-center">Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.PlayerList)
+                                                    {
                                                         <tr>
-                                                            <td style="width: 15px">
-                                                                <img src="@Url.Content(item.ImageURL)" alt="Image" class="image1"/>
+                                                            <td style="width: 25px">
+                                                                <img src="@Url.Content(item.ImageURL)" alt="Image" class="image1" />
                                                             </td>
-                                                            <td>
-                                                            @item.Name
+                                                            <td style="width: 200px">
+                                                                @item.Name
                                                             </td>
-                                                            <td>
-                                                            @item.Number
+                                                            <td style="width: 150px">
+                                                                @item.Number
                                                             </td>
-                                                            <td>
-                                                            @item.Position.Description
+                                                            <td style="width: 150px">
+                                                                @item.Position.Description
                                                             </td>
-                                                            <td>
-                                                            @item.Country.Name
+                                                            <td style="width: 200px">
+                                                                @item.Country.Name
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 150px">
                                                                 <div class="text-center">
-                                                                    <a asp-controller="Player" asp-action="Edit" asp-route-id="@item.Id" class="btn">
+                                                                    <a asp-controller="Players" asp-action="Edit" asp-route-id="@item.Id" class="btn">
                                                                         <i class="fa-solid fa-pen-to-square" style="color: dimgray"></i>
                                                                     </a>
                                                                 </div>
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 100px">
                                                                 <div class="text-center">
-                                                                    <a asp-controller="Player" asp-action="Delete" asp-route-id="@item.Id" class="btn">
+                                                                    <a asp-controller="Players" asp-action="Delete" asp-route-id="@item.Id" class="btn">
                                                                         <i class="fa-regular fa-trash-can" style="color: red;"></i>
                                                                     </a>
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                }
-                                            </tbody>
-                                        </table>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                            }
-                            else
-                            {
+                                }
+                                else
+                                {
 
-                                <div class="container-fluid d-flex justify-content-center py-5">
+                                    <div class="container-fluid d-flex justify-content-center py-5">
 
                                         <div class="col-md-12 py-3 justify-content-center">
                                             <div class="form-group col-md-12 text-center">
@@ -160,112 +162,113 @@
                                             </div>
                                             <hr />
                                             <div class="form-group col-md-12 text-center">
-                                                <a asp-controller="Player" asp-action="Create" asp-route-id="@Model.Team.Id"  class="btn btn-sm btn-outline-primary">
+                                                <a asp-controller="Players" asp-action="Create" asp-route-id="@Model.Team.Id" class="btn btn-sm btn-outline-primary">
                                                     Add New
                                                 </a>
                                             </div>
                                         </div>
-                                 
-                                </div>
-                            }
 
-                        </div>
-
-                        <!-- Staff tab start-->
-
-                        <div class="tab-pane show fade" id="staff-tab">
-
-                            @if (Model.StaffList.Any())
-                            {
-                                <div class="py-2" style="margin-bottom: -20px;">
-                                    <div class="text-md-right mr-5">
-                                        <div class="float-left ml-5">
-                                            <a asp-controller="Staff" asp-action="Create" asp-route-id="@Model.Team.Id" class="btn btn-outline-dark w-auto" style="margin-bottom: -35px ">
-                                                Add New
-                                            </a>
-                                        </div>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                        <input type="search" id="myInput1" onkeyup="myFunction1()" placeholder="Search name" class="search">
                                     </div>
-                                </div>
+                                }
 
-                                <div class="container tbl-container py-5">
-                                    <div class="row tbl-fixed">
-                                        <table id="myTable1" class="table-striped table-sortable">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                    </th>
-                                                    <th>Name</th>
-                                                    <th>Function</th>
-                                                    <th>Country</th>
-                                                    <th class="text-center">Edit</th>
-                                                    <th class="text-center">Delete</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var item in Model.StaffList)
-                                                {
+                            </div>
+
+                            <!-- Staff tab start-->
+
+                            <div class="tab-pane show fade" id="staff-tab">
+
+                                @if (Model.StaffList.Any())
+                                {
+                                    <div class="py-2" style="margin-bottom: -20px;">
+                                        <div class="text-md-right mr-5">
+                                            <div class="float-left ml-5">
+                                                <a asp-controller="Staffs" asp-action="Create" asp-route-id="@Model.Team.Id" class="btn btn-sm btn-success w-auto" style="margin-bottom: -35px ">
+                                                    Add New
+                                                </a>
+                                            </div>
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <input type="search" id="myInput1" onkeyup="myFunction1()" placeholder="Search name" class="search">
+                                        </div>
+                                    </div>
+
+                                    <div class="container tbl-container py-5">
+                                        <div class="row tbl-fixed">
+                                            <table id="myTable1" class="table-striped table-sortable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                        </th>
+                                                        <th>Name</th>
+                                                        <th>Function</th>
+                                                        <th>Country</th>
+                                                        <th class="text-center">Edit</th>
+                                                        <th class="text-center">Delete</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.StaffList)
+                                                    {
                                                         <tr>
-                                                            <td style="width: 15px">
+                                                            <td style="width: 25px">
                                                                 <img src="@Url.Content(item.ImageURL)" alt="Image" class="image1" />
                                                             </td>
                                                             <td>
-                                                            @item.Name
+                                                                @item.Name
                                                             </td>
                                                             <td>
-                                                            @item.Function.Description
+                                                                @item.Function.Description
                                                             </td>
                                                             <td>
-                                                            @item.Country.Name
+                                                                @item.Country.Name
                                                             </td>
                                                             <td>
                                                                 <div class="text-center">
-                                                                    <a asp-controller="Staff" asp-action="Edit" asp-route-id="@item.Id" class="btn">
-                                                                        <i class="fa-solid fa-pen-to-square" style="color: indigo"></i>
+                                                                    <a asp-controller="Staffs" asp-action="Edit" asp-route-id="@item.Id" class="btn">
+                                                                        <i class="fa-solid fa-pen-to-square" style="color: dimgray"></i>
                                                                     </a>
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <div class="text-center">
-                                                                    <a asp-controller="Staff" asp-action="Delete" asp-route-id="@item.Id" class="btn">
+                                                                    <a asp-controller="Staffs" asp-action="Delete" asp-route-id="@item.Id" class="btn">
                                                                         <i class="fa-regular fa-trash-can" style="color: red"></i>
                                                                     </a>
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                }
-                                            </tbody>
-                                        </table>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="container-fluid d-flex justify-content-center py-5">
-                                 
+                                }
+                                else
+                                {
+                                    <div class="container-fluid d-flex justify-content-center py-5">
+
                                         <div class="col-md-12 py-3">
                                             <div class="form-group col-md-12 text-center">
                                                 <h6 class="text-dark"><i class="fa-solid fa-circle-exclamation"></i> No staff yet</h6>
                                             </div>
                                             <hr />
                                             <div class="form-group col-md-12 text-center">
-                                                <a asp-controller="Staff" asp-action="Create" asp-route-id="@Model.Team.Id" class="btn btn-outline-primary btn-sm">
+                                                <a asp-controller="Staffs" asp-action="Create" asp-route-id="@Model.Team.Id" class="btn btn-outline-primary btn-sm">
                                                     Add New
                                                 </a>
                                             </div>
                                         </div>
-                                  
-                                </div>
-                            }
 
+                                    </div>
+                                }
+
+                            </div>
                         </div>
                     </div>
+
                 </div>
-            </div>
+
             </div>
         </div>
-
     </form>
 
     <script src="~/js/tablesort.js"></script>

@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
-using static System.Net.WebRequestMethods;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Superleague.Controllers
 {
@@ -105,11 +103,88 @@ namespace Superleague.Controllers
                     model.Staff.ImageURL = @"\images\staff\" + fileName + extension;
                 }
 
+                var functions = _functionRepository.GetAll();
+
+                foreach (var function in functions)
+                {
+                    if (model.Staff.FunctionId == function.Id)
+                    {
+                        if (function.Description == "Manager")
+                        {
+                            var managerExists = _staffRepository.GetAll().Where(t => t.Function.Id == function.Id);
+
+                            if (managerExists.Any())
+                            {
+                                ModelState.AddModelError("Staff.FunctionId", "There is already a manager in this team");
+
+                                StaffViewModel staffViewModel = new()
+                                {
+                                    Staff = new(),
+
+                                    TeamList = _teamRepository.GetAll().Select(i => new SelectListItem
+                                    {
+                                        Text = i.Name,
+                                        Value = i.Id.ToString(),
+                                    }),
+
+                                    FunctionList = _functionRepository.GetAll().Select(i => new SelectListItem
+                                    {
+                                        Text = i.Description,
+                                        Value = i.Id.ToString(),
+                                    }),
+
+                                    CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                                    {
+                                        Text = i.Name,
+                                        Value = i.Id.ToString(),
+                                    }),
+                                };
+
+                                return View(staffViewModel);
+                            }
+                        }
+                        else if (function.Description == "President")
+                        {
+                            var presidentExists = _staffRepository.GetAll().Where(t => t.Function.Id == function.Id);
+
+                            if (presidentExists.Any())
+                            {
+                                ModelState.AddModelError("Staff.FunctionId", "There is already a president in this team");
+
+                                StaffViewModel staffViewModel = new()
+                                {
+                                    Staff = new(),
+
+                                    TeamList = _teamRepository.GetAll().Select(i => new SelectListItem
+                                    {
+                                        Text = i.Name,
+                                        Value = i.Id.ToString(),
+                                    }),
+
+                                    FunctionList = _functionRepository.GetAll().Select(i => new SelectListItem
+                                    {
+                                        Text = i.Description,
+                                        Value = i.Id.ToString(),
+                                    }),
+
+                                    CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                                    {
+                                        Text = i.Name,
+                                        Value = i.Id.ToString(),
+                                    }),
+                                };
+
+                                return View(model);
+                            }
+                        }
+                    }
+                }
+
                 await _staffRepository.CreateAsync(model.Staff);
 
-                TempData["success"] = $"New member added";
+                TempData["success"] = $"New staff member added";
 
-                return RedirectToAction("Index", new { id = model.TeamId });
+                return RedirectToAction("Index", new { id = model.Staff.TeamId });
             }
 
             return View(model);
@@ -146,10 +221,6 @@ namespace Superleague.Controllers
                 return NotFound();
             }
 
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", staff.CountryId);
-            //ViewData["FunctionId"] = new SelectList(_context.Functions, "Id", "Description", staff.FunctionId);
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", staff.TeamId);
-
             return View(staffViewModel);
         }
 
@@ -158,7 +229,7 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(StaffViewModel model, IFormFile? file)
+        public async Task<IActionResult> Edit(StaffViewModel model, IFormFile? file, int id)
         {
             if (ModelState.IsValid)
             {
@@ -192,7 +263,103 @@ namespace Superleague.Controllers
                         model.Staff.ImageURL = @"\images\staff\" + fileName + extension;
                     }
 
+                    var staffFromBD = _staffRepository.GetAll().Where(t => t.Id == id).FirstOrDefault();
+
+                    if (staffFromBD.Name != model.Staff.Name)
+                    {
+                        staffFromBD.Name = model.Staff.Name;
+                    }
+
+                    if (staffFromBD.FunctionId != model.Staff.FunctionId)
+                    {
+                        var functions = _functionRepository.GetAll();
+
+                        foreach (var function in functions)
+                        {
+                            if (model.Staff.FunctionId == function.Id)
+                            {
+                                if (function.Description == "Manager")
+                                {
+                                    var managerExists = _staffRepository.GetAll().Where(t => t.Function.Id == function.Id);
+
+                                    if (managerExists.Any())
+                                    {
+                                        ModelState.AddModelError("Staff.FunctionId", "There is already a manager in this team");
+
+                                        StaffViewModel staffViewModel = new()
+                                        {
+                                            Staff = new(),
+
+                                            TeamList = _teamRepository.GetAll().Select(i => new SelectListItem
+                                            {
+                                                Text = i.Name,
+                                                Value = i.Id.ToString(),
+                                            }),
+
+                                            FunctionList = _functionRepository.GetAll().Select(i => new SelectListItem
+                                            {
+                                                Text = i.Description,
+                                                Value = i.Id.ToString(),
+                                            }),
+
+                                            CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                                            {
+                                                Text = i.Name,
+                                                Value = i.Id.ToString(),
+                                            }),
+                                        };
+
+                                        return View(staffViewModel);
+                                    }
+                                }
+                                else if (function.Description == "President")
+                                {
+                                    var presidentExists = _staffRepository.GetAll().Where(t => t.Function.Id == function.Id);
+
+                                    if (presidentExists.Any())
+                                    {
+                                        ModelState.AddModelError("Staff.FunctionId", "There is already a president in this team");
+
+                                        StaffViewModel staffViewModel = new()
+                                        {
+                                            Staff = new(),
+
+                                            TeamList = _teamRepository.GetAll().Select(i => new SelectListItem
+                                            {
+                                                Text = i.Name,
+                                                Value = i.Id.ToString(),
+                                            }),
+
+                                            FunctionList = _functionRepository.GetAll().Select(i => new SelectListItem
+                                            {
+                                                Text = i.Description,
+                                                Value = i.Id.ToString(),
+                                            }),
+
+                                            CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                                            {
+                                                Text = i.Name,
+                                                Value = i.Id.ToString(),
+                                            }),
+                                        };
+
+                                        return View(model);
+                                    }
+                                }
+                            }
+                        }
+                        staffFromBD.FunctionId = model.Staff.FunctionId;
+                    }
+
+                    if (staffFromBD.CountryId != model.Staff.CountryId)
+                    {
+                        staffFromBD.FunctionId = model.Staff.FunctionId;
+                    }
+
+                    //UPDATE DB WITH CHANGES
                     await _staffRepository.UpdateAsync(model.Staff);
+
+                    TempData["success"] = $"{model.Staff.Name} updated";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -205,14 +372,9 @@ namespace Superleague.Controllers
                         throw;
                     }
                 }
-                TempData["success"] = $"{model.Staff.Name} updated";
-
+              
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", staff.CountryId);
-            //ViewData["FunctionId"] = new SelectList(_context.Functions, "Id", "Description", staff.FunctionId);
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", staff.TeamId);
-
             return View(model);
         }
 
@@ -225,12 +387,6 @@ namespace Superleague.Controllers
             }
 
             var staff = await _staffRepository.GetByIdAsync(id.Value);
-
-            //var staff = await _context.Staffs
-            //    .Include(s => s.Country)
-            //    .Include(s => s.Function)
-            //    .Include(s => s.Team)
-            //    .FirstOrDefaultAsync(m => m.Id == id);
 
             if (staff == null)
             {
@@ -253,5 +409,14 @@ namespace Superleague.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var players = _staffRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Function).Include(p => p.Team);
+
+            return Json(new { data = players });
+        }
+
     }
 }

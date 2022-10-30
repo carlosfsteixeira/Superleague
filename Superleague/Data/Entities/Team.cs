@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 namespace Superleague.Data.Entities
 {
@@ -22,7 +23,7 @@ namespace Superleague.Data.Entities
         [ValidateNever]
         public string ImageURL { get; set; }
 
-        
+        [Required]
         [Display(Name = "Country")]
         public int? CountryId { get; set; }
         [ForeignKey("CountryId")]
@@ -30,17 +31,7 @@ namespace Superleague.Data.Entities
         [ValidateNever]
         public Country Country { get; set; }
 
-        public string ImageFullPath
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(ImageURL))
-                {
-                    return null;
-                }
-
-                return $"https://localhost:44368{ImageURL.Substring(1)}";
-            }
-        }
+        public List<Match> HomeMatches { get; set; }
+        public List<Match> AwayMatches { get; set; }
     }
 }

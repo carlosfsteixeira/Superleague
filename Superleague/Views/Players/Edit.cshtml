@@ -1,58 +1,94 @@
-﻿@model Superleague.Data.Entities.Player
+﻿@model Superleague.Models.PlayerViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = $"{Model.Player.Name}";
 }
 
-<h1>Edit</h1>
+<head>
+    <link rel="stylesheet" href="~/css/player.css" />
+</head>
 
-<h4>Player</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageURL" class="control-label"></label>
-                <input asp-for="ImageURL" class="form-control" />
-                <span asp-validation-for="ImageURL" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PositionId" class="control-label"></label>
-                <select asp-for="PositionId" class="form-control" asp-items="ViewBag.PositionId"></select>
-                <span asp-validation-for="PositionId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
-                <span asp-validation-for="CountryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TeamId" class="control-label"></label>
-                <select asp-for="TeamId" class="form-control" asp-items="ViewBag.TeamId"></select>
-                <span asp-validation-for="TeamId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<body>
+    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Player.TeamId" hidden />
+        <input asp-for="Player.Id" hidden />
+        <input asp-for="Player.ImageURL" hidden />
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        <div class="container-fluid">
+
+            <div class="d-sm-flex align-items-center justify-content-between">
+                <h1 class="h3 mb-0 text-gray-800">Update <i class="fa-solid fa-chevron-right"></i> @Model.Player.Name</h1>
+            </div>
+
+            <div class="row py-5">
+
+                <div class="col-lg-8">
+
+                    <div class="card shadow border-left-primary mb-4">
+
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Details</h6>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9 col-lg-3">
+
+                                    <img src ="@Model.Player.ImageURL" id="output" style="width:150px; height:160px" class="border-primary my-1 ml-4" onchange="readURL(this)" />
+                                    <label class="text-center ml-4" asp-for="Player.ImageURL" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
+                                    <input type="file" id="uploadBox" name="file" asp-for="Player.ImageURL" class="form-control" accept="image/jpeg, image/png" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
+
+
+                                </div>
+                                <div class="col-md-9 col-lg-5 py-4">
+
+                                    <div class="form-group col-md-12">
+                                        <input asp-for="Player.Name" class="form-control" placeholder="Name" />
+                                        <span asp-validation-for="Player.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <input asp-for="Player.Number" class="form-control" />
+                                        <i class="fa-solid fa-shirt icon" aria-hidden="true"></i>
+                                        <span asp-validation-for="Player.Number" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-9 col-lg-4 py-4">
+
+                                    <div class="form-group col-md-12">
+                                        <select asp-for="Player.PositionId" asp-items="@Model.PositionList" class="select">
+                                            <option disabled selected> Select Position </option>
+                                        </select>
+                                        <span asp-validation-for="Player.PositionId" class="text-danger"></span>
+
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <select asp-for="Player.CountryId" asp-items="@Model.CountryList" class="select">
+                                            <option disabled selected> Select Country </option>
+                                        </select>
+                                        <span asp-validation-for="Player.CountryId" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="text-center">
+                                <div class="form-group col-md-12">
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-secondary float-right" value="Update" />
+                                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-outline-dark float-right mr-1">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

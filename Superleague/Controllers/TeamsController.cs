@@ -126,11 +126,31 @@ namespace Superleague.Controllers
                     model.Team.ImageURL = @"\images\teams\" + fileName + extension;
                 }
 
-                await _teamRepository.CreateAsync(model.Team);
+                var teamNameExists = _teamRepository.GetAll().Where(t => t.Name.ToLower() == model.Team.Name.ToLower()).Count();
 
-                TempData["success"] = $"New team added";
+                if (teamNameExists >= 1)
+                {
+                    ModelState.AddModelError("Team.Name", "This Team name is already in use");
 
-                return RedirectToAction(nameof(Index));
+                    TeamViewModel teamViewModel = new TeamViewModel
+                    {
+                        CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                        {
+                            Text = i.Name,
+                            Value = i.Id.ToString(),
+                        }),
+                    };
+
+                    return View(teamViewModel);
+                }
+                else
+                {
+                    await _teamRepository.CreateAsync(model.Team);
+
+                    TempData["success"] = $"New team added";
+
+                    return RedirectToAction(nameof(Index));
+                }
             }
   
             return View(model);
@@ -148,9 +168,9 @@ namespace Superleague.Controllers
             {
                 Team = new(),
 
-                PlayerList = _playerRepository.GetAll().Where(e => e.TeamId == id).OrderBy(e => e.Name),
+                PlayerList = _playerRepository.GetAll().Include(p => p.Position).Include(p => p.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
-                StaffList = _staffRepository.GetAll().Where(e => e.TeamId == id).OrderBy(e => e.Name),
+                StaffList = _staffRepository.GetAll().Include(p => p.Function).Include(p => p.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
                 CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
                 {
@@ -176,7 +196,7 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(TeamViewModel model, IFormFile? file)
+        public async Task<IActionResult> Edit(TeamViewModel model, IFormFile? file, int id)
         {
             if (ModelState.IsValid)
             {
@@ -210,7 +230,39 @@ namespace Superleague.Controllers
                         model.Team.ImageURL = @"\images\teams\" + fileName + extension;
                     }
 
-                    await _teamRepository.UpdateAsync(model.Team);
+                    var teamNameExists = _teamRepository.GetAll().Where(t => t.Name.ToLower() == model.Team.Name.ToLower()).Count();
+
+                    if (teamNameExists >= 1)
+                    {
+                        ModelState.AddModelError("Team.Name", "This Team name is already in use");
+
+                        TeamViewModel teamViewModel = new()
+                        {
+                            Team = new(),
+
+                            PlayerList = _playerRepository.GetAll().Include(p => p.Position).Include(p => p.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
+
+                            StaffList = _staffRepository.GetAll().Include(p => p.Function).Include(p => p.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
+
+                            CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                            {
+                                Text = i.Name,
+                                Value = i.Id.ToString(),
+                            }),
+
+                            //Statistics = _context.Statistics.GetFirstOrDefault(u => u.Team.Id == id),
+                        };
+
+                        return View(teamViewModel);
+                    }
+                    else
+                    {
+                        await _teamRepository.UpdateAsync(model.Team);
+
+                        TempData["success"] = $"{model.Team.Name} updated";
+
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -223,13 +275,7 @@ namespace Superleague.Controllers
                         throw;
                     }
                 }
-
-                TempData["success"] = $"{model.Team.Name} updated";
-
-                return RedirectToAction(nameof(Index));
             }
-
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", team.CountryId);
 
             return View(model);
         }

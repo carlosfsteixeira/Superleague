@@ -255,6 +255,36 @@ namespace Superleague.Migrations
                     b.ToTable("Functions");
                 });
 
+            modelBuilder.Entity("Superleague.Data.Entities.Match", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AwayTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("MatchDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("RoundId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AwayTeamId");
+
+                    b.HasIndex("HomeTeamId");
+
+                    b.HasIndex("RoundId");
+
+                    b.ToTable("Matches");
+                });
+
             modelBuilder.Entity("Superleague.Data.Entities.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -310,6 +340,21 @@ namespace Superleague.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Positions");
+                });
+
+            modelBuilder.Entity("Superleague.Data.Entities.Round", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rounds");
                 });
 
             modelBuilder.Entity("Superleague.Data.Entities.Staff", b =>
@@ -455,6 +500,29 @@ namespace Superleague.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Superleague.Data.Entities.Match", b =>
+                {
+                    b.HasOne("Superleague.Data.Entities.Team", "AwayTeam")
+                        .WithMany("AwayMatches")
+                        .HasForeignKey("AwayTeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Superleague.Data.Entities.Team", "HomeTeam")
+                        .WithMany("HomeMatches")
+                        .HasForeignKey("HomeTeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Superleague.Data.Entities.Round", "Round")
+                        .WithMany()
+                        .HasForeignKey("RoundId");
+
+                    b.Navigation("AwayTeam");
+
+                    b.Navigation("HomeTeam");
+
+                    b.Navigation("Round");
+                });
+
             modelBuilder.Entity("Superleague.Data.Entities.Player", b =>
                 {
                     b.HasOne("Superleague.Data.Entities.Country", "Country")
@@ -525,6 +593,13 @@ namespace Superleague.Migrations
                         .HasForeignKey("TeamId");
 
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Superleague.Data.Entities.Team", b =>
+                {
+                    b.Navigation("AwayMatches");
+
+                    b.Navigation("HomeMatches");
                 });
 #pragma warning restore 612, 618
         }

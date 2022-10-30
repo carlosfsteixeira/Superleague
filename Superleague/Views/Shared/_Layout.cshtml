@@ -96,6 +96,7 @@
                         <h6 class="collapse-header">Customize</h6>
                         <a class="collapse-item" asp-area="" asp-controller="Positions" asp-action="Index">Player Positions</a>
                         <a class="collapse-item" asp-area="" asp-controller="Functions" asp-action="Index">Staff Functions</a>
+                        <a class="collapse-item" asp-area="" asp-controller="Rounds" asp-action="Index">Rounds</a>
                         <a class="collapse-item" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a>
                     </div>
                 </div>
@@ -194,6 +195,10 @@
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Profile
                                     </a>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="ChangePassword">
+                                        <i class="fa-solid fa-lock fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Change Password
+                                    </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -255,7 +260,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" asp-controller="Account" asp-action="Logout">Logout</a>
+                    <a class="btn btn-primary" asp-controller="Account" asp-action="Logout" asp-route-id="">Logout</a>
                 </div>
             </div>
         </div>
