@@ -1,42 +1,152 @@
-﻿@model Superleague.Data.Entities.Match
+﻿@model Superleague.Models.MatchViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create New Fixture";
 }
 
-<h1>Create</h1>
+<style>
+    .select {
+        width: 100%;
+        border: 2px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0;
+        outline: none;
+        padding: 8px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+    }
 
-<h4>Match</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MatchDate" class="control-label"></label>
-                <input asp-for="MatchDate" class="form-control" />
-                <span asp-validation-for="MatchDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoundId" class="control-label"></label>
-                <select asp-for="RoundId" class ="form-control" asp-items="ViewBag.RoundId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="HomeTeamId" class="control-label"></label>
-                <select asp-for="HomeTeamId" class ="form-control" asp-items="ViewBag.HomeTeamId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="AwayTeamId" class="control-label"></label>
-                <select asp-for="AwayTeamId" class ="form-control" asp-items="ViewBag.AwayTeamId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        .select:focus {
+            border-color: royalblue;
+            box-shadow: 0 0 4px royalblue;
+        }
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        .styled-table thead tr {
+    background-color: royalblue;
+    color: #ffffff;
+    text-align: left;
+}
+</style>
+
+<body>
+
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="container-fluid">
+
+            <div class="d-sm-flex align-items-center justify-content-between">
+                <h1 class="h3 mb-0 text-gray-800">Create Fixture</h1>
+            </div>
+
+            <div class="row py-4">
+
+                <div class="col-lg-3 col-md-4">
+
+
+                    <div class="card shadow border-left-primary mb-4">
+
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Match Info</h6>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="container form-group col-md-12">
+                                    <select asp-for="Match.RoundId" asp-items="@Model.RoundList" class="select">
+                                        <option disabled selected> Round </option>
+                                    </select>
+                                    <span asp-validation-for="Match.RoundId" class="text-danger"></span>
+                                </div>
+
+                                <hr />
+                                <div class="py-2">
+                                    <h5 class="col-md-12 ml-3">Teams</h5>
+                                </div>
+                                <div class="container form-group col-md-12">
+                                    <select asp-for="Match.HomeTeamId" asp-items="@Model.TeamNamesList" class="combo select">
+                                        <option disabled selected> Home Team</option>
+                                    </select>
+                                    <span asp-validation-for="Match.HomeTeamId" class="text-danger"></span>
+                                </div>
+                                <div class="container form-group col-md-12">
+                                    <select asp-for="Match.AwayTeamId" asp-items="@Model.TeamNamesList" class="combo select">
+                                        <option disabled selected> Away Team </option>
+                                    </select>
+                                    <span asp-validation-for="Match.AwayTeamId" class="text-danger"></span>
+
+                                </div>
+                                <div class="py-2">
+                                    <h5 class="col-md-12 ml-3">Match Date</h5>
+                                </div>
+                                <div class="container form-group col-md-12">
+                                    <input type="datetime-local" asp-for="Match.MatchDate" class="form-control select" />
+                                    <span asp-validation-for="Match.MatchDate" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="text-center">
+                                <div class="form-group col-md-12">
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-primary float-right" value="  Add  " />
+                                    <a asp-action="Index" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-8">
+
+                    <div class="card shadow mb-4">
+
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Match List</h6>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="py-3 col-12">
+                                    <table id="tblDataMatches" class="styled-table table-striped" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Round</th>
+                                                <th></th>
+                                                <th>Home Team</th>
+                                                <th>Away Team</th>
+                                                <th></th>
+                                                <th>Match Date</th>
+                                                <th>Venue</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+</form>
+
+</body>
+
+@section Scripts{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/matchGetAll.js"></script>
+    } 
+    }
 

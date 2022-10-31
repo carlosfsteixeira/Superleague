@@ -218,5 +218,13 @@ namespace Superleague.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var matchProperties = _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round);
+
+            return Json(new { data = matchProperties });
+        }
+
     }
 }
