@@ -121,7 +121,7 @@
                                                     @item.HomeTeam.Venue
                                                 </td>
                                                 <td class="text-center">
-                                                    <a asp-action="Upsert" asp-route-id="@item.Id" class="btn">
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn">
                                                         <i class="fa-solid fa-pen-to-square" style="color: dimgray"></i>
                                                     </a>
                                                 </td>
@@ -166,7 +166,7 @@
                         </div>
                         <hr />
                         <div class="form-group col-md-12 text-center">
-                            <a asp-controller="Matches" asp-action="Create" class="btn btn-outline-dark w-25">
+                            <a asp-controller="Matches" asp-action="Create" class="btn btn-sm btn-success">
                                 <i class="bi bi-circle-plus"></i> Add New
                             </a>
                         </div>

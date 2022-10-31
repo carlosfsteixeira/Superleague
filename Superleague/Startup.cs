@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,10 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Superleague
 {
@@ -48,6 +43,9 @@ namespace Superleague
             services.AddScoped<IStaffRepository, StaffRepository>();
             services.AddScoped<IRoundRepository, RoundRepository>();
             services.AddScoped<IMatchRepository, MatchRepository>();
+            services.AddScoped<IResultRepository, ResultRepository>();
+            services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+            services.AddScoped<IGlobalStatsRepository, GlobalStatsRepository>();
 
         }
 
@@ -60,10 +58,11 @@ namespace Superleague
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();

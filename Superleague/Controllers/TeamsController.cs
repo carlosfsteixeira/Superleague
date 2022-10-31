@@ -230,39 +230,53 @@ namespace Superleague.Controllers
                         model.Team.ImageURL = @"\images\teams\" + fileName + extension;
                     }
 
-                    var teamNameExists = _teamRepository.GetAll().Where(t => t.Name.ToLower() == model.Team.Name.ToLower()).Count();
+                    var teamFromBD = _teamRepository.GetById(id);
 
-                    if (teamNameExists >= 1)
+                    if (teamFromBD.Name != model.Team.Name)
                     {
-                        ModelState.AddModelError("Team.Name", "This Team name is already in use");
+                        var teamNameExists = _teamRepository.GetAll().Where(t => t.Name.ToLower() == model.Team.Name.ToLower()).Count();
 
-                        TeamViewModel teamViewModel = new()
+                        if (teamNameExists >= 1)
                         {
-                            Team = new(),
+                            ModelState.AddModelError("Team.Name", "This Team name is already in use");
 
-                            PlayerList = _playerRepository.GetAll().Include(p => p.Position).Include(p => p.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
-
-                            StaffList = _staffRepository.GetAll().Include(p => p.Function).Include(p => p.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
-
-                            CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                            TeamViewModel teamViewModel = new()
                             {
-                                Text = i.Name,
-                                Value = i.Id.ToString(),
-                            }),
+                                Team = new(),
 
-                            //Statistics = _context.Statistics.GetFirstOrDefault(u => u.Team.Id == id),
-                        };
+                                PlayerList = _playerRepository.GetAll().Include(p => p.Position).Include(p => p.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
-                        return View(teamViewModel);
+                                StaffList = _staffRepository.GetAll().Include(p => p.Function).Include(p => p.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
+
+                                CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                                {
+                                    Text = i.Name,
+                                    Value = i.Id.ToString(),
+                                }),
+
+                                //Statistics = _context.Statistics.GetFirstOrDefault(u => u.Team.Id == id),
+                            };
+
+                            return View(teamViewModel);
+                        }
+
                     }
-                    else
+
+                    if (teamFromBD.CountryId != model.Team.CountryId)
                     {
-                        await _teamRepository.UpdateAsync(model.Team);
-
-                        TempData["success"] = $"{model.Team.Name} updated";
-
-                        return RedirectToAction(nameof(Index));
+                        teamFromBD.CountryId = model.Team.CountryId;
                     }
+
+                    if (teamFromBD.Venue != model.Team.Venue)
+                    {
+                        teamFromBD.Venue = model.Team.Venue;
+                    }
+
+                    await _teamRepository.UpdateAsync(model.Team);
+
+                    TempData["success"] = $"{model.Team.Name} updated";
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {

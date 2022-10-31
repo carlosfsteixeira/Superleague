@@ -72,12 +72,20 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var round = await _roundRepository.GetByIdAsync(id);
+            try
+            {
+                var round = await _roundRepository.GetByIdAsync(id);
 
-            await _roundRepository.DeleteAsync(round);
+                await _roundRepository.DeleteAsync(round);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorTitle = "This Round is in use";
+                ViewBag.ErrorMessage = "Consider deleting all Matches appended and try again.";
+                return View("Error");
+            }
         }
-
     }
 }

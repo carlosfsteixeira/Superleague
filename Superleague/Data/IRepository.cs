@@ -12,6 +12,8 @@ namespace Superleague.Data
 
         Task<T> GetByIdAsync(int id);
 
+        T GetById(int id);
+
         Task CreateAsync(T entity);
 
         Task UpdateAsync(T entity);
@@ -19,5 +21,7 @@ namespace Superleague.Data
         Task DeleteAsync(T entity);
 
         Task<bool> ExistAsync(int id);
+
+        Task RemoveRangeAsync(IEnumerable<T> entity);
     }
 }

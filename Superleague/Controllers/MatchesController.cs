@@ -143,14 +143,26 @@ namespace Superleague.Controllers
                             }),
             };
 
-            var match = await _matchRepository.GetByIdAsync(id.Value);
+            matchViewModel.Match = await _matchRepository.GetByIdAsync(id.Value);
 
-            if (match == null)
+            var getRound = await _roundRepository.GetByIdAsync(matchViewModel.Match.RoundId.Value);
+
+            matchViewModel.Match.Round = getRound;
+
+            var getHomeTeam = await _teamRepository.GetByIdAsync(matchViewModel.Match.HomeTeamId.Value);
+
+            matchViewModel.Match.HomeTeam = getHomeTeam;
+
+            var getAwayTeam = await _teamRepository.GetByIdAsync(matchViewModel.Match.AwayTeamId.Value);
+
+            matchViewModel.Match.AwayTeam = getAwayTeam;
+
+            if (matchViewModel == null)
             {
                 return NotFound();
             }
 
-            return View(match);
+            return View(matchViewModel);
         }
 
         // POST: Matches/Edit/5
@@ -209,9 +221,9 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var match = await _roundRepository.GetByIdAsync(id);
+            var match = await _matchRepository.GetByIdAsync(id);
 
-            await _roundRepository.DeleteAsync(match);
+            await _matchRepository.DeleteAsync(match);
 
             TempData["success"] = $"Fixture removed";
 
@@ -222,6 +234,14 @@ namespace Superleague.Controllers
         public IActionResult GetAll()
         {
             var matchProperties = _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round);
+
+            return Json(new { data = matchProperties });
+        }
+
+        [HttpGet]
+        public IActionResult GetMatchId(int id)
+        {
+            var matchProperties = _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round).Where(t => t.Id == id);
 
             return Json(new { data = matchProperties });
         }

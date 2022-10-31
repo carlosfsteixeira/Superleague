@@ -11,7 +11,6 @@
 <div class="container-fluid">
     @if (Model.Any())
     {
-        <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Clubs Management</h1>
             <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
@@ -22,7 +21,7 @@
         <div class="row">
         @foreach (var item in Model)
         {
-                <div class="col-xl-3 col-md-6 mb-4 align-items-center justify-content-between d-sm-flex">
+            <div class="col-xl-3 col-md-6 mb-4 align-items-center justify-content-between d-sm-flex">
                 <div id="team">
                     <div class="card" style="width: 17rem;">
                         <div class="card-body">
@@ -60,11 +59,20 @@
     }
     else
     {
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h4 class="h3 mb-0 text-gray-800"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> No clubs yet</h4>
-            <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
-            </a>
+        <div class="container-fluid d-flex justify-content-center py-5">
+            <div class="row col-6">
+                <div class="col-md-12 py-3">
+                    <div class="form-group col-md-12 py-1 text-center">
+                        <h5 class="text-dark pl-3"><i class="fa-solid fa-circle-exclamation"></i> No teams yet</h5>
+                    </div>
+                    <hr />
+                    <div class="form-group col-md-12 text-center">
+                        <a asp-action="Create" class="btn btn-sm btn-success">
+                            <i class="bi bi-circle-plus"></i> Add New
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     }
        

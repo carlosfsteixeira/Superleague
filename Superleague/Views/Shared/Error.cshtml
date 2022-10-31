@@ -1,12 +1,37 @@
-﻿@model ErrorViewModel
+﻿@*@model ErrorViewModel*@
+
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = "Requet Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<style>
 
-@if (Model.ShowRequestId)
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:500,800" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-4 alert alert-warning">
+                    <h2><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> @ViewBag.ErrorTitle</h2>
+            </div>
+            <div class="col-lg-12">
+                <h4>@ViewBag.ErrorMessage</h4>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@*if (Model.ShowRequestId)
 {
     <p>
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
@@ -22,4 +47,4 @@
     It can result in displaying sensitive information from exceptions to end users.
     For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
     and restarting the app.
-</p>
+</p>*@

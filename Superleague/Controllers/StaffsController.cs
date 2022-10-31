@@ -174,7 +174,7 @@ namespace Superleague.Controllers
                                     }),
                                 };
 
-                                return View(model);
+                                return View(staffViewModel);
                             }
                         }
                     }
@@ -231,6 +231,8 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(StaffViewModel model, IFormFile? file, int id)
         {
+            int staffId = id;
+
             if (ModelState.IsValid)
             {
                 try
@@ -263,7 +265,7 @@ namespace Superleague.Controllers
                         model.Staff.ImageURL = @"\images\staff\" + fileName + extension;
                     }
 
-                    var staffFromBD = _staffRepository.GetAll().Where(t => t.Id == id).FirstOrDefault();
+                    var staffFromBD = _staffRepository.GetById(staffId);
 
                     if (staffFromBD.Name != model.Staff.Name)
                     {
@@ -343,7 +345,7 @@ namespace Superleague.Controllers
                                             }),
                                         };
 
-                                        return View(model);
+                                        return View(staffViewModel);
                                     }
                                 }
                             }

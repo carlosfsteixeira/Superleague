@@ -7,7 +7,7 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $('#tblDataMatches').DataTable({
         "ajax": {
-            "url":"/Matches/GetAll"
+            "url": "/Matches/GetMatchId",
         },
         "columns": [
             { "data": "round.description", "width": "15%" },

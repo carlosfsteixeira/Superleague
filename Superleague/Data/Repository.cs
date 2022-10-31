@@ -27,6 +27,11 @@ namespace Superleague.Data
             return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
         }
 
+        public T GetById(int id)
+        {
+            return  _context.Set<T>().FirstOrDefault(e => e.Id == id);
+        }
+
         public async Task CreateAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
@@ -53,9 +58,16 @@ namespace Superleague.Data
             return await _context.Set<T>().AnyAsync(e => e.Id == id);
         }
 
-        private async Task<bool> SaveAllAsync()
+        public async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task RemoveRangeAsync(IEnumerable<T> entity)
+        {
+            _context.Set<T>().RemoveRange(entity);
+
+            await SaveAllAsync();
         }
     }
 }

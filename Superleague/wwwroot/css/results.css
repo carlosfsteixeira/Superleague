@@ -1,0 +1,100 @@
+﻿input [type=number] {
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+    input[type=number]:focus {
+        border-color: #009879;
+        box-shadow: 0 0 8px #009879;
+    }
+
+.goalshome {
+    font-size: 24px;
+    float: right;
+    border-color: #009879;
+    text-align: center;
+    padding-right: 10px;
+}
+
+.goalsaway {
+    font-size: 24px;
+    float: left;
+    border-color: #009879;
+    text-align: center;
+}
+
+.cardcolor {
+    padding-top: 9px;
+}
+
+.bookingshome {
+    width: 60px;
+    text-align: end;
+    float: right;
+}
+
+.bookingsaway {
+    width: 60px;
+    text-align: end;
+}
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    width: 1000px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+    .styled-table thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: left;
+    }
+
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 15px;
+    }
+
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+        }
+
+.select {
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    margin: 2px 0;
+    outline: none;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+    .select:focus {
+        border-color: #009879;
+        box-shadow: 0 0 8px #009879;
+    }
+
+.optionsDiv {
+    margin-left: 700px;
+    margin-top: 50px;
+    width: auto;
+}

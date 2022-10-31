@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Superleague.Data.Entities;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Match = Superleague.Data.Entities.Match;
 
 namespace Superleague.Models

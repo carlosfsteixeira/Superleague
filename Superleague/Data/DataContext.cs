@@ -25,15 +25,15 @@ namespace Superleague.Data
 
         public DbSet<User> User { get; set; }
 
-        //public DbSet<Statistics> Statistics { get; set; }
+        public DbSet<Statistics> Statistics { get; set; }
 
-        //public DbSet<Result> Results { get; set; }
+        public DbSet<Result> Results { get; set; }
 
         public DbSet<Round> Rounds { get; set; }
 
         public DbSet<Match> Matches { get; set; }
 
-        //public DbSet<GlobalStatistics> GlobalStatistics { get; set; }
+        public DbSet<GlobalStats> GlobalStatistics { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

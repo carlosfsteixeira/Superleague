@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Superleague.Data.Entities.Result>
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/results.css" />
+</head>
+
+<body id="page-top">
+
+    <div class="container-fluid">
+
+        @if (Model.Any())
+        {
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Clubs Management</h1>
+                <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
+                </a>
+            </div>
+
+           
+        }
+        else
+        {
+            <div class="container-fluid d-flex justify-content-center py-5">
+                <div class="row col-6">
+                    <div class="col-md-12 py-3">
+                        <div class="form-group col-md-12 py-1 text-center">
+                            <h5 class="text-dark pl-3"><i class="fa-solid fa-circle-exclamation"></i> No results yet</h5>
+                        </div>
+                        <hr />
+                        <div class="form-group col-md-12 text-center">
+                            <h6>Add a result to a match in the fixtures menu</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+</body>
+
+
+@section Scripts {
+    <script src="~/js/matchFilter.js"></script>
+}

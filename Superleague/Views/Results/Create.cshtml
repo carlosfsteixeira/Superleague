@@ -1,0 +1,108 @@
+﻿@model Superleague.Models.ResultViewModel
+
+@{
+    ViewData["Title"] = "Results";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/results.css" />
+</head>
+
+<body id="page-top">
+
+    <form method="post" asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Result.MatchId" hidden />
+
+        <div class="col-lg-8">
+
+            <div class="card shadow mb-4">
+
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Match Overview</h6>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="py-3 col-12">
+
+                            <div class="container justify-content-center">
+                                <div class="row">
+
+                                    <div class="col-lg-4 col-md-4 text-center">
+                                        <h6>
+                                            <i class="fa-regular fa-calendar-days"></i> @Model.Match.Round.Description
+                                        </h6>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 text-center">
+                                        <h6>
+                                            <i class="fa-solid fa-clock"></i> @Html.DisplayFor(model=> model.Match.MatchDate)
+                                        </h6>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 text-center">
+                                        <h6>
+                                            <i class="fa-solid fa-location-dot"></i> @Model.Match.HomeTeam.Venue
+                                        </h6>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="container justify-content-center py-5">
+                                <div class="row">
+
+                                    <div class="col-lg-3 col-md-4 text-center">
+
+                                        <img src="@Model.Match.HomeTeam.ImageURL" alt="Image" style="width:100px; height:110px;" />
+                                        <div class="text-center">
+                                            <h5 class="py-1">@Model.Match.HomeTeam.Name</h5>
+                                        </div>
+                            
+
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 mb-3">
+                                        <h5 class="py-4">
+                                            <input asp-for="Result.HomeGoals" class="form-control goalshome" placeholder="0" />
+                                            <span asp-validation-for="Result.HomeGoals" class="text-danger"></span>
+                                        </h5>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 text-center">
+                                        <h4 class="py-4" style="margin-top: 10px">
+                                            V
+                                        </h4>
+                                    </div>
+                                    <div class="col-lg-2 col-md-4 mb-3">
+                                        <h5 class="py-4">
+                                            <input asp-for="Result.AwayGoals" class="form-control goalsaway" placeholder="0" />
+                                            <span asp-validation-for="Result.AwayGoals" class="text-danger"></span>
+                                        </h5>
+                                    </div>
+                                    <div class="col-lg-3 col-md-4 text-center">
+
+                                        <img src="@Model.Match.AwayTeam.ImageURL" alt="Image" style="width:100px; height:110px;" />
+                                        <div class="text-center">
+                                            <h5 class="py-1">@Model.Match.AwayTeam.Name</h5>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</body>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

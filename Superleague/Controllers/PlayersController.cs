@@ -174,6 +174,8 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(PlayerViewModel model, IFormFile? file, int id)
         {
+            int playerId = id;
+
             if (ModelState.IsValid)
             {
                 try
@@ -206,7 +208,7 @@ namespace Superleague.Controllers
                         model.Player.ImageURL = @"\images\players\" + fileName + extension;
                     }
 
-                    var playerFromBD = _playerRepository.GetAll().Where(t => t.Id == id).FirstOrDefault();
+                    var playerFromBD = _playerRepository.GetById(id);
 
                     if (playerFromBD.Name != model.Player.Name)
                     {
