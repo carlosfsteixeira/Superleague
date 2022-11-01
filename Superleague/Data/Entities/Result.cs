@@ -16,9 +16,21 @@ namespace Superleague.Data.Entities
         [Required]
         public int AwayGoals { get; set; }
 
+        public int? HomeTeamId { get; set; }
+        [ForeignKey("HomeTeamId")]
+        [ValidateNever]
+
         public Team HomeTeam { get; set; }
 
+        public int? AwayTeamId { get; set; }
+        [ForeignKey("AwayTeamId")]
+        [ValidateNever]
+
         public Team AwayTeam { get; set; }
+
+        public int? RoundId { get; set; }
+        [ForeignKey("RoundId")]
+        [ValidateNever]
 
         public Round Round { get; set; }
 

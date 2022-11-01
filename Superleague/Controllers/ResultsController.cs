@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
-using Superleague.Data.Entities;
 using Superleague.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Superleague.Controllers
 {
@@ -16,19 +11,23 @@ namespace Superleague.Controllers
     {
         private readonly IResultRepository _resultRepository;
         private readonly IMatchRepository _matchRepository;
+        private readonly IRoundRepository _roundRepository;
+        private readonly ITeamRepository _teamRepository;
 
-        public ResultsController(IResultRepository resultRepository, IMatchRepository matchRepository)
+        public ResultsController(IResultRepository resultRepository, IMatchRepository matchRepository, IRoundRepository roundRepository, ITeamRepository teamRepository)
         {
             _resultRepository = resultRepository;
             _matchRepository = matchRepository;
+            _roundRepository = roundRepository;
+            _teamRepository = teamRepository;
         }
 
         // GET: Results
         public IActionResult Index()
         {
-            var dataContext = _resultRepository.GetAll().Include(r => r.Match);
+            var results = _resultRepository.GetAll().Include(r => r.Match).Include(e => e.Round).Include(e => e.HomeTeam).Include(e => e.AwayTeam);
 
-            return View(dataContext);
+            return View(results);
         }
 
         // GET: Results/Details/5
@@ -79,15 +78,17 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ResultViewModel model, int id)
         {
-            var results = _resultRepository.GetAll().Where(u => u.Id == id);
+            var getMatchResult = _resultRepository.GetAll().Where(u => u.MatchId == id).FirstOrDefault();
 
-            if (results == null)
+            if (getMatchResult == null)
             {
+                model.Match = _matchRepository.GetAll().Include(p => p.HomeTeam).Include(p => p.AwayTeam).Include(p => p.Round).Where(u => u.Id == id).FirstOrDefault();
                 model.Result.MatchId = id;
-                model.Result.Match = await _matchRepository.GetAll().Include(p => p.HomeTeam).Include(p => p.AwayTeam).Include(p => p.Round).Where(u => u.Id == id).FirstOrDefaultAsync();
-                model.Result.HomeTeam = model.Result.Match.HomeTeam;
-                model.Result.AwayTeam = model.Result.Match.AwayTeam;
-                model.Result.Round = model.Result.Match.Round;
+                model.Result.HomeTeamId = model.Match.HomeTeamId;
+                model.Result.AwayTeamId = model.Match.AwayTeamId;
+                model.Result.RoundId = model.Match.RoundId;
+
+                //model.Result.Match = model.Match;
 
                 if (ModelState.IsValid)
                 {
@@ -97,8 +98,8 @@ namespace Superleague.Controllers
 
                     return RedirectToAction(nameof(Index));
                 }
-            }        
-            
+            }
+
             return View(model);
         }
 
@@ -113,11 +114,11 @@ namespace Superleague.Controllers
             ResultViewModel resultViewModel = new()
             {
                 Result = new(),
+
+                Match = new(),
             };
 
-            resultViewModel.Result = await _resultRepository.GetByIdAsync(id.Value);
-
-            resultViewModel.Result.Match = await _matchRepository.GetAll().Include(p => p.HomeTeam).Include(p => p.AwayTeam).Include(p => p.Round).Where(u => u.Id == id).FirstOrDefaultAsync();
+            resultViewModel.Result = _resultRepository.GetAll().Include(r => r.Match).Include(e => e.Round).Include(e => e.HomeTeam).Include(e => e.AwayTeam).Where(u => u.Id == id).FirstOrDefaultAsync().Result;
 
             if (resultViewModel == null)
             {
@@ -132,9 +133,9 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ResultViewModel model)
+        public async Task<IActionResult> Edit(ResultViewModel model, int id)
         {
-            model.Result.Id = id;
+            model.Result = _resultRepository.GetAll().Include(r => r.Match).Include(e => e.Round).Include(e => e.HomeTeam).Include(e => e.AwayTeam).Where(u => u.Id == id).FirstOrDefaultAsync().Result;
 
             if (ModelState.IsValid)
             {

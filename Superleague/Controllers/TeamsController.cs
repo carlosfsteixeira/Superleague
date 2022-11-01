@@ -21,6 +21,7 @@ namespace Superleague.Controllers
         private readonly ICountryRepository _countryRepository;
         private readonly IPlayerRepository _playerRepository;
         private readonly IStaffRepository _staffRepository;
+        private readonly IStatisticsRepository _statisticsRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IWebHostEnvironment _hostEnvironment;
 
@@ -28,6 +29,7 @@ namespace Superleague.Controllers
                                ICountryRepository countryRepository, 
                                IPlayerRepository playerRepository, 
                                IStaffRepository staffRepository,
+                               IStatisticsRepository statisticsRepository,
                                IImageHelper imageHelper,
                                IWebHostEnvironment hostEnvironment)
         {
@@ -35,6 +37,7 @@ namespace Superleague.Controllers
             _countryRepository = countryRepository;
             _playerRepository = playerRepository;
             _staffRepository = staffRepository;
+            _statisticsRepository = statisticsRepository;
             _imageHelper = imageHelper;
             _hostEnvironment = hostEnvironment;
         }
@@ -69,7 +72,7 @@ namespace Superleague.Controllers
                     Value = i.Id.ToString(),
                 }),
 
-                //Statistics = _statisticsRepository.GetFirstOrDefault(u => u.Team.Id == id),
+                Statistics = _statisticsRepository.GetById(id.Value),
             };
 
             teamViewModel.Team = await _teamRepository.GetByIdAsync(id.Value);

@@ -11,26 +11,66 @@
             width: 150px;
             border: 2px solid #aaa;
             border-radius: 4px;
-            border-color: royalblue;
+            border-color: dimgray;
             margin: 6px 0;
             outline: none;
             padding: 2px;
             box-sizing: border-box;
-            background-color: royalblue;
+            background-color: dimgray;
             color: white;
             justify-content: center;
             align-items: center;
         }
 
         label:hover {
-            background-color: royalblue;
-            border-color: royalblue;
             cursor: pointer;
         }
 
         input[type=file] {
             display: none;
         }
+
+        input[type=text] {
+            width: 100%;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            outline: none;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=text]:focus {
+            border-color: black;
+            box-shadow: 0 0 4px;
+        }
+
+        input[type=email] {
+            width: 100%;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            outline: none;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+            input[type=email]:focus {
+                border-color: black;
+                box-shadow: 0 0 4px;
+            }
+
+        input[type=password] {
+            width: 100%;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            outline: none;
+            padding: 4px;
+            box-sizing: border-box;
+        }
+
+            input[type=password]:focus {
+                border-color: black;
+                box-shadow: 0 0 4px;
+            }
 
         .select {
             width: 100%;
@@ -39,7 +79,6 @@
             outline: none;
             padding: 4px;
             box-sizing: border-box;
-            height: 35px;
         }
 
         .select:focus {
@@ -63,17 +102,17 @@
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between">
-                <h1 class="h3 mb-0 text-gray-800">New User</h1>
+                <h1 class="h3 mb-0 text-gray-800">Users <i class="fa-solid fa-angle-right"></i> Add New</h1>
             </div>
 
             <div class="row py-5">
 
                 <div class="col-lg-7">
 
-                    <div class="card shadow border-left-primary mb-4">
+                    <div class="card shadow border-left-success mb-4">
 
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">User Info</h6>
+                            <h6 class="m-0 font-weight-bold text-success">User Info</h6>
                         </div>
 
                         <div class="card-body">
@@ -135,7 +174,7 @@
                         <div class="card-footer">
                             <div class="text-center">
                                 <div class="form-group col-md-12">
-                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-primary float-right" value="Create" />
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-success float-right" value="  Add  " />
                                     <a asp-action="ListUsers" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
                                 </div>
                             </div>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Superleague.Data.Entities;
 using System.Collections;
@@ -14,13 +15,14 @@ namespace Superleague.Models
 
         public Team Team { get; set; }
 
+        [ValidateNever]
         public IEnumerable<SelectListItem> CountryList { get; set; }
-
+        [ValidateNever]
         public IEnumerable<Player> PlayerList { get; set; }
-
+        [ValidateNever]
         public IEnumerable<Staff> StaffList { get; set; }
-
-        //public Statistics Statistics { get; set; }
+        [ValidateNever]
+        public Statistics Statistics { get; set; }
 
 
     }

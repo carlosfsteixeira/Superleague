@@ -1,61 +1,192 @@
-﻿@model Superleague.Data.Entities.Result
+﻿@model Superleague.Models.ResultViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Results";
 }
 
-<h1>Edit</h1>
+<head>
+    <link rel="stylesheet" href="~/css/results.css" />
+</head>
 
-<h4>Result</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="HomeGoals" class="control-label"></label>
-                <input asp-for="HomeGoals" class="form-control" />
-                <span asp-validation-for="HomeGoals" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AwayGoals" class="control-label"></label>
-                <input asp-for="AwayGoals" class="form-control" />
-                <span asp-validation-for="AwayGoals" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HomeYellowCards" class="control-label"></label>
-                <input asp-for="HomeYellowCards" class="form-control" />
-                <span asp-validation-for="HomeYellowCards" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AwayYellowCards" class="control-label"></label>
-                <input asp-for="AwayYellowCards" class="form-control" />
-                <span asp-validation-for="AwayYellowCards" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HomeRedCards" class="control-label"></label>
-                <input asp-for="HomeRedCards" class="form-control" />
-                <span asp-validation-for="HomeRedCards" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AwayRedCards" class="control-label"></label>
-                <input asp-for="AwayRedCards" class="form-control" />
-                <span asp-validation-for="AwayRedCards" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MatchId" class="control-label"></label>
-                <select asp-for="MatchId" class="form-control" asp-items="ViewBag.MatchId"></select>
-                <span asp-validation-for="MatchId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<body id="page-top">
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="Result.Id" hidden />
+
+
+        <div class="container-fluid">
+
+             <div class="d-sm-flex align-items-center justify-content-between">
+                <h1 class="h3 mb-0 text-gray-800">Update <i class="fa-solid fa-angle-right"></i> Result </h1>
+            </div>
+
+            <div class="row py-4">
+
+                <div class="col-lg-8">
+
+                    <div class="card shadow border-left-primary mb-4">
+
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Match Overview</h6>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="py-3 col-12">
+
+                                    <div class="container justify-content-center">
+                                        <div class="row">
+
+                                            <div class="col-lg-4 col-md-4 text-center">
+                                                <h6>
+                                                    <i class="fa-regular fa-calendar-days"></i> @Model.Result.Round.Description
+                                                </h6>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 text-center">
+                                                <h6>
+                                                    <i class="fa-solid fa-clock"></i> @Html.DisplayFor(model=> model.Result.Match.MatchDate)
+                                                </h6>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 text-center">
+                                                <h6>
+                                                    <i class="fa-solid fa-location-dot"></i> @Model.Result.HomeTeam.Venue
+                                                </h6>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="container justify-content-center py-5">
+                                        <div class="row">
+
+                                            <div class="col-lg-3 col-md-4 text-center">
+
+                                                <img src="@Model.Result.HomeTeam.ImageURL" alt="Image" style="width:100px; height:110px;" />
+                                                <div class="text-center">
+                                                    <h5 class="py-1">@Model.Result.HomeTeam.Name</h5>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 mb-3">
+                                                <h5 class="py-4">
+                                                    <input asp-for="Result.HomeGoals" type="number" min="0" class="form-control goalshome" />
+                                                    <span asp-validation-for="Result.HomeGoals" class="text-danger"></span>
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 text-center">
+                                                <h4 class="py-4" style="margin-top: 10px">
+                                                    V
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 mb-3">
+                                                <h5 class="py-4">
+                                                    <input asp-for="Result.AwayGoals" type="number" min="0" class="form-control goalsaway" />
+                                                    <span asp-validation-for="Result.AwayGoals" class="text-danger"></span>
+                                                </h5>
+                                            </div>
+                                            <div class="col-lg-3 col-md-4 text-center">
+
+                                                <img src="@Model.Result.AwayTeam.ImageURL" alt="Image" style="width:100px; height:110px;" />
+                                                <div class="text-center">
+                                                    <h5 class="py-1">@Model.Result.AwayTeam.Name</h5>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="container justify-content-center py-1">
+                                        <div class="row">
+
+                                            <div class="col-lg-3 col-md-4">
+
+                                                <div class="text-right">
+                                                    <h6 class="py-2">Yellow Cards</h6>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-2 col-md-4">
+                                                <input asp-for="Result.HomeYellowCards" type="number" min="0" class="form-control homeyellow" />
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 text-left">
+                                            </div>
+                                            <div class="col-lg-2 col-md-4">
+                                                <input asp-for="Result.AwayYellowCards" type="number" min="0" class="form-control awayyellow" />
+                                            </div>
+                                            <div class="col-lg-3 col-md-4 text-center">
+
+                                                <div class="text-left">
+                                                    <h6 class="py-2">Yellow Cards</h6>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="container justify-content-center py-1">
+                                        <div class="row">
+
+                                            <div class="col-lg-3 col-md-4">
+
+                                                <div class="text-right">
+                                                    <h6 class="py-2">Red Cards</h6>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 mb-3">
+                                                <input asp-for="Result.HomeRedCards" type="number" min="0" class="form-control homered" />
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 text-center">
+                                                <h4 class="py-1">
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-2 col-md-4 mb-3">
+                                                <input asp-for="Result.AwayRedCards" type="number" min="0" class="form-control awayred" />
+                                            </div>
+                                            <div class="col-lg-3 col-md-4 text-center">
+
+                                                <div class="text-left">
+                                                    <h6 class="py-2">Red Cards</h6>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="text-center">
+                                <div class="form-group col-md-12">
+                                    <input type="submit" class="btn btn-sm btn-primary float-right" value="Update" />
+                                    <a asp-action="Index" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+
+</body>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    }
 

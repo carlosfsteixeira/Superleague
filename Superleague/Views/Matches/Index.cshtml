@@ -16,7 +16,7 @@
         {
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Season Fixtures</h1>
-                <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
                     <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
                 </a>
             </div>
@@ -29,7 +29,7 @@
                         <div class="row">
 
                             <div class="col-md-12 py-3">
-                                <div class="optionsDiv" style="color: royalblue; font-weight: bold;">
+                                <div class="optionsDiv" style="color: black; font-weight: bold;">
                                     Filter By Round
                                     <select type="search" class="select-table-filter select" data-table="order-table">
                                         <option value="">Show All</option>
@@ -96,7 +96,7 @@
                                                 <td>
                                                     @if (!string.IsNullOrEmpty(item.HomeTeam.ImageURL))
                                                     {
-                                                        <img src="@Url.Content(item.HomeTeam.ImageURL)" alt="Image" style="width:50px; height:60px;" />
+                                                        <img src="@Url.Content(item.HomeTeam.ImageURL)" alt="Image" style="max-height:auto; max-width:100%; width:50px; height:50px;" />
                                                     }
                                                 </td>
                                                 <td>
@@ -111,7 +111,7 @@
                                                 <td>
                                                     @if (!string.IsNullOrEmpty(item.AwayTeam.ImageURL))
                                                     {
-                                                        <img src="@Url.Content(item.AwayTeam.ImageURL)" alt="Image" style="width:50px; height:60px;" />
+                                                        <img src="@Url.Content(item.AwayTeam.ImageURL)" alt="Image" style="max-height:auto; max-width:100%; width:50px; height:50px;" />
                                                     }
                                                 </td>
                                                 <td>
