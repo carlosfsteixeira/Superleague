@@ -4,15 +4,19 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>@ViewData["Title"] - Superleague </title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+
+    <!-- Custom fonts for this template-->
+    <link href="~/theme/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="~/theme/css/sb-admin-2.min.css" rel="stylesheet" asp-append-version="true">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
-<body>
+<body id="page-top">
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black">
 
@@ -60,27 +64,51 @@
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            <partial name="_Notification" />
-            @RenderBody()
-        </main>
+    <div id="wrapper">
+        <div class="container-fluid col-lg-10 justify-content-between">
+            <main role="main" class="pb-3">
+                <partial name="_Notification" />
+                @RenderBody()
+            </main>
+
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center">
-            &copy; 2022 - Superleague - All rights reserved
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; 2022 - The Super League</span>
+            </div>
         </div>
     </footer>
+
+
+    <!-- Bootstrap core JavaScript-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/theme/vendor/jquery/jquery.min.js"></script>
+    <script src="~/theme/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/theme/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/theme/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="~/theme/vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/demo/datatables-demo.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="~/theme/js/demo/chart-area-demo.js"></script>
+    <script src="~/theme/js/demo/chart-pie-demo.js"></script>
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
+
 </html>

@@ -1,6 +1,4 @@
-﻿using Superleague.Helpers;
-
-namespace Superleague.Data
+﻿namespace Superleague.Helpers
 {
     public interface IMailHelper
     {

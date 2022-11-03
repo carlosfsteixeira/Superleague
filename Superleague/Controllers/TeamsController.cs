@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +45,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Teams
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var teamList = _teamRepository.GetAll().Include("Country").OrderBy(e => e.Name);
@@ -50,6 +53,7 @@ namespace Superleague.Controllers
             return View(teamList);
         }
 
+        [AllowAnonymous]
         // GET: Teams/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -87,7 +91,9 @@ namespace Superleague.Controllers
             return View(teamViewModel);
         }
 
+
         // GET: Teams/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             TeamViewModel teamViewModel = new TeamViewModel
@@ -107,6 +113,7 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(TeamViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
@@ -298,6 +305,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Teams/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -318,6 +326,7 @@ namespace Superleague.Controllers
         // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var team = await _teamRepository.GetByIdAsync(id);

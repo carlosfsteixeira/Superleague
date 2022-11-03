@@ -1,19 +1,8 @@
 ﻿@{
-    Layout = "_Admin";
+    Layout = "_Layout";
 
-    //@if(User.IsInRole("Admin"))
-    //{
-    //    Layout = "_Admin";
-    //}
-
-    //@if (User.IsInRole("Employee"))
-    //{
-    //    Layout = "_Employee";
-    //}
-
-    //@if (User.IsInRole("Club"))
-    //{
-    //    Layout = "_Club";
-    //}
-    
+    @if(User.Identity.IsAuthenticated)
+    {
+        Layout = "_Dashboard";
+    }    
 }

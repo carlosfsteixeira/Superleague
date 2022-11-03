@@ -13,5 +13,7 @@ namespace Superleague.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+
+        public int TeamId { get; set; }
     }
 }

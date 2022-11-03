@@ -1,10 +1,9 @@
 ﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-using Superleague.Helpers;
 using System;
 
-namespace Superleague.Data
+namespace Superleague.Helpers
 {
     public class MailHelper : IMailHelper
     {
@@ -65,5 +64,5 @@ namespace Superleague.Data
 
         }
     }
-    
+
 }

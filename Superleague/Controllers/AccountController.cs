@@ -67,6 +67,10 @@ namespace Superleague.Controllers
             {
                 var result = await _userHelper.LoginAsync(model);
 
+                var user = await _userHelper.GetUserByEmailAsync(model.Username);
+
+                
+
                 if (result.Succeeded)
                 {
                     if (this.Request.Query.Keys.Contains("ReturnUrl"))
@@ -74,7 +78,20 @@ namespace Superleague.Controllers
                         return Redirect(this.Request.Query["ReturnUrl"].First());
                     }
 
-                    return this.RedirectToAction("Index", "Home");
+                    TempData["success"] = $"Welcome back, {user.FirstName} {user.LastName}";
+
+                    if (await _userHelper.IsUserInRoleAsync(user, "Club"))
+                    {
+                        model.TeamId = (int)user.TeamId;
+
+                        return RedirectToAction("Edit", "Teams", new { id = model.TeamId });
+                    }
+                    else
+                    {
+                        return this.RedirectToAction("Index", "Home");
+                    }
+
+                    
                 }
             }
 
@@ -92,6 +109,7 @@ namespace Superleague.Controllers
 
 
         // Users
+        [Authorize(Roles = "Admin")]
         public IActionResult Register()
         {
             RegisterViewModel model = new RegisterViewModel
@@ -114,6 +132,7 @@ namespace Superleague.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
@@ -165,21 +184,20 @@ namespace Superleague.Controllers
                         user.TeamId = model.TeamId;
                     }
 
-                    string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+
                     string tokenLink = Url.Action("ConfirmEmail", "Account", new
                     {
                         userid = user.Id,
                         token = myToken
                     }, protocol: HttpContext.Request.Scheme);
 
-                    Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                        $"To allow the user, " +
-                        $"Click this link to confirm your account:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+                    Response response = _mailHelper.SendEmail(model.Email, "Account confirmation", $"<h2>Welcome to the Super League</h2>" +
+                        $"Before logging in, click the link below:</br></br><a href = \"{tokenLink}\"> --> Confirm my account <-- </a>");
 
                     if (response.IsSuccess)
                     {
                         TempData["success"] = $"Confirmation email has been sent";
-                        //return View(model);
                     }
 
                     await _userHelper.AddUserToRoleAsync(user, model.Role);
@@ -220,6 +238,7 @@ namespace Superleague.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetListUsers()
         {
             var users = _userManager.Users;
@@ -289,6 +308,7 @@ namespace Superleague.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -360,6 +380,82 @@ namespace Superleague.Controllers
             }
 
             return BadRequest();
+        }
+
+        public IActionResult RecoverPassword()
+        {
+            return View();
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Sorry, but this email was not found...");
+                    return View(model);
+                }
+
+                var myToken = await _userHelper.GeneratePasswordResetTokenAsync(user);
+
+                var link = this.Url.Action(
+                    "ResetPassword",
+                    "Account",
+                    new { token = myToken }, protocol: HttpContext.Request.Scheme);
+
+                Response response = _mailHelper.SendEmail(model.Email, "Super League Password Reset", $"<h1>Password Reset</h1>" +
+                $"Almost done! Just click the link below to reset the password:</br></br>" +
+                $"<a href = \"{link}\"> -->Reset Password <-- </a>");
+
+                if (response.IsSuccess)
+                {
+                    this.ViewBag.Message = "Instructions to reset password have been sent to your email";
+                }
+
+                return this.View();
+
+            }
+
+            return this.View(model);
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(model.UserName);
+            if (user != null)
+            {
+                var result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
+                if (result.Succeeded)
+                {
+                    this.ViewBag.Message = "Your password has been reset";
+                    return View();
+                }
+
+                this.ViewBag.Message = "Error while resetting the password";
+                return View(model);
+            }
+
+            this.ViewBag.Message = "User not found";
+            return View(model);
+        }
+
+
+
+        public IActionResult NotAuthorized()
+        {
+            return View();
         }
     }
 }

@@ -9,6 +9,7 @@ using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Superleague
 {
@@ -28,18 +29,24 @@ namespace Superleague
 
             services.AddTransient<SeedDb>();
 
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>();
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+                options.SignIn.RequireConfirmedEmail = true;
+                options.User.RequireUniqueEmail = true;
 
-            //services.AddAuthentication().AddCookie().AddJwtBearer(cfg =>
-            //{
-            //    cfg.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidIssuer = this.Configuration["Tokens:Issuer"],
-            //        ValidAudience = this.Configuration["Tokens:Audience"],
-            //        IssuerSigningKey = new SymmetricSecurityKey(
-            //            Encoding.UTF8.GetBytes(this.Configuration["Tokens:Key"]))
-            //    };
-            //});
+            }).AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+
+            services.AddAuthentication().AddCookie().AddJwtBearer(cfg =>
+            {
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = this.Configuration["Tokens:Issuer"],
+                    ValidAudience = this.Configuration["Tokens:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(this.Configuration["Tokens:Key"]))
+                };
+            });
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

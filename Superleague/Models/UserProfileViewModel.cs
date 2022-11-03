@@ -6,8 +6,6 @@ namespace Superleague.Models
 {
     public class UserProfileViewModel
     {
-        public User User { get; set; }
-
         [Required]
         [Display(Name = "First Name")]
         [StringLength(30), MinLength(2)]
@@ -18,7 +16,7 @@ namespace Superleague.Models
         [StringLength(30), MinLength(2)]
         public string LastName { get; set; }
 
-
+        [Required]
         public string ImageURL { get; set; }
     }
 }

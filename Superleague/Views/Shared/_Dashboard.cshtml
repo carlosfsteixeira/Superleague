@@ -52,20 +52,23 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Users</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Manage Users</h6>
-                        <a class="collapse-item" asp-area="" asp-controller="Account" asp-action="ListUsers">View All</a>
-                        <a class="collapse-item" asp-area="" asp-controller="Account" asp-action="Register">Add New</a>
+            @if(User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                   aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>Users</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Manage Users</h6>
+                            <a class="collapse-item" asp-area="" asp-controller="Account" asp-action="ListUsers">View All</a>
+                            <a class="collapse-item" asp-area="" asp-controller="Account" asp-action="Register">Add New</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            }
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
@@ -84,23 +87,27 @@
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Management</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Customize</h6>
-                        <a class="collapse-item" asp-area="" asp-controller="Positions" asp-action="Index">Player Positions</a>
-                        <a class="collapse-item" asp-area="" asp-controller="Functions" asp-action="Index">Staff Functions</a>
-                        <a class="collapse-item" asp-area="" asp-controller="Rounds" asp-action="Index">Rounds</a>
-                        <a class="collapse-item" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                   aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-fw fa-wrench"></i>
+                        <span>Management</span>
+                    </a>
+                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                     data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Customize</h6>
+                            <a class="collapse-item" asp-area="" asp-controller="Positions" asp-action="Index">Player Positions</a>
+                            <a class="collapse-item" asp-area="" asp-controller="Functions" asp-action="Index">Staff Functions</a>
+                            <a class="collapse-item" asp-area="" asp-controller="Rounds" asp-action="Index">Rounds</a>
+                            <a class="collapse-item" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            }
+           
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -186,8 +193,8 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-800">Hello, @User.Identity.Name</span>
-@*                                    <img class="img-profile rounded-circle" src="@Url.Content(Model.ImageURL)" alt="image">*@
+                                   <span class="mr-2 d-none d-lg-inline text-gray-800">@User.Identity.Name</span>
+                                   <img class="img-profile rounded-circle" src="" alt="image">
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

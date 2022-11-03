@@ -11,14 +11,17 @@
 <div class="container-fluid">
     @if (Model.Any())
     {
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Clubs Management</h1>
+        @if(User.IsInRole("Admin"))
+        {
+             <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Clubs <i class="fa-solid fa-angle-right"></i> All</h1>
             <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
                 <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
             </a>
-        </div>
-
-        <div class="row">
+            </div>
+        }
+       
+        <div class="row py-5">
         @foreach (var item in Model)
         {
             <div class="col-xl-3 col-md-6 mb-4 align-items-center justify-content-between d-sm-flex">
@@ -36,17 +39,28 @@
                                 <h6>@item.Country.Name</h6>
                             </div>
                         </div>
-                            <div class="card-footer" style="border-radius: 5px">
-                            <div class="row justify-content-center">
-                                <div class="col-md-6">
+                        <div class="card-footer" style="border-radius: 5px">
+
+                            @if (User.IsInRole("Club"))
+                            {
+                                <div class="row justify-content-center">
+                                    <div class="col-md-12 mb-2">
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary w-100">Edit</a>
-                                 </div>
-                                <div class="col-md-6">
-                                    <form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger w-100" onclick="Delete(@item.Id)">Delete</button>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+                            
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="row justify-content-center">
+                                    <div class="col-md-12">
+                                        <form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger w-100" onclick="Delete(@item.Id)">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                            
                         </div>
                         
                     </div>

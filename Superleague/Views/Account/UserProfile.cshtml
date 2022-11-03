@@ -37,13 +37,11 @@
 
     <form method="post" asp-action="UserProfile" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input asp-for="User.Id" hidden />
-            <input asp-for="User.ImageURL" hidden />
 
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h3 class="mb-0 text-gray-800">User Settings</h3>
+                <h3 class="mb-0 text-gray-800">User <i class="fa-solid fa-angle-right"></i> Settings <i class="fa-solid fa-angle-right"></i> Profile</h3>
             </div>
 
             <div class="row py-5">
@@ -61,7 +59,7 @@
                                 <div class="col-md-9 col-lg-4">
 
                                     <div class="container justify-content-center">
-                                    <img src="User.ImageURL" id="output" style="width:150px; height:160px" class="border-primary my-2" onchange="readURL(this)" />
+                                    <img src="ImageURL" id="output" style="width:150px; height:160px" class="border-primary my-2" onchange="readURL(this)" />
                                     <label asp-for="ImageURL" class="text-center" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
                                     
                                         <input type="file" id="uploadBox" name="file" asp-for="ImageURL" class="form-control" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
@@ -89,7 +87,7 @@
                             <div class="text-center">
                                 <div class="form-group col-md-12">
                                     <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-primary float-right" value="Update" />
-                                    <a asp-action="ListUsers" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
+                                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
                                 </div>
                             </div>
                         </div>
