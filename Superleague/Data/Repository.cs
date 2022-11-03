@@ -39,6 +39,14 @@ namespace Superleague.Data
             await SaveAllAsync();
         }
 
+        public void Create(T entity)
+        {
+             _context.Set<T>().Add(entity);
+
+             _context.SaveChanges();
+
+        }
+
         public async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
@@ -60,8 +68,11 @@ namespace Superleague.Data
 
         public async Task<bool> SaveAllAsync()
         {
-            return await _context.SaveChangesAsync() > 0;
+
+            var result = await _context.SaveChangesAsync() > 0;
+            return result;
         }
+
 
         public async Task RemoveRangeAsync(IEnumerable<T> entity)
         {

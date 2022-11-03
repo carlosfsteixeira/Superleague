@@ -13,7 +13,7 @@
     {
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Clubs Management</h1>
-            <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
                 <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
             </a>
         </div>
@@ -78,5 +78,38 @@
        
 
 </div>
+
+@section Scripts{
+    <script>
+        function Delete(url) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('form').submit();
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        success: function (data) {
+                            if (data.success) {
+                                toastr.success(data.message);
+                            }
+                            else {
+                                toastr.error(data.message);
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+}
 
 

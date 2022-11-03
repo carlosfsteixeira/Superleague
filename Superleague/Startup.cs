@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Superleague
 {
@@ -29,11 +30,24 @@ namespace Superleague
 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>();
 
+            //services.AddAuthentication().AddCookie().AddJwtBearer(cfg =>
+            //{
+            //    cfg.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidIssuer = this.Configuration["Tokens:Issuer"],
+            //        ValidAudience = this.Configuration["Tokens:Audience"],
+            //        IssuerSigningKey = new SymmetricSecurityKey(
+            //            Encoding.UTF8.GetBytes(this.Configuration["Tokens:Key"]))
+            //    };
+            //});
+
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IUserHelper, UserHelper>();
 
             services.AddScoped<IImageHelper, ImageHelper>();
+
+            services.AddScoped<IMailHelper, MailHelper>();
 
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();

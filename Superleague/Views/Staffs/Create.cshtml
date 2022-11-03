@@ -16,31 +16,32 @@
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between">
-                <h1 class="h3 mb-0 text-gray-800">New Staff Member</h1>
+                <h1 class="h3 mb-0 text-gray-800">Staff <i class="fa-solid fa-chevron-right"></i> Add New</h1>
             </div>
 
             <div class="row py-5">
 
-                <div class="col-lg-6">
+                <div class="col-lg-7">
 
-                    <div class="card shadow border-left-primary mb-4">
+                    <div class="card shadow border-left-success mb-4">
 
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Details</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Details</h6>
                         </div>
 
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-9 col-lg-4">
+                                <div class="col-md-4 col-lg-1"></div>
+
+                                <div class="col-md-9 col-lg-4 py-4">
 
                                     <img id="output" style="width:150px; height:160px" class="border-primary my-1 ml-4" onchange="readURL(this)" />
                                     <label class="text-center ml-4" asp-for="Staff.ImageURL" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
                                     <input type="file" id="uploadBox" name="file" asp-for="Staff.ImageURL" class="form-control" accept="image/jpeg, image/png" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
 
-
                                 </div>
-                                <div class="col-md-9 col-lg-6 py-4">
-
+                                <div class="col-md-6 col-lg-5 py-4">
+                                    <h5>Details</h5>
                                     <div class="form-group col-md-12">
                                         <input asp-for="Staff.Name" class="form-control" placeholder="Name" />
                                         <span asp-validation-for="Staff.Name" class="text-danger"></span>
@@ -51,8 +52,8 @@
                                             <option disabled selected> Function </option>
                                         </select>
                                         <span asp-validation-for="Staff.FunctionId" class="text-danger"></span>
-
                                     </div>
+
                                     <div class="form-group col-md-12">
                                         <select asp-for="Staff.CountryId" asp-items="@Model.CountryList" class="select">
                                             <option disabled selected> Country </option>
@@ -64,11 +65,12 @@
                             </div>
                         </div>
 
+
                         <div class="card-footer">
                             <div class="text-center">
                                 <div class="form-group col-md-12">
-                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-secondary float-right" value="  Add  " />
-                                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-outline-dark float-right mr-1">Cancel</a>
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-success float-right" value="  Add  " />
+                                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-outline-dark btn-sm float-right mr-1">Cancel</a>
                                 </div>
                             </div>
                         </div>

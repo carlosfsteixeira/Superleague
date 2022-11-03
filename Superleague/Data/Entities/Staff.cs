@@ -34,9 +34,8 @@ namespace Superleague.Data.Entities
         [ValidateNever]
         public Country Country { get; set; }
 
-        [Required]
         [Display(Name = "Team")]
-        public int TeamId { get; set; }
+        public int? TeamId { get; set; }
         [ForeignKey("TeamId")]
 
         [ValidateNever]

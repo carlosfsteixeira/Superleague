@@ -7,10 +7,13 @@ namespace Superleague.Data.Entities
 {
     public class User : IdentityUser
     {
+        [Required]
         public string FirstName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
+        [Required]
         public string ImageURL { get; set; }
 
         [Display(Name = "Team")]
@@ -20,6 +23,7 @@ namespace Superleague.Data.Entities
         [ValidateNever]
         public Team Team { get; set; }
 
+        [Required]
         public string Role { get; set; }
 
     }

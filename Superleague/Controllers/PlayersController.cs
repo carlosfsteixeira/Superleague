@@ -298,8 +298,20 @@ namespace Superleague.Controllers
 
         // POST: Players/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var player = await _playerRepository.GetByIdAsync(id);
+
+            await _playerRepository.DeleteAsync(player);
+
+            TempData["success"] = $"{player.Name} removed";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        //POST: Players/Delete/5
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
         {
             var player = await _playerRepository.GetByIdAsync(id);
 

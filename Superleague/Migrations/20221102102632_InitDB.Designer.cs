@@ -10,8 +10,8 @@ using Superleague.Data;
 namespace Superleague.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221029155839_Init_Db")]
-    partial class Init_Db
+    [Migration("20221102102632_InitDB")]
+    partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -257,6 +257,117 @@ namespace Superleague.Migrations
                     b.ToTable("Functions");
                 });
 
+            modelBuilder.Entity("Superleague.Data.Entities.GlobalStats", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("AwayWins")
+                        .HasColumnType("float");
+
+                    b.Property<string>("BestAttack")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BestDefence")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Draws")
+                        .HasColumnType("float");
+
+                    b.Property<double>("GoalAverage")
+                        .HasColumnType("float");
+
+                    b.Property<double>("HomeWins")
+                        .HasColumnType("float");
+
+                    b.Property<string>("LessDefeats")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LessDraws")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LessRedCards")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LessWins")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LessYellowCards")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MostDefeats")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MostDraws")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MostRedCards")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MostWins")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MostYellowCards")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalMatches")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalRedCards")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalYellowCards")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorstAttack")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorstDefence")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GlobalStatistics");
+                });
+
+            modelBuilder.Entity("Superleague.Data.Entities.Match", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AwayTeamId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeTeamId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("MatchDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("RoundId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AwayTeamId");
+
+                    b.HasIndex("HomeTeamId");
+
+                    b.HasIndex("RoundId");
+
+                    b.ToTable("Matches");
+                });
+
             modelBuilder.Entity("Superleague.Data.Entities.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -283,7 +394,7 @@ namespace Superleague.Migrations
                     b.Property<int>("PositionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TeamId")
+                    b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -314,6 +425,71 @@ namespace Superleague.Migrations
                     b.ToTable("Positions");
                 });
 
+            modelBuilder.Entity("Superleague.Data.Entities.Result", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AwayGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AwayRedCards")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AwayTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AwayYellowCards")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeRedCards")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeYellowCards")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MatchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoundId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AwayTeamId");
+
+                    b.HasIndex("HomeTeamId");
+
+                    b.HasIndex("MatchId");
+
+                    b.HasIndex("RoundId");
+
+                    b.ToTable("Results");
+                });
+
+            modelBuilder.Entity("Superleague.Data.Entities.Round", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rounds");
+                });
+
             modelBuilder.Entity("Superleague.Data.Entities.Staff", b =>
                 {
                     b.Property<int>("Id")
@@ -337,7 +513,7 @@ namespace Superleague.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("TeamId")
+                    b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -351,6 +527,47 @@ namespace Superleague.Migrations
                     b.ToTable("Staffs");
                 });
 
+            modelBuilder.Entity("Superleague.Data.Entities.Statistics", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Draws")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalsConceded")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalsScored")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Losses")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalMatches")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wins")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Statistics");
+                });
+
             modelBuilder.Entity("Superleague.Data.Entities.Team", b =>
                 {
                     b.Property<int>("Id")
@@ -359,6 +576,7 @@ namespace Superleague.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CountryId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("ImageURL")
@@ -387,15 +605,19 @@ namespace Superleague.Migrations
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageURL")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TeamId")
@@ -457,6 +679,33 @@ namespace Superleague.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Superleague.Data.Entities.Match", b =>
+                {
+                    b.HasOne("Superleague.Data.Entities.Team", "AwayTeam")
+                        .WithMany("AwayMatches")
+                        .HasForeignKey("AwayTeamId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Superleague.Data.Entities.Team", "HomeTeam")
+                        .WithMany("HomeMatches")
+                        .HasForeignKey("HomeTeamId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Superleague.Data.Entities.Round", "Round")
+                        .WithMany()
+                        .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AwayTeam");
+
+                    b.Navigation("HomeTeam");
+
+                    b.Navigation("Round");
+                });
+
             modelBuilder.Entity("Superleague.Data.Entities.Player", b =>
                 {
                     b.HasOne("Superleague.Data.Entities.Country", "Country")
@@ -473,15 +722,40 @@ namespace Superleague.Migrations
 
                     b.HasOne("Superleague.Data.Entities.Team", "Team")
                         .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeamId");
 
                     b.Navigation("Country");
 
                     b.Navigation("Position");
 
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Superleague.Data.Entities.Result", b =>
+                {
+                    b.HasOne("Superleague.Data.Entities.Team", "AwayTeam")
+                        .WithMany()
+                        .HasForeignKey("AwayTeamId");
+
+                    b.HasOne("Superleague.Data.Entities.Team", "HomeTeam")
+                        .WithMany()
+                        .HasForeignKey("HomeTeamId");
+
+                    b.HasOne("Superleague.Data.Entities.Match", "Match")
+                        .WithMany()
+                        .HasForeignKey("MatchId");
+
+                    b.HasOne("Superleague.Data.Entities.Round", "Round")
+                        .WithMany()
+                        .HasForeignKey("RoundId");
+
+                    b.Navigation("AwayTeam");
+
+                    b.Navigation("HomeTeam");
+
+                    b.Navigation("Match");
+
+                    b.Navigation("Round");
                 });
 
             modelBuilder.Entity("Superleague.Data.Entities.Staff", b =>
@@ -500,9 +774,7 @@ namespace Superleague.Migrations
 
                     b.HasOne("Superleague.Data.Entities.Team", "Team")
                         .WithMany()
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeamId");
 
                     b.Navigation("Country");
 
@@ -511,11 +783,22 @@ namespace Superleague.Migrations
                     b.Navigation("Team");
                 });
 
+            modelBuilder.Entity("Superleague.Data.Entities.Statistics", b =>
+                {
+                    b.HasOne("Superleague.Data.Entities.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
+
+                    b.Navigation("Team");
+                });
+
             modelBuilder.Entity("Superleague.Data.Entities.Team", b =>
                 {
                     b.HasOne("Superleague.Data.Entities.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Country");
                 });
@@ -527,6 +810,13 @@ namespace Superleague.Migrations
                         .HasForeignKey("TeamId");
 
                     b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("Superleague.Data.Entities.Team", b =>
+                {
+                    b.Navigation("AwayMatches");
+
+                    b.Navigation("HomeMatches");
                 });
 #pragma warning restore 612, 618
         }

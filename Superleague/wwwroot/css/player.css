@@ -31,15 +31,16 @@
     }
 
 input[type=number] {
-    width: 80%;
+    width: 100%;
     border: 2px solid #aaa;
     border-radius: 4px;
     outline: none;
+    padding: 8px;
     box-sizing: border-box;
     display: inline-block;
     margin-bottom: 1px;
-    padding-left: 40px;
-    float: right;
+    text-align: right;
+    padding-right: 20px;
 }
     input[type=number]:focus {
         border-color: black;
@@ -47,12 +48,11 @@ input[type=number] {
     }
 
 .icon {
-    position: absolute;
-    left: 25px;
+    position:absolute;
     padding: 9px 8px;
     color: #aaa;
     transition: .3s;
-    margin-bottom: 1px;
+    margin-top: -40px;
 }
 
 input[type=file] {
@@ -64,20 +64,18 @@ label {
     width: 150px;
     border: 2px solid #aaa;
     border-radius: 4px;
-    border-color: royalblue;
+    border-color: gray;
     margin: 3px 0;
     outline: none;
     padding: 3px;
     box-sizing: border-box;
-    background-color: royalblue;
+    background-color: gray;
     color: white;
     justify-content: center;
     align-items: center;
 }
 
     label:hover {
-        background-color: royalblue;
-        border-color: royalblue;
         cursor: pointer;
     }
 

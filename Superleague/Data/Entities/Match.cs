@@ -12,23 +12,26 @@ namespace Superleague.Data.Entities
 
         [Required]
         [Display(Name = "Match Date")]
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd/MM/yyy HH:mm}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyy HH:mm}")]
         public DateTime MatchDate { get; set; }
 
+        [Required]
         [Display(Name = "Round")]
         public int? RoundId { get; set; }
         [ForeignKey("RoundId")]
 
         [ValidateNever]
         public Round Round { get; set; }
-  
+
+        [Required]
         [Display(Name = "Home Team")]
         public int? HomeTeamId { get; set; }
         [ForeignKey("HomeTeamId")]
 
         [ValidateNever]
         public Team HomeTeam { get; set; }
-    
+
+        [Required]
         [Display(Name = "Away Team")]
         public int? AwayTeamId { get; set; }
         [ForeignKey("AwayTeamId")]

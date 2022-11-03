@@ -31,29 +31,45 @@ function loadDataTable() {
                 "data": "id",
                 "render": function (data) {
                     return `
-                        <div class="btn-group" role="group">
+                        <div class="w-75 btn-group" role="group">
                         <a href="/Players/Edit?id=${data}"
-                        class="btn btn-secondary btn-sm"> Edit</a>
-                        </div>
+                        class="btn btn-info"> <i class="bi bi-pencil-square"></i> Edit</a>
+                        <a onClick=Delete('/Players/Delete/${data}')
+                        class="btn btn-danger text-white"> <i class="bi bi-trash-fill"></i> Del</a>
+                    </div>
                      `
                 },
-                "width": "5%"
-            },
-            {
-                "data": "id",
-                "render": function (data) {
-                    return `
-                        <div class="btn-group" role="group">
-                        <a href="/Players/Delete?id=${data}"
-                        class="btn btn-danger btn-sm">Delete</a>
-                        </div>
-                     `
-                },
-                "width": "5%"
-            },
+                "width": "15%"
+            }
         ]
     });
-    order: [[1, 'asc']]
-};
+    order: [[0, 'asc']]
+}
 
-/*<i class="bi bi-trash-fill"></i>*/
+function Delete(url) {
+    Swal.fire({
+        title: 'Are you sure?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: url,
+                type: "POST",
+                success: function (data) {
+                    if (data.success) {
+                        dataTable.ajax.reload();
+                        toastr.success(data.message);
+                    }
+                    else {
+                        dataTable.ajax.reload();
+                        toastr.success(data.message);
+                    }
+                }
+            });
+        }
+    })
+}

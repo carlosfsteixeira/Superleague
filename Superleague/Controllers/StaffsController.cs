@@ -407,7 +407,7 @@ namespace Superleague.Controllers
 
             await _staffRepository.DeleteAsync(staff);
 
-            TempData["success"] = $"{staff.Name} updated";
+            TempData["success"] = $"{staff.Name} removed";
 
             return RedirectToAction(nameof(Index));
         }

@@ -18,16 +18,21 @@
     }
 
         .select:focus {
-            border-color: royalblue;
-            box-shadow: 0 0 4px royalblue;
+            border-color: black;
+            box-shadow: 0 0 4px black;
         }
 
         .styled-table thead tr {
-    background-color: royalblue;
+    background-color: black;
     color: #ffffff;
     text-align: left;
 }
 </style>
+
+<head>
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
 
 <body>
 
@@ -45,10 +50,10 @@
                 <div class="col-lg-3 col-md-4">
 
 
-                    <div class="card shadow border-left-primary mb-4">
+                    <div class="card shadow border-left-success mb-4">
 
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Match Info</h6>
+                            <h6 class="m-0 font-weight-bold text-success">Match Info</h6>
                         </div>
 
                         <div class="card-body">
@@ -66,13 +71,13 @@
                                     <h5 class="col-md-12 ml-3">Teams</h5>
                                 </div>
                                 <div class="container form-group col-md-12">
-                                    <select asp-for="Match.HomeTeamId" asp-items="@Model.TeamNamesList" class="combo select">
+                                    <select asp-for="Match.HomeTeamId" asp-items="@Model.TeamNamesList" id="home" class="combo select">
                                         <option disabled selected> Home Team</option>
                                     </select>
                                     <span asp-validation-for="Match.HomeTeamId" class="text-danger"></span>
                                 </div>
                                 <div class="container form-group col-md-12">
-                                    <select asp-for="Match.AwayTeamId" asp-items="@Model.TeamNamesList" class="combo select">
+                                    <select asp-for="Match.AwayTeamId" asp-items="@Model.TeamNamesList" id="away" class="combo select">
                                         <option disabled selected> Away Team </option>
                                     </select>
                                     <span asp-validation-for="Match.AwayTeamId" class="text-danger"></span>
@@ -92,7 +97,7 @@
                         <div class="card-footer">
                             <div class="text-center">
                                 <div class="form-group col-md-12">
-                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-primary float-right" value="  Add  " />
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-success float-right" value="  Add  " />
                                     <a asp-action="Index" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
                                 </div>
                             </div>
@@ -105,10 +110,6 @@
                 <div class="col-lg-8">
 
                     <div class="card shadow mb-4">
-
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Match List</h6>
-                        </div>
 
                         <div class="card-body">
                             <div class="row">
@@ -148,5 +149,18 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/matchGetAll.js"></script>
     } 
-    }
+    <script>
+        function ValidateInput() {
+            if (document.getElementById("home").value == document.getElementById("away").value) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Home Team and Away must be different',
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
+}
 

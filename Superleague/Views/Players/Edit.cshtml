@@ -18,7 +18,7 @@
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between">
-                <h1 class="h3 mb-0 text-gray-800">Update <i class="fa-solid fa-chevron-right"></i> @Model.Player.Name</h1>
+                <h1 class="h3 mb-0 text-gray-800">Players <i class="fa-solid fa-chevron-right"></i> Update <i class="fa-solid fa-chevron-right"></i> @Model.Player.Name</h1>
             </div>
 
             <div class="row py-5">
@@ -33,39 +33,39 @@
 
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-9 col-lg-3">
+                                <div class="col-md-4 col-lg-1"></div>
 
-                                    <img src ="@Model.Player.ImageURL" id="output" style="width:150px; height:160px" class="border-primary my-1 ml-4" onchange="readURL(this)" />
+                                <div class="col-md-9 col-lg-4 py-4">
+
+                                    <img src="@Model.Player.ImageURL" id="output" style="width:150px; height:160px" class="border-primary my-1 ml-4" onchange="readURL(this)" />
                                     <label class="text-center ml-4" asp-for="Player.ImageURL" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
                                     <input type="file" id="uploadBox" name="file" asp-for="Player.ImageURL" class="form-control" accept="image/jpeg, image/png" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
 
-
                                 </div>
-                                <div class="col-md-9 col-lg-5 py-4">
-
+                                <div class="col-md-6 col-lg-5 py-4">
+                                    <h5>Details</h5>
                                     <div class="form-group col-md-12">
                                         <input asp-for="Player.Name" class="form-control" placeholder="Name" />
                                         <span asp-validation-for="Player.Name" class="text-danger"></span>
                                     </div>
-                                    <div class="form-group col-md-12">
-                                        <input asp-for="Player.Number" class="form-control" />
-                                        <i class="fa-solid fa-shirt icon" aria-hidden="true"></i>
+
+                                    <div class="form-group col-md-12 float-center">
+
+                                        <input asp-for="Player.Number" class="form-control" min="1" onkeydown="if(event.key==='.'){event.preventDefault();}" oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" />
+                                        <p class="icon">Number</p>
                                         <span asp-validation-for="Player.Number" class="text-danger"></span>
                                     </div>
 
-                                </div>
-                                <div class="col-md-9 col-lg-4 py-4">
-
                                     <div class="form-group col-md-12">
                                         <select asp-for="Player.PositionId" asp-items="@Model.PositionList" class="select">
-                                            <option disabled selected> Select Position </option>
+                                            <option disabled selected> Position </option>
                                         </select>
                                         <span asp-validation-for="Player.PositionId" class="text-danger"></span>
-
                                     </div>
+
                                     <div class="form-group col-md-12">
                                         <select asp-for="Player.CountryId" asp-items="@Model.CountryList" class="select">
-                                            <option disabled selected> Select Country </option>
+                                            <option disabled selected> Country </option>
                                         </select>
                                         <span asp-validation-for="Player.CountryId" class="text-danger"></span>
                                     </div>
@@ -74,11 +74,12 @@
                             </div>
                         </div>
 
+
                         <div class="card-footer">
                             <div class="text-center">
                                 <div class="form-group col-md-12">
-                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-secondary float-right" value="Update" />
-                                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-outline-dark float-right mr-1">Cancel</a>
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-primary float-right" value="Update" />
+                                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-outline-dark btn-sm float-right mr-1">Cancel</a>
                                 </div>
                             </div>
                         </div>
