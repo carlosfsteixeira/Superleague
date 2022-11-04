@@ -331,11 +331,21 @@ namespace Superleague.Controllers
         {
             var team = await _teamRepository.GetByIdAsync(id);
 
-            await _teamRepository.DeleteAsync(team);
+            try
+            {
+                await _teamRepository.DeleteAsync(team);
 
-            TempData["success"] = $"{team.Name} removed";
+                TempData["success"] = $"{team.Name} removed";
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ViewBag.ErrorTitle = "This Club is in use";
+                ViewBag.ErrorMessage = "Consider deleting all Matches appended and try again.";
+                return View("Error");
+            }
+ 
         }
     }
 }

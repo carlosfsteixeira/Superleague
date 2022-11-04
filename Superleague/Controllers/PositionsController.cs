@@ -27,6 +27,14 @@ namespace Superleague.Controllers
             return View(_context.GetAll().OrderBy(e => e.Description));
         }
 
+        // GET: Positions API
+        public IActionResult GetAll()
+        {
+            var positions = _context.GetAll().OrderBy(e => e.Description);
+
+            return Json(new { data = positions });
+        }
+
         // GET: Positions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -138,14 +146,27 @@ namespace Superleague.Controllers
 
         // POST: Positions/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var position = await _context.GetByIdAsync(id);
 
-            await _context.DeleteAsync(position);
+            try
+            {
 
-            return RedirectToAction(nameof(Index));
+                await _context.DeleteAsync(position);
+
+                TempData["success"] = $"Position removed";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ViewBag.ErrorTitle = "This Position is in use";
+                ViewBag.ErrorMessage = "Consider deleting all Players appended and try again.";
+                return View("Error");
+            }
+
         }
     }
 }

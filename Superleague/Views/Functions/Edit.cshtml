@@ -1,33 +1,80 @@
 ﻿@model Superleague.Data.Entities.Function
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Functions";
 }
 
-<h1>Edit</h1>
+<style>
+    input[type=text] {
+        width: 100%;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        outline: none;
+        padding: 4px;
+        box-sizing: border-box;
+    }
 
-<h4>Function</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        input[type=text]:focus {
+            border-color: black;
+            box-shadow: 0 0 4px;
+        }
+</style>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<body>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="container-fluid">
+
+            <div class="d-sm-flex align-items-center justify-content-between">
+                <h1 class="h3 mb-0 text-gray-800">Countries <i class="fa-solid fa-angle-right"></i> Update <i class="fa-solid fa-angle-right"></i> @Model.Description</h1>
+            </div>
+
+            <div class="row py-5">
+
+                <div class="col-lg-4">
+
+                    <div class="card shadow border-left-primary mb-4">
+
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Info</h6>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                <div class="col-lg-12 col-lg-4 mb-4">
+
+                                    <div class="form-group col-md-12">
+                                        <input asp-for="Description" class="form-control" placeholder="Name" />
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="text-center">
+                                <div class="form-group col-md-12">
+                                    <input type="submit" onclick="return ValidateInput()" class="btn btn-sm btn-success float-right" value="  Add  " />
+                                    <a asp-action="Index" class="btn btn-sm btn-outline-dark float-right mr-1">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+</body>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

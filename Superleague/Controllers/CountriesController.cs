@@ -25,7 +25,16 @@ namespace Superleague.Controllers
         // GET: Countries
         public IActionResult Index()
         {
-            return View(_context.GetAll());
+            return View(_context.GetAll().OrderBy(e => e.Name));
+
+        }
+
+        // GET: Countries
+        public IActionResult GetAll()
+        {
+            var countries = _context.GetAll();
+
+            return Json(new { data = countries });
         }
 
         // GET: Countries/Details/5
@@ -139,14 +148,26 @@ namespace Superleague.Controllers
 
         // POST: Countries/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var country = await _context.GetByIdAsync(id);
 
-            await _context.DeleteAsync(country);
+            try
+            {
+                await _context.DeleteAsync(country);
 
-            return RedirectToAction(nameof(Index));
+                TempData["success"] = $"Function removed";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ViewBag.ErrorTitle = "This Country is in use";
+                ViewBag.ErrorMessage = "Consider deleting all Clubs, Players and Staff Members appended and try again.";
+                return View("Error");
+            }
+
         }
     }
 }

@@ -28,6 +28,14 @@ namespace Superleague.Controllers
             return View(_context.GetAll().OrderBy(e => e.Description));
         }
 
+        // GET: Functions API
+        public IActionResult GetAll()
+        {
+            var functions = _context.GetAll().OrderBy(e => e.Description);
+
+            return Json(new { data = functions });
+        }
+
         // GET: Functions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -139,14 +147,25 @@ namespace Superleague.Controllers
 
         // POST: Functions/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var function = await _context.GetByIdAsync(id);
 
-            await _context.DeleteAsync(function);
+            try
+            {
+                await _context.DeleteAsync(function);
 
-            return RedirectToAction(nameof(Index));
+                TempData["success"] = $"Function removed";
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ViewBag.ErrorTitle = "This Function is in use";
+                ViewBag.ErrorMessage = "Consider deleting all Staff Members appended and try again.";
+                return View("Error");
+            }
         }
     }
 }

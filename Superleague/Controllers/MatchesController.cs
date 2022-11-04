@@ -223,11 +223,21 @@ namespace Superleague.Controllers
         {
             var match = await _matchRepository.GetByIdAsync(id);
 
-            await _matchRepository.DeleteAsync(match);
+            try
+            {
+                await _matchRepository.DeleteAsync(match);
 
-            TempData["success"] = $"Fixture removed";
+                TempData["success"] = $"Fixture removed";
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ViewBag.ErrorTitle = "This Match is in use";
+                ViewBag.ErrorMessage = "Consider deleting all Results appended and try again.";
+                return View("Error");
+            }
+       
         }
 
         [HttpGet]

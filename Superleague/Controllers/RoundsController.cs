@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,7 @@ using Superleague.Data.Entities;
 
 namespace Superleague.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RoundsController : Controller
     {
         private readonly IRoundRepository _roundRepository;
@@ -26,6 +29,13 @@ namespace Superleague.Controllers
             return View(_roundRepository.GetAll().OrderBy(e => e.Description));
         }
 
+        // GET: Rounds API
+        public IActionResult GetAll()
+        {
+            var rounds = _roundRepository.GetAll().OrderBy(e => e.Description);
+
+            return Json(new { data = rounds });
+        }
         // GET: Rounds/Create
         public IActionResult Create()
         {
@@ -69,7 +79,6 @@ namespace Superleague.Controllers
 
         // POST: Rounds/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var round = await _roundRepository.GetByIdAsync(id);
@@ -77,6 +86,8 @@ namespace Superleague.Controllers
             try
             {
                 await _roundRepository.DeleteAsync(round);
+
+                TempData["success"] = $"Round removed";
 
                 return RedirectToAction(nameof(Index));
             }
