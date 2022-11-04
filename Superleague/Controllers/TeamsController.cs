@@ -59,7 +59,7 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeamNotFound");
             }
 
             TeamViewModel teamViewModel = new()
@@ -85,7 +85,7 @@ namespace Superleague.Controllers
 
             if (teamViewModel == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeamNotFound");
             }
 
             return View(teamViewModel);
@@ -171,7 +171,7 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeamNotFound");
             }
 
             TeamViewModel teamViewModel = new()
@@ -195,7 +195,7 @@ namespace Superleague.Controllers
 
             if (teamViewModel == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeamNotFound");
             }
             
             return View(teamViewModel);
@@ -292,7 +292,7 @@ namespace Superleague.Controllers
                 {
                     if (!await _teamRepository.ExistAsync(model.Team.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("TeamNotFound");
                     }
                     else
                     {
@@ -310,14 +310,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeamNotFound");
             }
 
             var team = await _teamRepository.GetByIdAsync(id.Value);
 
             if (team == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("TeamNotFound");
             }
 
             return View(team);
@@ -345,7 +345,11 @@ namespace Superleague.Controllers
                 ViewBag.ErrorMessage = "Consider deleting all Matches appended and try again.";
                 return View("Error");
             }
- 
+        }
+
+        public IActionResult TeamNotFound()
+        {
+            return View();
         }
     }
 }

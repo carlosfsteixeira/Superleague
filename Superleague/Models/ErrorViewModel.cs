@@ -1,6 +1,4 @@
-using System;
-
-namespace Superleague.Models
+﻿namespace Superleague.Models
 {
     public class ErrorViewModel
     {

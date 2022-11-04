@@ -69,8 +69,6 @@ namespace Superleague.Controllers
 
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
 
-                
-
                 if (result.Succeeded)
                 {
                     if (this.Request.Query.Keys.Contains("ReturnUrl"))
@@ -90,8 +88,6 @@ namespace Superleague.Controllers
                     {
                         return this.RedirectToAction("Index", "Home");
                     }
-
-                    
                 }
             }
 
@@ -450,8 +446,6 @@ namespace Superleague.Controllers
             this.ViewBag.Message = "User not found";
             return View(model);
         }
-
-
 
         public IActionResult NotAuthorized()
         {
