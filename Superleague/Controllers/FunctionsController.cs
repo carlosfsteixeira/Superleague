@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
+using Superleague.Helpers;
 
 namespace Superleague.Controllers
 {
@@ -41,14 +42,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FunctionNotFound");
             }
 
             var country = await _context.GetByIdAsync(id.Value);
 
             if (country == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FunctionNotFound");
             }
 
             return View(country);
@@ -81,14 +82,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FunctionNotFound");
             }
 
             var function = await _context.GetByIdAsync(id.Value);
 
             if (function == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FunctionNotFound");
             }
             return View(function);
         }
@@ -102,7 +103,7 @@ namespace Superleague.Controllers
         {
             if (id != function.Id)
             {
-                return NotFound();
+                return new NotFoundViewResult("FunctionNotFound");
             }
 
             if (ModelState.IsValid)
@@ -115,7 +116,7 @@ namespace Superleague.Controllers
                 {
                     if (!await _context.ExistAsync(function.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("FunctionNotFound");
                     }
                     else
                     {
@@ -132,14 +133,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FunctionNotFound");
             }
 
             var function = await _context.GetByIdAsync(id.Value);
 
             if (function == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("FunctionNotFound");
             }
 
             return View(function);
@@ -166,6 +167,11 @@ namespace Superleague.Controllers
                 ViewBag.ErrorMessage = "Consider deleting all Staff Members appended and try again.";
                 return View("Error");
             }
+        }
+
+        public IActionResult FunctionNotFound()
+        {
+            return View();
         }
     }
 }

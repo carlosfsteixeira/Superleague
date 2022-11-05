@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,21 +23,23 @@ namespace Superleague.Controllers
             _resultRepository = resultRepository;
         }
 
-
         // GET: Statistics
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            //RefreshStatisticsTable();
-            CalculateStatistics();
+            var stats = await _statisticsRepository.GetAll().ToListAsync();
 
-            var stats = _statisticsRepository.GetAll().Include(t => t.Team)
-                .OrderByDescending(s => s.Points)
-                .OrderByDescending(s => s.Wins)
-                .OrderByDescending(s => s.GoalsScored);
+            await _statisticsRepository.RemoveRangeAsync(stats);
+
+            await CalculateStatistics();
+
+            var statistics = await _statisticsRepository.GetAll().Include(t => t.Team)
+            .OrderByDescending(s => s.Points)
+            .OrderByDescending(s => s.Wins)
+            .OrderByDescending(s => s.GoalsScored).ToListAsync();
 
             int positionCounter = 1;
 
-            foreach (var statistic in stats)
+            foreach (var statistic in statistics)
             {
                 if (statistic.Position == 0)
                 {
@@ -43,70 +47,56 @@ namespace Superleague.Controllers
                 }
             }
 
-            return View(stats);
+            return View(statistics);
         }
 
-        public async void CalculateStatistics()
+        public async Task CalculateStatistics()
         {
-            var teams = _teamRepository.GetAll();
-
-            StatisticsViewModel model = new() { };
+            var teams = _teamRepository.GetAll().ToList();
 
             foreach (var team in teams)
             {
-                model.Statistics = new Statistics
-                {
-                    TeamId = team.Id,
-                };
-                //
+                Statistics statistics = new Statistics();
 
-                var results = _resultRepository.GetAll().Where(u => u.AwayTeamId == model.Statistics.TeamId || u.HomeTeamId == model.Statistics.TeamId);
+                statistics.TeamId = team.Id;
+
+                var results = _resultRepository.GetAll().Where(u => u.AwayTeamId == statistics.TeamId || u.HomeTeamId == statistics.TeamId);
 
                 //calculate statistics of team (visiting each result)
                 foreach (Result result in results)
                 {
                     //if team is HomeTeam (plays at home)
-                    if (result.HomeTeamId == model.Statistics.TeamId)
+                    if (result.HomeTeamId == statistics.TeamId)
                     {
-                        model.Statistics.GoalsScored += result.HomeGoals;
+                        statistics.GoalsScored += result.HomeGoals;
                     }
-                    else if (result.AwayTeamId == model.Statistics.TeamId)
+                    else if (result.AwayTeamId == statistics.TeamId)
                     {
-                        model.Statistics.GoalsScored += result.AwayGoals;
+                        statistics.GoalsScored += result.AwayGoals;
                     }
 
-                    model.Statistics.GoalsConceded += (result.HomeGoals + result.AwayGoals) - model.Statistics.GoalsScored;
+                    statistics.GoalsConceded += (result.HomeGoals + result.AwayGoals) - statistics.GoalsScored;
 
-                    if (model.Statistics.GoalsConceded < model.Statistics.GoalsScored)
+                    if (statistics.GoalsConceded < statistics.GoalsScored)
                     {
-                        model.Statistics.Wins++;
-                        model.Statistics.Points += 3;
+                        statistics.Wins++;
+                        statistics.Points += 3;
                     }
-                    else if (model.Statistics.GoalsConceded == model.Statistics.GoalsScored)
+                    else if (statistics.GoalsConceded == statistics.GoalsScored)
                     {
-                        model.Statistics.Draws++;
-                        model.Statistics.Points += 1;
+                        statistics.Draws++;
+                        statistics.Points += 1;
                     }
                     else
                     {
-                        model.Statistics.Losses++;
+                        statistics.Losses++;
                     }
 
-                    model.Statistics.TotalMatches++;
+                    statistics.TotalMatches++;
                 }
-                //
-                if (ModelState.IsValid)
-                {
-                    _statisticsRepository.Create(model.Statistics);
-                }
+
+                await _statisticsRepository.CreateAsync(statistics);
             }
-        }
-
-        public void RefreshStatisticsTable()
-        {
-            var stats = _statisticsRepository.GetAll();
-
-            _statisticsRepository.RemoveRangeAsync(stats);
         }
 
     }

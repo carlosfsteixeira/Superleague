@@ -195,7 +195,7 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StaffNotFound");
             }
 
             StaffViewModel staffViewModel = new()
@@ -218,7 +218,7 @@ namespace Superleague.Controllers
 
             if (staffViewModel == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StaffNotFound");
             }
 
             return View(staffViewModel);
@@ -229,10 +229,9 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(StaffViewModel model, IFormFile? file, int id)
+        public async Task<IActionResult> Edit(StaffViewModel model, IFormFile? file)
         {
-            int staffId = id;
-
+           
             if (ModelState.IsValid)
             {
                 try
@@ -265,7 +264,7 @@ namespace Superleague.Controllers
                         model.Staff.ImageURL = @"\images\staff\" + fileName + extension;
                     }
 
-                    var staffFromBD = _staffRepository.GetById(staffId);
+                    var staffFromBD = await _staffRepository.GetByIdAsync(model.Staff.Id);
 
                     if (staffFromBD.Name != model.Staff.Name)
                     {
@@ -350,6 +349,7 @@ namespace Superleague.Controllers
                                 }
                             }
                         }
+
                         staffFromBD.FunctionId = model.Staff.FunctionId;
                     }
 
@@ -367,7 +367,7 @@ namespace Superleague.Controllers
                 {
                     if (!await _staffRepository.ExistAsync(model.Staff.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("StaffNotFound");
                     }
                     else
                     {
@@ -385,14 +385,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StaffNotFound");
             }
 
             var staff = await _staffRepository.GetByIdAsync(id.Value);
 
             if (staff == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("StaffNotFound");
             }
 
             return View(staff);
@@ -412,12 +412,30 @@ namespace Superleague.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var staff = await _staffRepository.GetByIdAsync(id);
+
+            await _staffRepository.DeleteAsync(staff);
+
+            TempData["success"] = $"{staff.Name} removed";
+
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {
             var players = _staffRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Function).Include(p => p.Team);
 
             return Json(new { data = players });
+        }
+
+
+        public IActionResult StaffNotFound()
+        {
+            return View();
         }
 
     }

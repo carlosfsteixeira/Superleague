@@ -16,8 +16,6 @@ namespace Superleague.Data
 
         Task CreateAsync(T entity);
 
-        void Create(T entity);
-
         Task UpdateAsync(T entity);
 
         Task DeleteAsync(T entity);
@@ -25,5 +23,7 @@ namespace Superleague.Data
         Task<bool> ExistAsync(int id);
 
         Task RemoveRangeAsync(IEnumerable<T> entity);
+
+        void RemoveRange(T entity);
     }
 }

@@ -1,0 +1,100 @@
+﻿@model Superleague.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<body id="page-top">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-xl-3 col-md-4 mb-4">
+                <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                    Users
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers.ToString()</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="<i fa-solid fa-user fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 mb-4">
+                <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                    Clubs
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalTeams.ToString()</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="<i fa-solid fa-people-group fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 mb-4">
+                <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                    Players
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPlayers.ToString()</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="<i fa-solid fa-person-running fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-4 mb-4">
+                <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                    Staff Members
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalStaffs.ToString()</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="<i fa-solid fa-person fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+        </div>
+
+    </div>
+
+</body>
+

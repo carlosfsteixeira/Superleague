@@ -13,8 +13,7 @@ namespace Superleague.Data.Entities
         [Required]
         public string LastName { get; set; }
 
-        [Required]
-        public string ImageURL { get; set; }
+        public string? ImageURL { get; set; }
 
         [Display(Name = "Team")]
         public int? TeamId { get; set; }
@@ -25,6 +24,8 @@ namespace Superleague.Data.Entities
 
         [Required]
         public string Role { get; set; }
-
     }
+
+
+
 }

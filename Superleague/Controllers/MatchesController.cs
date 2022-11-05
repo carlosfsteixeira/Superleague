@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Superleague.Data;
 using Superleague.Data.Entities;
+using Superleague.Helpers;
 using Superleague.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -38,7 +39,7 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("MatchNotFound");
             }
 
             MatchViewModel matchViewModel = new()
@@ -66,7 +67,7 @@ namespace Superleague.Controllers
 
             if (matchViewModel == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("MatchNotFound");
             }
 
             return View(matchViewModel);
@@ -121,7 +122,7 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("MatchNotFound");
             }
 
             MatchViewModel matchViewModel = new()
@@ -159,7 +160,7 @@ namespace Superleague.Controllers
 
             if (matchViewModel == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("MatchNotFound");
             }
 
             return View(matchViewModel);
@@ -186,7 +187,7 @@ namespace Superleague.Controllers
                 {
                     if (!await _matchRepository.ExistAsync(model.Match.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("MatchNotFound");
                     }
                     else
                     {
@@ -203,14 +204,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("MatchNotFound");
             }
 
             var match = await _matchRepository.GetByIdAsync(id.Value);
 
             if (match == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("MatchNotFound");
             }
 
             return View(match);
@@ -254,6 +255,11 @@ namespace Superleague.Controllers
             var matchProperties = _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round).Where(t => t.Id == id);
 
             return Json(new { data = matchProperties });
+        }
+
+        public IActionResult MatchNotFound()
+        {
+            return View();
         }
 
     }

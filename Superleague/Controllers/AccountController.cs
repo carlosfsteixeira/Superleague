@@ -86,7 +86,7 @@ namespace Superleague.Controllers
                     }
                     else
                     {
-                        return this.RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Dashboard");
                     }
                 }
             }
@@ -148,7 +148,7 @@ namespace Superleague.Controllers
                         file.CopyTo(fileStreams);
                     }
 
-                    model.ImageURL = @"\images\archive\users" + fileName + extension;
+                    model.ImageURL = @"\images\archive\users\" + fileName + extension;
                 }
 
                 var user = await _userHelper.GetUserByEmailAsync(model.Email);
@@ -284,6 +284,8 @@ namespace Superleague.Controllers
                     if (response.Succeeded)
                     {
                         TempData["success"] = $"Profile updated";
+
+                        return View(model);
                     }
                     else
                     {

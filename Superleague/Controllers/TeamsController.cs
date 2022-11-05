@@ -240,7 +240,7 @@ namespace Superleague.Controllers
                         model.Team.ImageURL = @"\images\teams\" + fileName + extension;
                     }
 
-                    var teamFromBD = _teamRepository.GetById(id);
+                    var teamFromBD = await _teamRepository.GetByIdAsync(id);
 
                     if (teamFromBD.Name != model.Team.Name)
                     {
@@ -264,7 +264,7 @@ namespace Superleague.Controllers
                                     Value = i.Id.ToString(),
                                 }),
 
-                                //Statistics = _context.Statistics.GetFirstOrDefault(u => u.Team.Id == id),
+                                Statistics = _statisticsRepository.GetAll().Where(u => u.Team.Id == id).FirstOrDefault(),
                             };
 
                             return View(teamViewModel);

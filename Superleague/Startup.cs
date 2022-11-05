@@ -108,6 +108,10 @@ namespace Superleague
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
             });
         }
     }

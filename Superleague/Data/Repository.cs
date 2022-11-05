@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using Superleague.Data.Entities;
 using System.Threading.Tasks;
+using System.Security.Policy;
 
 namespace Superleague.Data
 {
@@ -21,7 +22,6 @@ namespace Superleague.Data
         {
             return _context.Set<T>().AsNoTracking();
         }
-
         public async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
@@ -37,14 +37,6 @@ namespace Superleague.Data
             await _context.Set<T>().AddAsync(entity);
 
             await SaveAllAsync();
-        }
-
-        public void Create(T entity)
-        {
-             _context.Set<T>().Add(entity);
-
-             _context.SaveChanges();
-
         }
 
         public async Task UpdateAsync(T entity)
@@ -73,6 +65,20 @@ namespace Superleague.Data
             return result;
         }
 
+        public bool SaveAll()
+        {
+
+            var result = _context.SaveChanges() > 0;
+            return result;
+        }
+
+
+        public void RemoveRange(T entity)
+        {
+            _context.Set<T>().RemoveRange(entity);
+
+            SaveAll();
+        }
 
         public async Task RemoveRangeAsync(IEnumerable<T> entity)
         {

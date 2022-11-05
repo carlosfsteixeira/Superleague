@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
+using Superleague.Helpers;
 using Superleague.Models;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ResultNotFound");
             }
 
             ResultViewModel resultViewModel = new()
@@ -52,7 +53,7 @@ namespace Superleague.Controllers
 
             if (resultViewModel == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ResultNotFound");
             }
 
             return View(resultViewModel);
@@ -108,7 +109,7 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ResultNotFound");
             }
 
             ResultViewModel resultViewModel = new()
@@ -122,7 +123,7 @@ namespace Superleague.Controllers
 
             if (resultViewModel == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ResultNotFound");
             }
 
             return View(resultViewModel);
@@ -151,7 +152,7 @@ namespace Superleague.Controllers
                 {
                     if (!await _resultRepository.ExistAsync(model.Result.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("ResultNotFound");
                     }
                     else
                     {
@@ -168,14 +169,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ResultNotFound");
             }
 
             var result = await _resultRepository.GetByIdAsync(id.Value);
 
             if (result == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("ResultNotFound");
             }
 
             return View(result);
@@ -195,6 +196,9 @@ namespace Superleague.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
+        public IActionResult ResultNotFound()
+        {
+            return View();
+        }
     }
 }

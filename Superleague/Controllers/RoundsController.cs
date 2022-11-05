@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Superleague.Data;
 using Superleague.Data.Entities;
+using Superleague.Helpers;
 
 namespace Superleague.Controllers
 {
@@ -64,14 +65,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("RoundNotFound");
             }
 
             var round = await _roundRepository.GetByIdAsync(id.Value);
 
             if (round == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("RoundNotFound");
             }
 
             return View(round);
@@ -97,6 +98,11 @@ namespace Superleague.Controllers
                 ViewBag.ErrorMessage = "Consider deleting all Matches appended and try again.";
                 return View("Error");
             }
+        }
+
+        public IActionResult RoundNotFound()
+        {
+            return View();
         }
     }
 }

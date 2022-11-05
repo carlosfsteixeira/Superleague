@@ -134,7 +134,7 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("PlayerNotFound");
             }
 
             PlayerViewModel playerViewModel = new()
@@ -157,7 +157,7 @@ namespace Superleague.Controllers
 
             if (playerViewModel == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("PlayerNotFound");
             }
 
             //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", player.CountryId);
@@ -172,10 +172,8 @@ namespace Superleague.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(PlayerViewModel model, IFormFile? file, int id)
+        public async Task<IActionResult> Edit(PlayerViewModel model, IFormFile? file)
         {
-            int playerId = id;
-
             if (ModelState.IsValid)
             {
                 try
@@ -208,7 +206,7 @@ namespace Superleague.Controllers
                         model.Player.ImageURL = @"\images\players\" + fileName + extension;
                     }
 
-                    var playerFromBD = _playerRepository.GetById(id);
+                    var playerFromBD = await _playerRepository.GetByIdAsync(model.Player.Id);
 
                     if (playerFromBD.Name != model.Player.Name)
                     {
@@ -265,7 +263,7 @@ namespace Superleague.Controllers
                 {
                     if (!await _playerRepository.ExistAsync(model.Player.Id))
                     {
-                        return NotFound();
+                        return new NotFoundViewResult("PlayerNotFound");
                     }
                     else
                     {
@@ -283,14 +281,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("PlayerNotFound");
             }
 
             var player = await _playerRepository.GetByIdAsync(id.Value);
 
             if (player == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("PlayerNotFound");
             }
 
             return View(player);
@@ -328,6 +326,11 @@ namespace Superleague.Controllers
             var players = _playerRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Position).Include(p => p.Team);
 
             return Json(new { data = players });
+        }
+
+        public IActionResult PlayerNotFound()
+        {
+            return View();
         }
     }
 }

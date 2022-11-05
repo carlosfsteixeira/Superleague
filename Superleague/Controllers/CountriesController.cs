@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
+using Superleague.Helpers;
 
 namespace Superleague.Controllers
 {
@@ -42,14 +44,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             var country = await _context.GetByIdAsync(id.Value);
 
             if (country == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             return View(country);
@@ -82,14 +84,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             var country = await _context.GetByIdAsync(id.Value);
 
             if (country == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
             return View(country);
         }
@@ -103,7 +105,7 @@ namespace Superleague.Controllers
         {
             if (id != country.Id)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             if (ModelState.IsValid)
@@ -133,14 +135,14 @@ namespace Superleague.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             var country = await _context.GetByIdAsync(id.Value);
 
             if (country == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("CountryNotFound");
             }
 
             return View(country);
@@ -168,6 +170,11 @@ namespace Superleague.Controllers
                 return View("Error");
             }
 
+        }
+
+        public IActionResult CountryNotFound()
+        {
+            return View();
         }
     }
 }
