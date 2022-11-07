@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Superleague.Data.Entities;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
 
 namespace Superleague.Models
@@ -14,5 +15,8 @@ namespace Superleague.Models
 
         [ValidateNever]
         public Result Results { get; set; }
+
+        [ValidateNever]
+        public List<Team> Teams { get; set; }
     }
 }

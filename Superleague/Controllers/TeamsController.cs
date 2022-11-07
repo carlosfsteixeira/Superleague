@@ -26,6 +26,7 @@ namespace Superleague.Controllers
         private readonly IStatisticsRepository _statisticsRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IResultRepository _resultsRepository;
 
         public TeamsController(ITeamRepository teamRepository, 
                                ICountryRepository countryRepository, 
@@ -33,7 +34,8 @@ namespace Superleague.Controllers
                                IStaffRepository staffRepository,
                                IStatisticsRepository statisticsRepository,
                                IImageHelper imageHelper,
-                               IWebHostEnvironment hostEnvironment)
+                               IWebHostEnvironment hostEnvironment,
+                               IResultRepository resultsRepository)
         {
             _teamRepository = teamRepository;
             _countryRepository = countryRepository;
@@ -42,6 +44,7 @@ namespace Superleague.Controllers
             _statisticsRepository = statisticsRepository;
             _imageHelper = imageHelper;
             _hostEnvironment = hostEnvironment;
+            _resultsRepository = resultsRepository;
         }
 
         // GET: Teams

@@ -1,161 +1,90 @@
-﻿@model IEnumerable<Superleague.Data.Entities.GlobalStats>
+﻿@model Superleague.Models.GlobalStatsViewModel
 
 @{
-    ViewData["Title"] = "Global";
+    ViewData["Title"] = "Statistics";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalMatches)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalGoals)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GoalAverage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HomeWins)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AwayWins)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Draws)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalYellowCards)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalRedCards)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BestAttack)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorstAttack)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BestDefence)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WorstDefence)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MostWins)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LessWins)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MostDefeats)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LessDefeats)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MostDraws)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LessDraws)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MostYellowCards)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LessYellowCards)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MostRedCards)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LessRedCards)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalMatches)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalGoals)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GoalAverage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HomeWins)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AwayWins)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Draws)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalYellowCards)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalRedCards)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BestAttack)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorstAttack)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BestDefence)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WorstDefence)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MostWins)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LessWins)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MostDefeats)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LessDefeats)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MostDraws)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LessDraws)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MostYellowCards)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LessYellowCards)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MostRedCards)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LessRedCards)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<body id="page-top">
+
+    <div class="container-fluid">
+
+        <div class="row py-3"> 
+
+            <div class="container-fluid d-flex justify-content-center">
+
+           
+                @foreach(var team in Model.Teams)
+                {
+                    <div class="mr-1">
+                        <img src="@team.ImageURL" style="width:60px; height:60px; padding-left: 4px"/>
+                    </div>
+               
+                }
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-6 mb-4">
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Matches</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                @Model.GlobalStats.TotalMatches
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                @Model.GlobalStats.TotalGoals
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                @Model.GlobalStats.GoalAverage
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Results</h6>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="small font-weight-bold">
+                            Home Wins <span class="float-right">20%</span>
+                        </h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 60%"
+                                 aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <h4 class="small font-weight-bold">
+                            Away Wins <span class="float-right">40%</span>
+                        </h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
+                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <h4 class="small font-weight-bold">
+                            Draws <span class="float-right">60%</span>
+                        </h4>
+                        <div class="progress mb-4">
+                            <div class="progress-bar" role="progressbar" style="width: 60%"
+                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
