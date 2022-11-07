@@ -400,7 +400,6 @@ namespace Superleague.Controllers
 
         // POST: Staffs/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var staff = await _staffRepository.GetByIdAsync(id);

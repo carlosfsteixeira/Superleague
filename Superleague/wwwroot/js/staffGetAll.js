@@ -13,7 +13,7 @@ function loadDataTable() {
             {
                 "data": "imageURL",
                 "render": function (data, type, row, meta) {
-                    return '<img src="' + data + '" alt="' + data + '"height="50" width="30"/>';
+                    return '<img src="' + data + '" alt="' + data + '"height="50" width="40"/>';
                 }, "width": "5%"
             },
             { "data": "name", "width": "15%" },
@@ -25,20 +25,20 @@ function loadDataTable() {
                 }, "width": "5%"
             },
             { "data": "team.name", "width": "15%" },
-            { "data": "country.name", "width": "15%" },
+            { "data": "country.name", "width": "25%" },
             {
                 "data": "id",
                 "render": function (data) {
                     return `
                         <div class="w-75 btn-group" role="group">
                         <a href="/Staffs/Edit?id=${data}"
-                        class="btn btn-info"> <i class="bi bi-pencil-square"></i> Edit</a>
+                        class="btn text-primary"> <i class="fa-solid fa-pen-to-square"></i> </a>
                         <a onClick=Delete('/Staffs/Delete/${data}')
-                        class="btn btn-danger text-white"> <i class="bi bi-trash-fill"></i> Del</a>
+                        class="btn text-danger"> <i class="fa-solid fa-trash-can"></i> </a>
                     </div>
                      `
                 },
-                "width": "15%"
+                "width": "5%"
             }
         ]
     });

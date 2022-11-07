@@ -37,8 +37,6 @@ namespace Superleague.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-
             builder.Entity<Match>()
                 .HasOne(x => x.HomeTeam)
                 .WithMany(x => x.HomeMatches)
@@ -50,6 +48,14 @@ namespace Superleague.Data
                 .WithMany(x => x.AwayMatches)
                 .HasForeignKey(x => x.AwayTeamId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Country>().HasIndex(e => e.Name).IsUnique();
+
+            builder.Entity<Function>().HasIndex(e => e.Description).IsUnique();
+
+            builder.Entity<Position>().HasIndex(e => e.Description).IsUnique();
+
+            base.OnModelCreating(builder);
         }
     }
 }

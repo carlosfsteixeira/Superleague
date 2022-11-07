@@ -11,5 +11,8 @@ namespace Superleague.Models
 
         [ValidateNever]
         public GlobalStats GlobalStats { get; set; }
+
+        [ValidateNever]
+        public Result Results { get; set; }
     }
 }

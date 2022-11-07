@@ -10,6 +10,7 @@ using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Vereyon.Web;
 
 namespace Superleague
 {
@@ -32,6 +33,8 @@ namespace Superleague
                 options.LoginPath = "/Account/NotAuthorized";
                 options.AccessDeniedPath = "/Account/NotAuthorized";
             });
+
+            services.AddFlashMessage();
 
             services.AddTransient<SeedDb>();
 

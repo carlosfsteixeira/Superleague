@@ -17,9 +17,12 @@
 
         <div class="d-sm-flex align-items-center justify-content-between">
             <h1 class="h3 mb-0 text-gray-800 my-2">Management <i class="fa-solid fa-angle-right"></i> Rounds <i class="fa-solid fa-angle-right"></i> View All</h1>
-            <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
-                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
-            </a>
+            @if (Model.Count() < 7)
+            {
+                <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
+                </a>
+            }
         </div>
 
         <div class="card shadow mb-4 py-3">
@@ -31,6 +34,7 @@
                         <thead>
                             <tr>
                                 <th>Description</th>
+                                <th>Complete</th>
                                 <th></th>
                             </tr>
                         </thead>

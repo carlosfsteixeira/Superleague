@@ -1,0 +1,161 @@
+﻿@model IEnumerable<Superleague.Data.Entities.GlobalStats>
+
+@{
+    ViewData["Title"] = "Global";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalMatches)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalGoals)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GoalAverage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HomeWins)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AwayWins)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Draws)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalYellowCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalRedCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BestAttack)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorstAttack)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BestDefence)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorstDefence)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MostWins)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessWins)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MostDefeats)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessDefeats)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MostDraws)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessDraws)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MostYellowCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessYellowCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MostRedCards)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessRedCards)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalMatches)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalGoals)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoalAverage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomeWins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AwayWins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Draws)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalYellowCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalRedCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BestAttack)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorstAttack)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BestDefence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorstDefence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MostWins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessWins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MostDefeats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessDefeats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MostDraws)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessDraws)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MostYellowCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessYellowCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MostRedCards)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessRedCards)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

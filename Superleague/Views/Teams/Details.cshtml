@@ -217,19 +217,19 @@
                                                     @foreach (var item in Model.PlayerList)
                                                     {
                                                         <tr>
-                                                            <td style="width: 15px;">
+                                                            <td style="width: 25px">
                                                                 <img src="@Url.Content(item.ImageURL)" alt="Image" class="image1" />
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 200px">
                                                                 @item.Name
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 150px">
                                                                 @item.Number
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 150px">
                                                                 @item.Position.Description
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 200px">
                                                                 @item.Country.Name
                                                             </td>
                                                         </tr>
@@ -280,16 +280,16 @@
                                                     @foreach (var item in Model.StaffList)
                                                     {
                                                         <tr>
-                                                            <td style="width: 15px;">
+                                                            <td style="width: 25px">
                                                                 <img src="@Url.Content(item.ImageURL)" alt="Image" class="image1" />
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 225px">
                                                                 @item.Name
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 225px">
                                                                 @item.Function.Description
                                                             </td>
-                                                            <td>
+                                                            <td style="width: 225px">
                                                                 @item.Country.Name
                                                             </td>
                                                         </tr>

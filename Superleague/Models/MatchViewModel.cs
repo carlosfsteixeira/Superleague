@@ -9,12 +9,12 @@ namespace Superleague.Models
     {
         public Match Match { get; set; }
 
+        public IEnumerable<Round> Rounds { get; set; }
+
         public IEnumerable<Team> TeamsList { get; set; }
 
         public IEnumerable<SelectListItem> TeamNamesList { get; set; }
 
-        public IEnumerable<SelectListItem> RoundList { get; set; }
-
-        public IEnumerable<SelectListItem> ResultList { get; set; }
+        public IEnumerable<SelectListItem> RoundsList { get; set; }
     }
 }

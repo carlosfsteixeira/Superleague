@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
+using Vereyon.Web;
 
 namespace Superleague.Controllers
 {
@@ -16,10 +17,12 @@ namespace Superleague.Controllers
     public class PositionsController : Controller
     {
         private readonly IPositionRepository _context;
+        private readonly IFlashMessage _flashMessage;
 
-        public PositionsController(IPositionRepository context)
+        public PositionsController(IPositionRepository context, IFlashMessage flashMessage)
         {
             _context = context;
+            _flashMessage = flashMessage;
         }
 
         // GET: Positions
@@ -69,9 +72,18 @@ namespace Superleague.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _context.CreateAsync(position);
+                try
+                {
+                    await _context.CreateAsync(position);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("There is already a position with this description");
+                }
+
+                return View(position);
             }
             return View(position);
         }
@@ -110,6 +122,8 @@ namespace Superleague.Controllers
                 try
                 {
                     await _context.UpdateAsync(position);
+
+                    TempData["success"] = $"Position updated";
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -55,7 +55,7 @@
                             <div class="row">
 
                                 <div class="container form-group col-md-12">
-                                    <select asp-for="Match.RoundId" asp-items="@Model.RoundList" class="select">
+                                    <select asp-for="Match.RoundId" asp-items="@Model.RoundsList" class="select">
                                         <option disabled selected> Round </option>
                                     </select>
                                     <span asp-validation-for="Match.RoundId" class="text-danger"></span>

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
+using Vereyon.Web;
 
 namespace Superleague.Controllers
 {
@@ -18,10 +19,12 @@ namespace Superleague.Controllers
     public class CountriesController : Controller
     {
         private readonly ICountryRepository _context;
+        private readonly IFlashMessage _flashMessage;
 
-        public CountriesController(ICountryRepository context)
+        public CountriesController(ICountryRepository context, IFlashMessage flashMessage)
         {
             _context = context;
+            _flashMessage = flashMessage;
         }
 
         // GET: Countries
@@ -72,10 +75,20 @@ namespace Superleague.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _context.CreateAsync(country);
+                try
+                {
+                    await _context.CreateAsync(country);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("There is already a country with this name");
+                }
+
+                return View(country);
             }
+
             return View(country);
         }
 

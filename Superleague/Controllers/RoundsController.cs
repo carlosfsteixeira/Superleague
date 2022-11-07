@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
+using Vereyon.Web;
 
 namespace Superleague.Controllers
 {
@@ -18,10 +19,12 @@ namespace Superleague.Controllers
     public class RoundsController : Controller
     {
         private readonly IRoundRepository _roundRepository;
+        private readonly IFlashMessage _flashMessage;
 
-        public RoundsController(IRoundRepository roundRepository)
+        public RoundsController(IRoundRepository roundRepository, IFlashMessage flashMessage)
         {
             _roundRepository = roundRepository;
+            _flashMessage = flashMessage;
         }
 
         // GET: Rounds
@@ -52,9 +55,18 @@ namespace Superleague.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _roundRepository.CreateAsync(round);
+                try
+                {
+                    await _roundRepository.CreateAsync(round);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("There is already a round with this description");
+                }
+
+                return View(round);
             }
             return View(round);
         }

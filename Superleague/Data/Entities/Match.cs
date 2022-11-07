@@ -38,5 +38,10 @@ namespace Superleague.Data.Entities
 
         [ValidateNever]
         public Team AwayTeam { get; set; }
+
+        [ValidateNever]
+        public bool Played { get; set; }
+
+        public bool HasResult { get; set; }
     }
 }

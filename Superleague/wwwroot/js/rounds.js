@@ -10,7 +10,8 @@ function loadDataTable() {
             "url": "/Rounds/GetAll"
         },
         "columns": [
-            { "data": "description", "width": "95%" },
+            { "data": "description", "width": "25%" },
+            { "data": "complete", "width": "70%" },
             {
                 "data": "id",
                 "render": function (data) {

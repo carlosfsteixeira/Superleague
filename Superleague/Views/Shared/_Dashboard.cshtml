@@ -26,7 +26,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-dark sidebar sidebar-dark accordion" style="background-color:black !important" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Dashboard" asp-action="Index">
@@ -57,7 +57,7 @@
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-fw fa-cog"></i>
+                        <i class="fa-solid fa-user-gear"></i>
                         <span>Users</span>
                     </a>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -73,7 +73,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
                    aria-expanded="true" aria-controls="collapseOne">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-users-rectangle"></i>
                     <span>Clubs</span>
                 </a>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
@@ -92,7 +92,7 @@
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                    aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fas fa-fw fa-wrench"></i>
+                        <i class="fa-solid fa-folder"></i>
                         <span>Management</span>
                     </a>
                     <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
@@ -108,51 +108,38 @@
                 </li>
             }
            
+            <hr class="sidebar-divider"/>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
             <div class="sidebar-heading">
                 Season
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Statistics</span>
+                    <i class="fa-solid fa-ranking-star"></i>
+                    <span>Standings</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Season Data</h6>
-                        <a class="collapse-item" href="#">Global</a>
-                        <a class="collapse-item" href="#">Team Stats</a>
+                        <a class="collapse-item" asp-controller="Statistics" asp-action="Index">Table</a>
+                        <a class="collapse-item" asp-controller="GlobalStats" asp-action="Index">Statistics</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" asp-controller="Statistics" asp-action="Index">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Table</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Results" asp-action="Index">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Results</span>
+                <a class="nav-link" asp-controller="Matches" asp-action="Index">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <span>Matches</span>
                 </a>
             </li>
 
-            <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" asp-controller="Matches" asp-action="Index">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Fixtures</span>
+                <a class="nav-link" asp-controller="Results" asp-action="Index">
+                    <i class="fa-solid fa-futbol"></i>
+                    <span>Results</span>
                 </a>
             </li>
 
@@ -259,15 +246,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Logout</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Ready to leave?</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" asp-controller="Account" asp-action="Logout" asp-route-id="">Logout</a>
+                    <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-warning" asp-controller="Account" asp-action="Logout" asp-route-id="">Yes, Logout</a>
                 </div>
             </div>
         </div>

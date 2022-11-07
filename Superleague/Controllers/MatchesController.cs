@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,10 +29,25 @@ namespace Superleague.Controllers
         }
 
         // GET: Matches
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var dataContext = _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round);
-            return View(dataContext);
+            var matches = await _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round).ToListAsync();
+
+            await VerifyIfMatchPlayed(matches);
+
+            return View(matches);
+        }
+
+        public async Task VerifyIfMatchPlayed(List<Match> matches)
+        {
+            foreach (var match in matches)
+            {
+                if (match.MatchDate <= DateTime.Now)
+                {
+                    match.Played = true;
+                    _matchRepository.UpdateAsync(match);
+                }
+            }
         }
 
         // GET: Matches/Details/5
@@ -46,7 +62,7 @@ namespace Superleague.Controllers
             {
                 Match = new(),
 
-                RoundList = _roundRepository.GetAll().Select(a =>
+                RoundsList = _roundRepository.GetAll().Select(a =>
                             new SelectListItem
                             {
                                 Text = a.Description,
@@ -80,7 +96,7 @@ namespace Superleague.Controllers
             {
                 Match = new(),
 
-                RoundList = _roundRepository.GetAll().Select(a =>
+                RoundsList =  _roundRepository.GetAll().Where(t => t.Complete == false).Select(a =>
                             new SelectListItem
                             {
                                 Text = a.Description,
@@ -105,9 +121,25 @@ namespace Superleague.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MatchViewModel model)
         {
+            model.Rounds = await _roundRepository.GetAll().ToListAsync();
+
             if (ModelState.IsValid)
             {
                 await _matchRepository.CreateAsync(model.Match);
+
+                foreach(var round in model.Rounds)
+                {
+                    if (round.Id == model.Match.RoundId)
+                    {
+                        var countMatchsRound = _matchRepository.GetAll().Where(t => t.RoundId == model.Match.RoundId).Count();
+
+                        if(countMatchsRound >= 4)
+                        {
+                            round.Complete = true;
+                            await _roundRepository.UpdateAsync(round);
+                        }
+                    }
+                }
 
                 TempData["success"] = $"New fixture created";
 
@@ -129,7 +161,7 @@ namespace Superleague.Controllers
             {
                 Match = new(),
 
-                RoundList = _roundRepository.GetAll().Select(a =>
+                RoundsList = _roundRepository.GetAll().Where(t => t.Complete == false).Select(a =>
                             new SelectListItem
                             {
                                 Text = a.Description,
@@ -199,38 +231,55 @@ namespace Superleague.Controllers
             return View(model);
         }
 
-        // GET: Matches/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("MatchNotFound");
-            }
+        //// GET: Matches/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new NotFoundViewResult("MatchNotFound");
+        //    }
 
-            var match = await _matchRepository.GetByIdAsync(id.Value);
+        //    var match = await _matchRepository.GetByIdAsync(id.Value);
 
-            if (match == null)
-            {
-                return new NotFoundViewResult("MatchNotFound");
-            }
+        //    if (match == null)
+        //    {
+        //        return new NotFoundViewResult("MatchNotFound");
+        //    }
 
-            return View(match);
-        }
+        //    return View(match);
+        //}
 
         // POST: Matches/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var match = await _matchRepository.GetByIdAsync(id);
+            int matchId = id;
+
+            var match = await _matchRepository.GetByIdAsync(matchId);
+
+            var rounds = await _roundRepository.GetAll().ToListAsync();
+
+            foreach (var round in rounds)
+            {
+                if (round.Id == match.RoundId)
+                {
+                    var countMatchsRound = _matchRepository.GetAll().Where(t => t.RoundId == match.RoundId).Count();
+
+                    if (countMatchsRound < 4)
+                    {
+                        round.Complete = false;
+                        await _roundRepository.UpdateAsync(round);
+                    }
+                }
+            }
 
             try
             {
                 await _matchRepository.DeleteAsync(match);
 
                 TempData["success"] = $"Fixture removed";
-
-                return RedirectToAction(nameof(Index));
+                
             }
             catch (Exception)
             {
@@ -238,7 +287,9 @@ namespace Superleague.Controllers
                 ViewBag.ErrorMessage = "Consider deleting all Results appended and try again.";
                 return View("Error");
             }
-       
+
+            return RedirectToAction("Index");
+
         }
 
         [HttpGet]

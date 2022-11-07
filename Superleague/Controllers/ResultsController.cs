@@ -88,12 +88,14 @@ namespace Superleague.Controllers
                 model.Result.HomeTeamId = model.Match.HomeTeamId;
                 model.Result.AwayTeamId = model.Match.AwayTeamId;
                 model.Result.RoundId = model.Match.RoundId;
+                model.Match.HasResult = true;
 
                 //model.Result.Match = model.Match;
 
                 if (ModelState.IsValid)
                 {
                     await _resultRepository.CreateAsync(model.Result);
+                    await _matchRepository.UpdateAsync(model.Match);
 
                     TempData["success"] = $"Result added";
 
@@ -189,7 +191,13 @@ namespace Superleague.Controllers
         {
             var result = await _resultRepository.GetByIdAsync(id);
 
+            var match = await _matchRepository.GetAll().Where(a => a.Id == result.MatchId).FirstAsync();
+
             await _resultRepository.DeleteAsync(result);
+
+            match.HasResult = false;
+
+            await _matchRepository.UpdateAsync(match);
 
             TempData["success"] = $"Result removed";
 

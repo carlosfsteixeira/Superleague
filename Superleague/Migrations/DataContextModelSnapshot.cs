@@ -235,6 +235,9 @@ namespace Superleague.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Countries");
                 });
 
@@ -251,6 +254,9 @@ namespace Superleague.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Description")
+                        .IsUnique();
 
                     b.ToTable("Functions");
                 });
@@ -344,12 +350,18 @@ namespace Superleague.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<bool>("HasResult")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("HomeTeamId")
                         .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("MatchDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Played")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("RoundId")
                         .IsRequired()
@@ -420,6 +432,9 @@ namespace Superleague.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Description")
+                        .IsUnique();
+
                     b.ToTable("Positions");
                 });
 
@@ -480,7 +495,11 @@ namespace Superleague.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Complete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -607,7 +626,6 @@ namespace Superleague.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageURL")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")

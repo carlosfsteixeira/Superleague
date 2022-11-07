@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>@ViewData["Title"] - Superleague </title>
+    <title>@ViewData["Title"] - Super League </title>
 
     <!-- Custom fonts for this template-->
     <link href="~/theme/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -37,12 +37,29 @@
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Results" asp-action="Index">Results</a>
                     </li>
+@*                    <li class="nav-item dropdown">
+                        <a class="nav-link text-dark text-center" asp-area="" asp-controller="Statistics" asp-action="Index">Standings</a>
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Table</a>
-                        <div class="dropdown-menu">
-                            <a class="nav-link text-dark text-center" asp-area="" asp-controller="Statistics" asp-action="Index">Standings</a>
+                        <a class="nav-link text-dark text-center" asp-area="" asp-controller="GlobalStatistics" asp-action="Index">Global</a>
+                    </li>*@
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           Standings
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" asp-controller="Statistics" asp-action="Index">
+                                <i class="fa-solid fa-ranking-star fa-fw mr-2 text-gray-600"></i>
+                                Table
+                            </a>
                             <div class="dropdown-divider"></div>
-                            <a class="nav-link text-dark text-center" asp-area="" asp-controller="GlobalStatistics" asp-action="Index">Global</a>
+                            <a class="dropdown-item" asp-controller="GlobalStats" asp-action="Index">
+                                <i class="fa-solid fa-chart-pie fa-fw mr-2 text-gray-600"></i>
+                                Statistics
+                            </a>
                         </div>
                     </li>
                     <li class="nav-item">

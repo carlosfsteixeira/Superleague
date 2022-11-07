@@ -66,9 +66,9 @@ namespace Superleague.Controllers
             {
                 Team = new(),
 
-                PlayerList = _playerRepository.GetAll().Where(e => e.TeamId == id).OrderBy(e => e.Name),
+                PlayerList = _playerRepository.GetAll().Include(p => p.Position).Include(e => e.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
-                StaffList = _staffRepository.GetAll().Where(e => e.TeamId == id).OrderBy(e => e.Name),
+                StaffList = _staffRepository.GetAll().Include(p => p.Function).Include(e => e.Country).Where(e => e.TeamId == id).OrderBy(e => e.Name),
 
                 CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
                 {
@@ -305,27 +305,26 @@ namespace Superleague.Controllers
         }
 
         // GET: Teams/Delete/5
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("TeamNotFound");
-            }
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new NotFoundViewResult("TeamNotFound");
+        //    }
 
-            var team = await _teamRepository.GetByIdAsync(id.Value);
+        //    var team = await _teamRepository.GetByIdAsync(id.Value);
 
-            if (team == null)
-            {
-                return new NotFoundViewResult("TeamNotFound");
-            }
+        //    if (team == null)
+        //    {
+        //        return new NotFoundViewResult("TeamNotFound");
+        //    }
 
-            return View(team);
-        }
+        //    return View(team);
+        //}
 
         // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -337,7 +336,7 @@ namespace Superleague.Controllers
 
                 TempData["success"] = $"{team.Name} removed";
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             catch (Exception)
             {

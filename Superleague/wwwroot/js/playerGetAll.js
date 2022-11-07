@@ -13,7 +13,7 @@ function loadDataTable() {
             {
                 "data": "imageURL",
                 "render": function (data, type, row, meta) {
-                    return '<img src="' + data + '" alt="' + data + '"height="50" width="30"/>';
+                    return '<img src="' + data + '" alt="' + data + '"height="50" width="40"/>';
                 }, "width": "5%"
             },
             { "data": "name", "width": "15%" },
@@ -33,13 +33,13 @@ function loadDataTable() {
                     return `
                         <div class="w-75 btn-group" role="group">
                         <a href="/Players/Edit?id=${data}"
-                        class="btn btn-info"> <i class="bi bi-pencil-square"></i> Edit</a>
+                        class="btn text-primary"> <i class="fa-solid fa-pen-to-square"></i> </a>
                         <a onClick=Delete('/Players/Delete/${data}')
-                        class="btn btn-danger text-white"> <i class="bi bi-trash-fill"></i> Del</a>
+                        class="btn text-danger"> <i class="fa-solid fa-trash-can"></i> </a>
                     </div>
                      `
                 },
-                "width": "15%"
+                "width": "5%"
             }
         ]
     });

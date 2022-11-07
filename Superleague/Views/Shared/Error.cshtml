@@ -4,19 +4,19 @@
     ViewData["Title"] = "Request Error";
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:500,800" rel="stylesheet">
+    <title>Document</title>
+</head>
+    <body>
 
-@if (ViewBag.ErrorTitle == null)
-{
-    <!DOCTYPE html>
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-            <link href="https://fonts.googleapis.com/css?family=Raleway:500,800" rel="stylesheet">
-            <title>Document</title>
-        </head>
-        <body>
+        @if (ViewBag.ErrorTitle == null)
+        {
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-4 alert alert-warning">
@@ -27,21 +27,9 @@
                     </div>
                 </div>
             </div>
-        </body>
-    </html>
-}
-else
-{
-         <!DOCTYPE html>
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-            <link href="https://fonts.googleapis.com/css?family=Raleway:500,800" rel="stylesheet">
-            <title>Document</title>
-        </head>
-        <body>
+        }
+        else
+        {
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-4 alert alert-warning">
@@ -52,16 +40,15 @@ else
                     </div>
                 </div>
             </div>
-        </body>
-    </html>
-}
+        }
+    </body>
+</html>
 
-
-if (Model.ShowRequestId)
+@*if (Model.ShowRequestId)
 {
     <p>
         <strong>Request ID:</strong> <code>@Model.RequestId</code>
     </p>
-}
+}*@
 
 

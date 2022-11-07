@@ -1,7 +1,10 @@
-﻿namespace Superleague.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Superleague.Data.Entities
 {
     public class GlobalStats : IEntity
     {
+        [Key]
         public int Id { get; set; }
 
         public int TotalMatches { get; set; }

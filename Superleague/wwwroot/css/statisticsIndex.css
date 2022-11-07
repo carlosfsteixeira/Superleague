@@ -8,14 +8,14 @@
     text-align: center;
 }
 
-.styled-table thead tr {
-    background-color: #009879;
-    color: #ffffff;
-    text-align: center;
-    height: 40px;
-    text-align: center;
-    vertical-align: bottom;
-}
+    .styled-table thead tr {
+        background-color: black;
+        color: #ffffff;
+        text-align: center;
+        height: 40px;
+        text-align: center;
+        vertical-align: bottom;
+    }
 
 .styled-table th,
 .styled-table td {
@@ -32,7 +32,7 @@
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+    border-bottom: 2px solid black;
 }
 
 .styled-table tbody tr.active-row {

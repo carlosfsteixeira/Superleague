@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
+using Vereyon.Web;
 
 namespace Superleague.Controllers
 {
@@ -17,10 +18,12 @@ namespace Superleague.Controllers
     public class FunctionsController : Controller
     {
         private readonly IFunctionRepository _context;
+        private readonly IFlashMessage _flashMessage;
 
-        public FunctionsController(IFunctionRepository context)
+        public FunctionsController(IFunctionRepository context, IFlashMessage flashMessage)
         {
             _context = context;
+            _flashMessage = flashMessage;
         }
 
         // GET: Functions
@@ -70,9 +73,18 @@ namespace Superleague.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _context.CreateAsync(function);
+                try
+                {
+                    await _context.CreateAsync(function);
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("There is already a function with this description");
+                }
+
+                return View(function);
             }
             return View(function);
         }
@@ -111,6 +123,8 @@ namespace Superleague.Controllers
                 try
                 {
                     await _context.UpdateAsync(function);
+
+                    TempData["success"] = $"Function updated";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
