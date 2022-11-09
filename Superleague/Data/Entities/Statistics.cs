@@ -33,6 +33,10 @@ namespace Superleague.Data.Entities
         [Display(Name = "P")]
         public int Position { get; set; }
 
+        public int TotalCards { get; set; }
+
+        public int GoalAverage { get; set; }
+
         public int? TeamId { get; set; }
         [ForeignKey("TeamId")]
         [ValidateNever]

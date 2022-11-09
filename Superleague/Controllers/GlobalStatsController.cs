@@ -115,7 +115,7 @@ namespace Superleague.Controllers
             // stats by team -> WORST ATTACK
             var minGoalsScored = await _statisticsRepository.GetAll().MinAsync(t => t.GoalsScored);
             var teamWorstAttack = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.GoalsScored == minGoalsScored).FirstAsync();
-            model.GlobalStats.BestAttack = teamWorstAttack.Team.Name;
+            model.GlobalStats.WorstAttack = teamWorstAttack.Team.Name;
         }
 
         public async Task getBestAndWorstDefense(GlobalStatsViewModel model)
@@ -141,7 +141,7 @@ namespace Superleague.Controllers
             // stats by team -> LESS WINS
             var minWins = await _statisticsRepository.GetAll().MinAsync(t => t.Wins);
             var teamMinWins = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Wins == minWins).FirstAsync();
-            model.GlobalStats.MostWins = teamMinWins.Team.Name;
+            model.GlobalStats.LessWins = teamMinWins.Team.Name;
         }
 
         public async Task getMostAndLessDraws(GlobalStatsViewModel model)
@@ -149,12 +149,12 @@ namespace Superleague.Controllers
             // stats by team -> LESS DRAWS
             var lessDraws = await _statisticsRepository.GetAll().MinAsync(t => t.Draws);
             var teamlessDraws = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Draws == lessDraws).FirstAsync();
-            model.GlobalStats.MostWins = teamlessDraws.Team.Name;
+            model.GlobalStats.LessDraws = teamlessDraws.Team.Name;
 
             // stats by team -> MOST DRAWS
             var mostDraws = await _statisticsRepository.GetAll().MaxAsync(t => t.Draws);
             var teamMostDraws = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Draws == mostDraws).FirstAsync();
-            model.GlobalStats.MostWins = teamMostDraws.Team.Name;
+            model.GlobalStats.MostDraws = teamMostDraws.Team.Name;
         }
 
         public async Task getMostAndLessLosses(GlobalStatsViewModel model)
@@ -162,12 +162,12 @@ namespace Superleague.Controllers
             // stats by team -> LESS LOSSES
             var lessLosses = await _statisticsRepository.GetAll().MinAsync(t => t.Losses);
             var teamlessLosses = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Losses == lessLosses).FirstAsync();
-            model.GlobalStats.MostWins = teamlessLosses.Team.Name;
+            model.GlobalStats.LessDefeats = teamlessLosses.Team.Name;
 
             // stats by team -> MOST LOSSES
             int mostLosses = _statisticsRepository.GetAll().MaxAsync(t => t.Losses).Result;
             var teamMostLosses = _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Losses == mostLosses).First();
-            model.GlobalStats.MostWins = teamMostLosses.Team.Name;
+            model.GlobalStats.MostDefeats = teamMostLosses.Team.Name;
         }
 
         private async Task RefreshGlobalStatisticsTableAsync()

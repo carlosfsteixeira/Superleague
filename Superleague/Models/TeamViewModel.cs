@@ -24,6 +24,8 @@ namespace Superleague.Models
         [ValidateNever]
         public Statistics Statistics { get; set; }
 
+        public List<Result> Results { get; set; }
+
 
     }
 }

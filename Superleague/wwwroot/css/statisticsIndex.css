@@ -20,6 +20,7 @@
 .styled-table th,
 .styled-table td {
     text-align: center;
+    font-weight: 700;
 }
 
 .styled-table tbody tr {

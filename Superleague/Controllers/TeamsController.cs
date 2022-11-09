@@ -79,7 +79,7 @@ namespace Superleague.Controllers
                     Value = i.Id.ToString(),
                 }),
 
-                Statistics = _statisticsRepository.GetById(id.Value),
+                Statistics = _statisticsRepository.GetAll().Where(p => p.TeamId == id).First(),
             };
 
             teamViewModel.Team = await _teamRepository.GetByIdAsync(id.Value);

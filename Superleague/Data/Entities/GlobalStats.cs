@@ -42,13 +42,5 @@ namespace Superleague.Data.Entities
         public string MostDraws { get; set; }
 
         public string LessDraws { get; set; }
-
-        public string MostYellowCards { get; set; }
-
-        public string LessYellowCards { get; set; }
-
-        public string MostRedCards { get; set; }
-
-        public string LessRedCards { get; set; }
     }
 }
