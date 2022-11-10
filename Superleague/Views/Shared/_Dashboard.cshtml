@@ -185,10 +185,15 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" asp-controller="Account" asp-action="UserProfile">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
+
+                                    @if (!User.IsInRole("Admin"))
+                                    {
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="UserProfile">
+                                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Profile
+                                        </a>
+                                    }
+               
                                     <a class="dropdown-item" asp-controller="Account" asp-action="ChangePassword">
                                         <i class="fa-solid fa-lock fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Change Password
@@ -254,7 +259,7 @@
                 <div class="modal-body">Ready to leave?</div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-warning" asp-controller="Account" asp-action="Logout" asp-route-id="">Yes, Logout</a>
+                    <a class="btn btn-primary" asp-controller="Account" asp-action="Logout" asp-route-id="">Yes, Logout</a>
                 </div>
             </div>
         </div>

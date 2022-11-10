@@ -69,18 +69,17 @@ namespace Superleague.Controllers
                     if (result.HomeTeamId == statistics.TeamId)
                     {
                         statistics.GoalsScored += result.HomeGoals;
-                        statistics.TotalCards += result.HomeYellowCards + result.HomeRedCards;
-
+                        statistics.TotalYellows += result.HomeYellowCards;
+                        statistics.TotalReds += result.HomeRedCards;
                     }
                     else if (result.AwayTeamId == statistics.TeamId)
                     {
                         statistics.GoalsScored += result.AwayGoals;
-                        statistics.TotalCards += result.AwayYellowCards + result.AwayRedCards;
+                        statistics.TotalYellows += result.AwayYellowCards;
+                        statistics.TotalReds += result.AwayRedCards;
                     }
 
                     statistics.GoalsConceded += (result.HomeGoals + result.AwayGoals) - statistics.GoalsScored;
-
-                    statistics.GoalAverage = statistics.GoalsScored / statistics.TotalMatches;
 
                     if (statistics.GoalsConceded < statistics.GoalsScored)
                     {
@@ -98,6 +97,8 @@ namespace Superleague.Controllers
                     }
 
                     statistics.TotalMatches++;
+
+                    statistics.GoalAverage = statistics.GoalsScored / statistics.TotalMatches;
                 }
 
                 await _statisticsRepository.CreateAsync(statistics);

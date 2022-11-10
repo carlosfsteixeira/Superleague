@@ -60,10 +60,11 @@
                                 <div class="col-md-9 col-lg-4"> 
 
                                     <div class="container justify-content-center">
-                                    <img src="@Model.ImageURL" id="output" style="width:150px; height:160px" class="border-primary my-2" onchange="readURL(this)" />
-                                    <label asp-for="ImageURL" class="text-center" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
+                                        <img src="@Model.ImageURL" id="output" style="width:150px; height:160px" class="border-primary my-2" onchange="readURL(this)" />
+                                        <label asp-for="ImageURL" class="text-center" for="uploadBox"> <i class="fas fa-camera-alt"></i> Image</label>
                                         <input type="file" id="uploadBox" name="file" asp-for="ImageURL" class="form-control" accept="image/*" onchange="document.getElementById('output').src = window.URL.createObjectURL(this.files[0])" />
                                     </div>
+                                    
                                 </div>
 
                                 <div class="col-md-9 col-lg-7 py-3">

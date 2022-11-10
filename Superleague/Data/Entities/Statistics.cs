@@ -33,7 +33,9 @@ namespace Superleague.Data.Entities
         [Display(Name = "P")]
         public int Position { get; set; }
 
-        public int TotalCards { get; set; }
+        public int TotalYellows { get; set; }
+
+        public int TotalReds { get; set; }
 
         public int GoalAverage { get; set; }
 

@@ -166,7 +166,7 @@ namespace Superleague.Controllers
                         Role = model.Role,
                     };
 
-                    var result = await _userHelper.AddUserAsync(user, model.Password);
+                    var result = await _userHelper.AddUserAsync(user, $".Temp123#");
 
                     if (result != IdentityResult.Success)
                     {
@@ -189,7 +189,8 @@ namespace Superleague.Controllers
                     }, protocol: HttpContext.Request.Scheme);
 
                     Response response = _mailHelper.SendEmail(model.Email, "Account confirmation", $"<h2>Welcome to the Super League</h2>" +
-                        $"Before logging in, click the link below:</br></br><a href = \"{tokenLink}\"> --> Confirm my account <-- </a>");
+                        $"Before logging in, click the link below:</br></br><a href = \"{tokenLink}\"> --> Confirm my account <-- </a></br></br>" +
+                        $"</br>Your default password is <b>.Temp123#</b> <h5> -> IMPORTANT: Don't forget to reset it to one of your choosing</h5>");
 
                     if (response.IsSuccess)
                     {

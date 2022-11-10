@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Superleague.Data;
 
 namespace Superleague.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221110224701_removed_total_goals_from_stats")]
+    partial class removed_total_goals_from_stats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -563,13 +565,10 @@ namespace Superleague.Migrations
                     b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TotalCards")
+                        .HasColumnType("int");
+
                     b.Property<int>("TotalMatches")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalReds")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalYellows")
                         .HasColumnType("int");
 
                     b.Property<int>("Wins")

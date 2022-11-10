@@ -26,17 +26,18 @@ namespace Superleague.Data
             await _userHelper.CheckRoleAsync("Club");
 
 
-            var user = await _userHelper.GetUserByEmailAsync("carlost2410@gmail.com");
+            var user = await _userHelper.GetUserByEmailAsync("admin@superleague.com");
             if (user == null)
             {
                 user = new User
                 {
-                    FirstName = "Carlos",
-                    LastName = "Teixeira",
-                    Email = "carlost2410@gmail.com",
-                    UserName = "carlost2410@gmail.com",
+                    FirstName = "admin",
+                    LastName = "superleague",
+                    Email = "admin@superleague.com",
+                    UserName = "admin@superleague.com",
                     Role = "Admin",
-                    ImageURL = @"images\archive\user.png"
+                    ImageURL = @"images\archive\user.png",
+                    EmailConfirmed = true,
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "Cinel123.");
