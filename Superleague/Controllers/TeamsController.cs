@@ -170,6 +170,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Teams/Edit/5
+        [Authorize(Roles = "Club")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)

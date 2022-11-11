@@ -389,6 +389,7 @@ namespace Superleague.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
         {
             if (this.ModelState.IsValid)
@@ -430,6 +431,7 @@ namespace Superleague.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             var user = await _userHelper.GetUserByEmailAsync(model.UserName);

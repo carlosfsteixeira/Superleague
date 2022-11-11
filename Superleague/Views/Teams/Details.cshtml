@@ -105,17 +105,14 @@
 
                 <div class="container-fluid d-flex justify-content-center">
                 <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card border-left-dark shadow py-2">
                         <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                        Played
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Statistics.TotalMatches</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Matches Played</div>
+                            </div>
+                            <div class="row">
+                                <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                    @Model.Statistics.TotalMatches
                                 </div>
                             </div>
                         </div>
@@ -123,17 +120,14 @@
                 </div>
 
                 <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card border-left-dark shadow py-2">
                         <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                        Scored
-                                    </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Statistics.GoalsScored</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fa-solid fa-crosshairs fa-2x text-gray-300"></i>
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Scored</div>
+                            </div>
+                            <div class="row">
+                                <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                    @Model.Statistics.GoalsScored
                                 </div>
                             </div>
                         </div>
@@ -141,55 +135,46 @@
                 </div>
 
                 <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card border-left-dark shadow py-2">
                         <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                        Goal Average/Match
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Goal AVG/Match</div>
+                                </div>
+                                <div class="row">
+                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                        @Model.Statistics.GoalAverage
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Statistics.GoalAverage</div>
                                 </div>
-                                <div class="col-auto">
-                                    <i class="fa-regular fa-futbol fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card border-left-dark shadow py-2">
                         <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                        Yellow Cards
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Yellow Cards</div>
+                                </div>
+                                <div class="row">
+                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                        @Model.Statistics.TotalYellows
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Statistics.TotalYellows</div>
                                 </div>
-                                <div class="col-auto">
-                                    <i class="fa-solid fa-id-badge fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow h-100 py-2">
+                    <div class="card border-left-dark shadow py-2">
                         <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                        Red Cards
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Red Cards</div>
+                                </div>
+                                <div class="row">
+                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                        @Model.Statistics.TotalReds
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Statistics.TotalReds</div>
                                 </div>
-                                <div class="col-auto">
-                                    <i class="fa-solid fa-id-badge fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

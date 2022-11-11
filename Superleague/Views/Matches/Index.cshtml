@@ -14,21 +14,23 @@
 
         @if (Model.Any())
         {
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4 pt-5">
                 <h1 class="h3 mb-0 text-gray-800">Season Fixtures</h1>
-                @if (Model.Count() < 28)
+                @if (User.IsInRole("Employee"))
                 {
-                     <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
-                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
-                     </a>
+                    @if (Model.Count() < 28)
+                    {
+                        <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
+                        </a>
+                    }
                 }
-              
             </div>
-
-            <div class="row py-4">
-
-                <div class="col-lg-12 col-md-4">
-                    <div class="container-fluid mb-4">
+            <div class="container-fluid d-flex justify-content-center mb-4">
+                <div class="row py-1">
+           
+                    <div class="col-lg-12 col-md-4">
+                    
 
                         <div class="row">
 
@@ -82,15 +84,20 @@
                                             <th class="text-center">
                                                 <b>Status</b>
                                             </th>
-                                            <th>
-                                                <b>Edit</b>
-                                            </th>
-                                            <th class="text-center">
-                                                <b>Delete</b>
-                                            </th>
-                                            <th>
- 
-                                            </th>
+
+                                            @if (User.IsInRole("Employee"))
+                                            {
+                                                <th>
+                                                    <b>Edit</b>
+                                                </th>
+                                                <th class="text-center">
+                                                    <b>Delete</b>
+                                                </th>
+                                                <th>
+
+                                                </th>
+                                            }
+                                               
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -137,26 +144,29 @@
                                                         <span class="badge badge-danger text-white">NOT PLAYED</span>
                                                     }
                                                 </td>
-                                                <td class="text-center">
-                                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn">
-                                                        <i class="fa-solid fa-pen-to-square" style="color: dimgray"></i>
-                                                    </a>
-                                                </td>
-                                                <td class="text-center">
-                                                    @*<form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">*@
+                                                @if (User.IsInRole("Employee"))
+                                                {
+                                                    <td class="text-center">
+                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn">
+                                                            <i class="fa-solid fa-pen-to-square" style="color: dimgray"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @*<form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">*@
                                                         <button type="submit" class="btn" onclick="Delete(@item.Id)">
                                                             <i class="fa-regular fa-trash-can" style="color: red"></i>
                                                         </button>
-                                                    @*</form>*@
-                                                </td>
-                                                <td class="text-center">
-                                                    @if (item.Played == true && item.HasResult == false)
-                                                    {
-                                                        <a asp-controller="Results" asp-action="Create" asp-route-id="@item.Id" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="bottom" title="Add Result">
-                                                            Add Result
-                                                        </a>
-                                                    }                                                    
-                                                </td>
+                                                        @*</form>*@
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if (item.Played == true && item.HasResult == false)
+                                                        {
+                                                            <a asp-controller="Results" asp-action="Create" asp-route-id="@item.Id" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="bottom" title="Add Result">
+                                                                Add Result
+                                                            </a>
+                                                        }                                                    
+                                                    </td>
+                                                }
                                             </tr>
                                         }
                                     </tbody>

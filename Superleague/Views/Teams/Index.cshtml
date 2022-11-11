@@ -11,7 +11,8 @@
 <div class="container-fluid">
     @if (Model.Any())
     {
-       
+        @if (User.Identity.IsAuthenticated)
+        {
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Clubs <i class="fa-solid fa-angle-right"></i> All</h1>
                 @if (Model.Count() < 8)
@@ -21,8 +22,8 @@
                     </a>
                 }
             </div>
-        
-       
+        }
+           
         <div class="row py-5">
         @foreach (var item in Model)
         {

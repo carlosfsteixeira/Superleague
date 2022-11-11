@@ -37,26 +37,13 @@ h6 {
     text-align: center;
 }
 
-#team .card {
-    border-radius: 5px;
-    border-color: none;
-    box-shadow: 5px 5px 15px #555;
-    transition: all 0.3s ease-in;
-    -webkit-transition: all 0.3s ease-in;
-    -moz-transition: all 0.3s ease-in;
-    text-align: center;
+.card {
+    transition: 0.5s;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
-#team .card:hover {
-    background: #ffffff;
-    color: #333;
-    border-radius: 5px;
-    border: none;
-    box-shadow: 5px 5px 10px black;
-    text-align: center;
-}
-
-#team .card:hover h1, #team .card:hover i {
-    color: #333;
-    text-align: center;
-}
+    .card:hover {
+        box-shadow: 0 5px 5px #000;
+        transform: scale3d(1.05, 1.05, 1.05);
+    }

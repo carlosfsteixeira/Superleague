@@ -15,135 +15,143 @@
         @if (Model.Any())
         {
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Latest Results</h1>
+                <h1 class="h3 mb-0 text-gray-800 pt-5">Results</h1>
             </div>
 
-            <div class="row py-4">
+            <div class="container-fluid d-flex justify-content-center mb-4">
+                <div class="row py-1">
 
-                <div class="col-lg-12 col-md-4">
-                    <div class="container-fluid mb-4">
+                    <div class="col-lg-12 col-md-4">
+                        <div class="container-fluid mb-4">
 
-                        <div class="row">
+                            <div class="row">
 
-                            <div class="col-md-12 py-3">
-                                <div class="optionsDiv" style="color: black; font-weight: bold;">
-                                    Filter By Round
-                                    <select type="search" class="select-table-filter select" data-table="order-table">
-                                        <option value="">Show All</option>
-                                        <option value="Round 1">Round 1</option>
-                                        <option value="Round 2">Round 2</option>
-                                        <option value="Round 3">Round 3</option>
-                                        <option value="Round 4">Round 4</option>
-                                        <option value="Round 5">Round 5</option>
-                                        <option value="Round 6">Round 6</option>
-                                        <option value="Round 7">Round 7</option>
-                                    </select>
+                                <div class="col-md-12 py-3">
+                                    <div class="optionsDiv" style="color: black; font-weight: bold;">
+                                        Filter By Round
+                                        <select type="search" class="select-table-filter select" data-table="order-table">
+                                            <option value="">Show All</option>
+                                            <option value="Round 1">Round 1</option>
+                                            <option value="Round 2">Round 2</option>
+                                            <option value="Round 3">Round 3</option>
+                                            <option value="Round 4">Round 4</option>
+                                            <option value="Round 5">Round 5</option>
+                                            <option value="Round 6">Round 6</option>
+                                            <option value="Round 7">Round 7</option>
+                                        </select>
+                                    </div>
                                 </div>
+
                             </div>
 
-                        </div>
-
-                        <div class="row">
-                            <div>
-                                <table class="order-table styled-table">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                <b>Round</b>
-                                            </th>
-                                            <th>
-
-                                            </th>
-                                            <th class="text-left">
-                                                <b>Home Team</b>
-                                            </th>
-                                            <th>
-
-                                            </th>
-                                           <th>
-
-                                            </th>
-                                            <th>
-                                   
-                                            </th>
-                                            <th class="text-right">
-                                                <b>Away Team</b>
-                                            </th>
-                                            <th>
-
-                                            </th>
-                                            <th class="text-center">
-                                                <b>Match Date</b>
-                                            </th>
-                                            <th class="text-center">
-                                                <b>Venue</b>
-                                            </th>
-                                            <th class="text-center">
-                                                <b>Edit</b>
-                                            </th>
-                                             <th class="text-center">
-                                                <b>Delete</b>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model)
-                                        {
+                            <div class="row">
+                                <div>
+                                    <table class="order-table styled-table">
+                                        <thead>
                                             <tr>
-                                                <td class="text-center">
-                                                    @item.Round.Description
-                                                </td>
-                                                <td class="text-center">
-                                                    @if (!string.IsNullOrEmpty(item.HomeTeam.ImageURL))
-                                                    {
-                                                        <img src="@Url.Content(item.HomeTeam.ImageURL)" alt="Image" style="max-height:auto; max-width:100%; width:50px; height:50px;" />
-                                                    }
-                                                </td>
-                                                <td class="text-left">
-                                                    @item.HomeTeam.Name
-                                                </td class="text-center">
-                                                <th class="text-center" style="font-size: 18px; width: 10px"">
-                                                    @item.HomeGoals.ToString()
+                                                <th>
+                                                    <b>Round</b>
                                                 </th>
-                                                <th class="text-center" style="color: dimgray; width: 10px">
-                                                    v
+                                                <th>
+
                                                 </th>
-                                                <th class="text-center" style="font-size: 18px; width: 10px"">
-                                                    @item.AwayGoals.ToString()
+                                                <th class="text-left">
+                                                    <b>Home Team</b>
                                                 </th>
-                                                <td class="text-right">
-                                                    @item.AwayTeam.Name
-                                                </td>
-                                                <td class="text-center">
-                                                    @if (!string.IsNullOrEmpty(item.AwayTeam.ImageURL))
-                                                    {
-                                                        <img src="@Url.Content(item.AwayTeam.ImageURL)" alt="Image" style="max-height:auto; max-width:100%; width:50px; height:50px;" />
-                                                    }
-                                                </td>
-                                                <td class="text-center">
-                                                    @item.Match.MatchDate
-                                                </td>
-                                                <td class="text-center">
-                                                    @item.HomeTeam.Venue
-                                                </td>
-                                                <td>
-                                                    <div class="text-center">
-                                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn">
-                                                            <i class="fa-solid fa-pen-to-square" style="color: dimgray"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                 <td class="text-center">
-                                                    <form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">
-                                                        <button type="submit" class="btn" onclick="Delete(@item.Id)">
-                                                            <i class="fa-regular fa-trash-can" style="color: red"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
+                                                <th>
+
+                                                </th>
+                                               <th>
+
+                                                </th>
+                                                <th>
+                                   
+                                                </th>
+                                                <th class="text-right">
+                                                    <b>Away Team</b>
+                                                </th>
+                                                <th>
+
+                                                </th>
+                                                <th class="text-center">
+                                                    <b>Match Date</b>
+                                                </th>
+                                                <th class="text-center">
+                                                    <b>Venue</b>
+                                                </th>
+                                                @if (User.IsInRole("Employee"))
+                                                {
+                                                    <th class="text-center">
+                                                        <b>Edit</b>
+                                                    </th>
+                                                     <th class="text-center">
+                                                        <b>Delete</b>
+                                                    </th>
+                                                }
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td class="text-center">
+                                                        @item.Round.Description
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if (!string.IsNullOrEmpty(item.HomeTeam.ImageURL))
+                                                        {
+                                                            <img src="@Url.Content(item.HomeTeam.ImageURL)" alt="Image" style="max-height:auto; max-width:100%; width:50px; height:50px;" />
+                                                        }
+                                                    </td>
+                                                    <td class="text-left">
+                                                        @item.HomeTeam.Name
+                                                    </td class="text-center">
+                                                    <th class="text-center" style="font-size: 20px; width: 10px"">
+                                                        @item.HomeGoals.ToString()
+                                                    </th>
+                                                    <th class="text-center" style="width: 10px">
+                                                        v
+                                                    </th>
+                                                    <th class="text-center" style="font-size: 20px; width: 10px"">
+                                                        @item.AwayGoals.ToString()
+                                                    </th>
+                                                    <td class="text-right">
+                                                        @item.AwayTeam.Name
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if (!string.IsNullOrEmpty(item.AwayTeam.ImageURL))
+                                                        {
+                                                            <img src="@Url.Content(item.AwayTeam.ImageURL)" alt="Image" style="max-height:auto; max-width:100%; width:50px; height:50px;" />
+                                                        }
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @item.Match.MatchDate
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @item.HomeTeam.Venue
+                                                    </td>
+                                                    @if (User.IsInRole("Employee"))
+                                                    {
+                                                             <td>
+                                                        <div class="text-center">
+                                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn">
+                                                                <i class="fa-solid fa-pen-to-square" style="color: dimgray"></i>
+                                                            </a>
+                                                        </div>
+                                                        </td>
+                                                         <td class="text-center">
+                                                            <form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">
+                                                                <button type="submit" class="btn" onclick="Delete(@item.Id)">
+                                                                    <i class="fa-regular fa-trash-can" style="color: red"></i>
+                                                                </button>
+                                                            </form>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
