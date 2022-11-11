@@ -27,6 +27,7 @@ namespace Superleague.Controllers
         private readonly IImageHelper _imageHelper;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IResultRepository _resultsRepository;
+        private readonly IUserHelper _userHelper;
 
         public TeamsController(ITeamRepository teamRepository, 
                                ICountryRepository countryRepository, 
@@ -35,7 +36,8 @@ namespace Superleague.Controllers
                                IStatisticsRepository statisticsRepository,
                                IImageHelper imageHelper,
                                IWebHostEnvironment hostEnvironment,
-                               IResultRepository resultsRepository)
+                               IResultRepository resultsRepository,
+                               IUserHelper userHelper)
         {
             _teamRepository = teamRepository;
             _countryRepository = countryRepository;
@@ -45,6 +47,7 @@ namespace Superleague.Controllers
             _imageHelper = imageHelper;
             _hostEnvironment = hostEnvironment;
             _resultsRepository = resultsRepository;
+            _userHelper = userHelper;
         }
 
         // GET: Teams
@@ -178,6 +181,13 @@ namespace Superleague.Controllers
                 return new NotFoundViewResult("TeamNotFound");
             }
 
+            var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+            if (id != user.TeamId)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
+
             TeamViewModel teamViewModel = new()
             {
                 Team = new(),
@@ -196,7 +206,7 @@ namespace Superleague.Controllers
             };
 
             teamViewModel.Team = await _teamRepository.GetByIdAsync(id.Value);
-
+            
             if (teamViewModel == null)
             {
                 return new NotFoundViewResult("TeamNotFound");
