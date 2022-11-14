@@ -133,7 +133,7 @@ namespace Superleague.Controllers
                     {
                         var countMatchsRound = _matchRepository.GetAll().Where(t => t.RoundId == model.Match.RoundId).Count();
 
-                        if(countMatchsRound >= 4)
+                        if(countMatchsRound == 4)
                         {
                             round.Complete = true;
                             await _roundRepository.UpdateAsync(round);
@@ -260,26 +260,25 @@ namespace Superleague.Controllers
 
             var rounds = await _roundRepository.GetAll().ToListAsync();
 
-            foreach (var round in rounds)
-            {
-                if (round.Id == match.RoundId)
-                {
-                    var countMatchsRound = _matchRepository.GetAll().Where(t => t.RoundId == match.RoundId).Count();
-
-                    if (countMatchsRound < 4)
-                    {
-                        round.Complete = false;
-                        await _roundRepository.UpdateAsync(round);
-                    }
-                }
-            }
-
             try
             {
                 await _matchRepository.DeleteAsync(match);
 
                 TempData["success"] = $"Fixture removed";
-                
+
+                foreach (var round in rounds)
+                {
+                    if (round.Id == match.RoundId)
+                    {
+                        var countMatchsRound = _matchRepository.GetAll().Where(t => t.RoundId == match.RoundId).Count();
+
+                        if (countMatchsRound < 4)
+                        {
+                            round.Complete = false;
+                            await _roundRepository.UpdateAsync(round);
+                        }
+                    }
+                }
             }
             catch (Exception)
             {

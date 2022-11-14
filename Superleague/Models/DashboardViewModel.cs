@@ -21,6 +21,8 @@ namespace Superleague.Models
 
         public int TotalStaffs { get; set; }
 
+        public IEnumerable<Round> Rounds { get; set; }
+
 
     }
 }

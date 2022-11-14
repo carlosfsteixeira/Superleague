@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<Superleague.Data.Entities.User>*@
+﻿@model IEnumerable<Superleague.Data.Entities.User>
 
 @{
     ViewData["Title"] = "Users";
@@ -26,16 +26,45 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="tblUsers" class="table styled-table table-striped" width="100%" cellspacing="0">
+                    <table id="tableUsers" class="table styled-table table-striped" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>First Name</th>
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Role</th>
-                                <th>Team</th>
+                                <th>Club</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.FirstName
+                                    </td>
+                                    <td>
+                                        @item.LastName
+                                    </td>
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>
+                                        @item.Role
+                                    </td>
+                                    <td>
+                                        @if(item.Team == null)
+                                        {
+                                            <span class="badge badge-secondary">N/A</span>
+                                        }
+                                        else
+                                        {
+                                            @item.Team.Name
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -45,6 +74,11 @@
 </body>
 
 @section Scripts{
-    <script src="~/js/users.js"></script>
+@*    <script src="~/js/users.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            $('#tableUsers').DataTable();
+        });
+    </script>
 }
 

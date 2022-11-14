@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
@@ -6,6 +7,7 @@ using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Superleague.Controllers
 {
@@ -21,10 +23,12 @@ namespace Superleague.Controllers
         private readonly IStatisticsRepository _statisticsRepository;
         private readonly IGlobalStatsRepository _globalStatsRepository;
         private readonly IResultRepository _resultRepository;
+        private readonly IRoundRepository _roundRepository;
 
         public DashboardController(ITeamRepository teamRepository, IPlayerRepository playerRepository, IUserHelper userHelper,
             UserManager<User> userManager, IStaffRepository staffRepository, IMatchRepository matchRepository, 
-            IStatisticsRepository statisticsRepository, IGlobalStatsRepository globalStatsRepository, IResultRepository resultRepository)
+            IStatisticsRepository statisticsRepository, IGlobalStatsRepository globalStatsRepository, IResultRepository resultRepository,
+            IRoundRepository roundRepository)
         {
             _teamRepository = teamRepository;
             _userHelper = userHelper;
@@ -34,6 +38,7 @@ namespace Superleague.Controllers
             _statisticsRepository = statisticsRepository;
             _globalStatsRepository = globalStatsRepository;
             _resultRepository = resultRepository;
+            _roundRepository = roundRepository;
             _playerRepository = playerRepository;
         }
 
@@ -57,9 +62,25 @@ namespace Superleague.Controllers
 
                 TotalStaffs = _staffRepository.GetAll().Count(),
 
+                Rounds = _roundRepository.GetAll().OrderBy(e => e.Description),
             };
 
             return View(dashboardViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CloseRound(int id)
+        {
+            var round = _roundRepository.GetById(id);
+
+            round.Closed = true;
+
+            await _roundRepository.UpdateAsync(round);
+
+            TempData["success"] = $"Round closed";
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -16,7 +16,7 @@
         {
             <div class="d-sm-flex align-items-center justify-content-between mb-4 pt-5">
                 <h1 class="h3 mb-0 text-gray-800">Season Fixtures</h1>
-                @if (User.IsInRole("Employee"))
+                @if (User.IsInRole("Admin"))
                 {
                     @if (Model.Count() < 28)
                     {
@@ -85,7 +85,7 @@
                                                 <b>Status</b>
                                             </th>
 
-                                            @if (User.IsInRole("Employee"))
+                                            @if (User.IsInRole("Admin"))
                                             {
                                                 <th>
                                                     <b>Edit</b>
@@ -144,7 +144,7 @@
                                                         <span class="badge badge-danger text-white">NOT PLAYED</span>
                                                     }
                                                 </td>
-                                                @if (User.IsInRole("Employee"))
+                                                @if (item.Round.Closed == false && User.IsInRole("Admin"))
                                                 {
                                                     <td class="text-center">
                                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn">

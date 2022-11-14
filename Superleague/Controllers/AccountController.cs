@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Superleague.Data;
@@ -78,16 +79,16 @@ namespace Superleague.Controllers
 
                     TempData["success"] = $"Welcome back, {user.FirstName} {user.LastName}";
 
-                    if (await _userHelper.IsUserInRoleAsync(user, "Club"))
-                    {
-                        model.TeamId = (int)user.TeamId;
+                    //if (await _userHelper.IsUserInRoleAsync(user, "Club"))
+                    //{
+                    //    model.TeamId = (int)user.TeamId;
 
-                        return RedirectToAction("Edit", "Teams", new { id = model.TeamId });
-                    }
-                    else
-                    {
+                    //    return RedirectToAction("Edit", "Teams", new { id = model.TeamId });
+                    //}
+                    //else
+                    //{
                         return RedirectToAction("Index", "Dashboard");
-                    }
+                    //}
                 }
             }
 
@@ -234,20 +235,22 @@ namespace Superleague.Controllers
             return View();
         }
 
-        [HttpGet]
-        [Authorize]
-        public IActionResult GetListUsers()
-        {
-            var users = _userManager.Users;
+        //[HttpGet]
+        //[Authorize]
+        //public IActionResult GetListUsers()
+        //{
+        //    var users = _userManager.Users.Include(e => e.Team);
 
-            return Json(new { data = users });
-            //return View(users);
-        }
+        //    return Json(new { data = users });
+        //    //return View(users);
+        //}
 
         [HttpGet]
         public IActionResult ListUsers()
         {
-            return View();
+            var users = _userManager.Users.Include(e => e.Team);
+
+            return View(users);
         }
 
         public async Task<IActionResult> UserProfile()

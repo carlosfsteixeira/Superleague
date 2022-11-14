@@ -90,11 +90,130 @@
                 </div>
             </div>
 
-            
+        </div>
 
+        <div class="row">
+
+            <div class="card shadow mb-4 py-3 col-xl-5">
+                <div class="card-header">
+                    <h5 class="text-dark">Rounds</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tableRounds"  class="table table-striped" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th></th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0" width="100%">
+                                @foreach (var item in Model.Rounds)
+                                {
+                                    <tr>
+                                        <td>@item.Description</td>
+                                        <td class="text-center">
+
+                                            @if (@item.Complete == true)
+                                            {
+                                                <span class="badge badge-info pt-1">Completed</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger pt-1">Not Completed</span>    
+                                            }
+                                            
+                                        </td>
+                                        <td>
+                                            @if (@item.Complete == true && @item.Closed == false)
+                                            {
+                                                <button type="submit" class="btn w-100" onclick="Close(@item.Id)"><i class="fa-solid fa-lock-open"></i></button>
+                                            }
+
+                                            @if (@item.Complete == true && @item.Closed == true)
+                                            {
+                                                <h6 class="text-center pt-1"><i class="fa-solid fa-lock"></i></h6>
+                                            }
+
+                                            @if (@item.Complete == false && @item.Closed == false)
+                                            {
+                                                
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
+
+    <div id="confirmDialog" class="modal fade">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Close Round</h4>
+                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+                </div>
+                <div class="modal-body">
+                    <p>Close this round?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btnYesConfirm">Yes</button>
+                    <button type="button" class="btn btn-outline-secondary" id="btnNoConfirm">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts
+    {
+    <script>
+        $(document).ready( function () {
+            $('#tableRounds').DataTable();
+                "info" : false
+            } );
+    </script>
+
+    <script>
+        function Close(id) {
+            var url = "Dashboard/CloseRound/" + id;
+            event.preventDefault();
+            Swal.fire({
+                title: 'Close this round',
+                text: "Are you sure?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('form').submit();
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        success: function (data) {
+                            if (data.success) {
+                                window.location.reload();
+                                toastr.success(data.message);
+                            }
+                            else {
+                                window.location.reload();
+                                toastr.success(data.message);
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+}
 
 </body>
 

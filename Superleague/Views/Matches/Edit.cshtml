@@ -53,26 +53,17 @@
 
                         <div class="card-body">
                             <div class="row">
-
-                                <div class="container form-group col-md-12">
-                                    <select asp-for="Match.RoundId" asp-items="@Model.RoundsList" class="select">
-                                        <option disabled selected> Round </option>
-                                    </select>
-                                    <span asp-validation-for="Match.RoundId" class="text-danger"></span>
-                                </div>
-
-                                <hr />
                                 <div class="py-2">
                                     <h5 class="col-md-12 ml-3">Teams</h5>
                                 </div>
                                 <div class="container form-group col-md-12">
-                                    <select asp-for="Match.HomeTeamId" asp-items="@Model.TeamNamesList" class="combo select">
+                                    <select asp-for="Match.HomeTeamId" asp-items="@Model.TeamNamesList" id="home" class="combo select">
                                         <option disabled selected> Home Team</option>
                                     </select>
                                     <span asp-validation-for="Match.HomeTeamId" class="text-danger"></span>
                                 </div>
                                 <div class="container form-group col-md-12">
-                                    <select asp-for="Match.AwayTeamId" asp-items="@Model.TeamNamesList" class="combo select">
+                                    <select asp-for="Match.AwayTeamId" asp-items="@Model.TeamNamesList" id="away" class="combo select">
                                         <option disabled selected> Away Team </option>
                                     </select>
                                     <span asp-validation-for="Match.AwayTeamId" class="text-danger"></span>
@@ -102,7 +93,7 @@
 
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-lg-8">
 
                     <div class="card shadow mb-4">
 
@@ -179,5 +170,18 @@
     @{
         <partial name="_ValidationScriptsPartial" />
     }
+    <script>
+        function ValidateInput() {
+            if (document.getElementById("home").value == document.getElementById("away").value) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Home Team and Away must be different',
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
     }
 

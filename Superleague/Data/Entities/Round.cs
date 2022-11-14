@@ -14,5 +14,7 @@ namespace Superleague.Data.Entities
         public string Description { get; set; }
 
         public bool Complete { get; set; }
+
+        public bool Closed { get; set; }
     }
 }

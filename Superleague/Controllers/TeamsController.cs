@@ -173,7 +173,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Teams/Edit/5
-        [Authorize(Roles = "Club")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -183,10 +183,10 @@ namespace Superleague.Controllers
 
             var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
-            if (id != user.TeamId)
-            {
-                return RedirectToAction("NotAuthorized", "Account");
-            }
+            //if (id != user.TeamId)
+            //{
+            //    return RedirectToAction("NotAuthorized", "Account");
+            //}
 
             TeamViewModel teamViewModel = new()
             {
