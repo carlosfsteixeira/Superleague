@@ -235,16 +235,6 @@ namespace Superleague.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //[Authorize]
-        //public IActionResult GetListUsers()
-        //{
-        //    var users = _userManager.Users.Include(e => e.Team);
-
-        //    return Json(new { data = users });
-        //    //return View(users);
-        //}
-
         [HttpGet]
         public IActionResult ListUsers()
         {
@@ -325,7 +315,15 @@ namespace Superleague.Controllers
                     {
                         TempData["success"] = $"Password Updated";
 
-                        return this.RedirectToAction("UserProfile");
+                        if (User.IsInRole("Admin"))
+                        {
+                            return RedirectToAction("Index", "Dashboard");
+                        }
+                        else
+                        {
+                            return this.RedirectToAction("UserProfile");
+                        }
+
                     }
                     else
                     {
@@ -417,7 +415,7 @@ namespace Superleague.Controllers
 
                 if (response.IsSuccess)
                 {
-                    this.ViewBag.Message = "Instructions to reset password have been sent to your email";
+                    this.ViewBag.Message = "Instructions to reset the password have been sent to your email";
                 }
 
                 return this.View();

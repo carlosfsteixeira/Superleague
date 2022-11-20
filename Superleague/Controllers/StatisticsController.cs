@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using Superleague.Data;
 using Superleague.Data.Entities;
-using Superleague.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,9 +30,7 @@ namespace Superleague.Controllers
             await CalculateStatistics();
 
             var statistics = await _statisticsRepository.GetAll().Include(t => t.Team)
-            .OrderByDescending(s => s.Points)
-            .OrderByDescending(s => s.Wins)
-            .OrderByDescending(s => s.GoalsScored).ToListAsync();
+            .OrderByDescending(s => s.Points).ThenByDescending(s => s.Wins).ThenByDescending(s => s.GoalsScored).ToListAsync();
 
             int positionCounter = 1;
 

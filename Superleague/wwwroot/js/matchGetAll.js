@@ -14,7 +14,7 @@ function loadDataTable() {
             {
                 "data": "homeTeam.imageURL",
                 "render": function (data, type, row, meta) {
-                    return '<img src="' + data + '" alt="' + data + '"height="50" width="40"/>';
+                    return '<img src="' + data + '" alt="' + data + '"height="50" width="50"/>';
                 }, "width": "10%"
             },
             { "data": "homeTeam.name", "width": "20%" },
@@ -22,7 +22,7 @@ function loadDataTable() {
             {
                 "data": "awayTeam.imageURL",
                 "render": function (data, type, row, meta) {
-                    return '<img src="' + data + '" alt="' + data + '"height="50" width="40"/>';
+                    return '<img src="' + data + '" alt="' + data + '"height="50" width="50"/>';
                 }, "width": "10%"
             },
             { "data": "matchDate", "width": "20%" },

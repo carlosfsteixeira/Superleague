@@ -123,208 +123,200 @@
 
         <div class="row py-2">
 
+            <div class="col-xl-4 col-md-4 mb-4">
 
-
-                <div class="col-xl-4 col-md-4 mb-4">
-
-                    <!-- Matches -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-chart-pie"></i> Matches Won</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row py-3">
-                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                    <div class="text-center font-weight-bold text-success text-uppercase mb-1">
-                                        Home
-                                    </div>
-                                    <h2 class="text-center pt-3">
-                                        @Model.GlobalStats.HomeWins
-                                    </h2>
+                <!-- Matches -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-chart-pie"></i> Matches Won</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row py-3">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="text-center font-weight-bold text-success text-uppercase mb-1">
+                                    Home
                                 </div>
-                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                    <div class="text-center font-weight-bold text-info text-uppercase mb-1">
-                                        Draws
-                                    </div>
-                                    <h2 class="text-center pt-3">
-                                        @Model.GlobalStats.Draws
-                                    </h2>
+                                <h2 class="text-center pt-3">
+                                    @Model.GlobalStats.HomeWins
+                                </h2>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="text-center font-weight-bold text-info text-uppercase mb-1">
+                                    Draws
                                 </div>
-                                <div class="col-sm-4 col-md-4 col-lg-4">
-                                    <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
-                                        Away
-                                    </div>
-                                    <h2 class="text-center pt-3">
-                                        @Model.GlobalStats.AwayWins
-                                    </h2>
+                                <h2 class="text-center pt-3">
+                                    @Model.GlobalStats.Draws
+                                </h2>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
+                                    Away
                                 </div>
+                                <h2 class="text-center pt-3">
+                                    @Model.GlobalStats.AwayWins
+                                </h2>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <div class="col-xl-4 col-md-4 mb-4">
+            </div>
 
-                    <!-- Attack -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-crosshairs"></i> Attack</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row py-2">
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-success text-uppercase mb-1">
-                                        Best
-                                    </div>
-                                    <h5 class="text-center pt-5">
-                                        @Model.GlobalStats.BestAttack
-                                    </h5>
+            <div class="col-xl-4 col-md-4 mb-4">
+
+                <!-- Attack -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-crosshairs"></i> Attack</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row py-2">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-success text-uppercase mb-1">
+                                    Best
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
-                                        Worst
-                                    </div>
-                                    <h5 class="text-center pt-5">
-                                        @Model.GlobalStats.WorstAttack
-                                    </h5>
+                                <h5 class="text-center pt-5">
+                                    @Model.GlobalStats.BestAttack
+                                </h5>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
+                                    Worst
                                 </div>
+                                <h5 class="text-center pt-5">
+                                    @Model.GlobalStats.WorstAttack
+                                </h5>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <div class="col-xl-4 col-md-4 mb-4">
+            </div>
 
-                    <!-- Attack -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-hand-dots"></i> Defense</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row py-2">
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-success text-uppercase mb-1">
-                                        Best
-                                    </div>
-                                    <h5 class="text-center pt-5">
-                                        @Model.GlobalStats.BestDefence
-                                    </h5>
+            <div class="col-xl-4 col-md-4 mb-4">
+
+                <!-- Attack -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-hand-dots"></i> Defense</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row py-2">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-success text-uppercase mb-1">
+                                    Best
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
-                                        Worst
-                                    </div>
-                                    <h5 class="text-center pt-5">
-                                        @Model.GlobalStats.WorstDefence
-                                    </h5>
+                                <h5 class="text-center pt-5">
+                                    @Model.GlobalStats.BestDefence
+                                </h5>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
+                                    Worst
                                 </div>
+                                <h5 class="text-center pt-5">
+                                    @Model.GlobalStats.WorstDefence
+                                </h5>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-
+            </div>
 
         </div>
 
         <div class="row py-1">
 
+            <div class="col-xl-4 col-md-4 mb-4">
 
-
-                <div class="col-xl-4 col-md-4 mb-4">
-
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-star"></i> Wins</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row py-2">
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-success text-uppercase mb-1">
-                                        Most
-                                    </div>
-                                    <h5 class="text-center pt-4">
-                                        @Model.GlobalStats.MostWins
-                                    </h5>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-star"></i> Wins</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row py-2">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-success text-uppercase mb-1">
+                                    Most
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
-                                        Least
-                                    </div>
-                                    <h5 class="text-center pt-4">
-                                        @Model.GlobalStats.LessWins
-                                    </h5>
+                                <h5 class="text-center pt-4">
+                                    @Model.GlobalStats.MostWins
+                                </h5>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
+                                    Least
                                 </div>
+                                <h5 class="text-center pt-4">
+                                    @Model.GlobalStats.LessWins
+                                </h5>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <div class="col-xl-4 col-md-4 mb-4">
+            </div>
 
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-star-half-stroke"></i> Draws</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row py-2">
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-success text-uppercase mb-1">
-                                        Most
-                                    </div>
-                                    <h5 class="text-center pt-4">
-                                        @Model.GlobalStats.MostDraws
-                                    </h5>
+            <div class="col-xl-4 col-md-4 mb-4">
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-star-half-stroke"></i> Draws</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row py-2">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-success text-uppercase mb-1">
+                                    Most
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
-                                        Least
-                                    </div>
-                                    <h5 class="text-center pt-4">
-                                        @Model.GlobalStats.LessDraws
-                                    </h5>
+                                <h5 class="text-center pt-4">
+                                    @Model.GlobalStats.MostDraws
+                                </h5>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
+                                    Least
                                 </div>
+                                <h5 class="text-center pt-4">
+                                    @Model.GlobalStats.LessDraws
+                                </h5>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <div class="col-xl-4 col-md-4 mb-4">
+            </div>
 
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-dark"><i class="fa-regular fa-star"></i> Defeats</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="row py-2">
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-success text-uppercase mb-1">
-                                        Most
-                                    </div>
-                                    <h5 class="text-center pt-4">
-                                        @Model.GlobalStats.MostDefeats
-                                    </h5>
+            <div class="col-xl-4 col-md-4 mb-4">
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-dark"><i class="fa-regular fa-star"></i> Defeats</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row py-2">
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-success text-uppercase mb-1">
+                                    Most
                                 </div>
-                                <div class="col-sm-6 col-md-6 col-lg-6">
-                                    <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
-                                        Least
-                                    </div>
-                                    <h5 class="text-center pt-4">
-                                        @Model.GlobalStats.LessDefeats
-                                    </h5>
+                                <h5 class="text-center pt-4">
+                                    @Model.GlobalStats.MostDefeats
+                                </h5>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
+                                    Least
                                 </div>
+                                <h5 class="text-center pt-4">
+                                    @Model.GlobalStats.LessDefeats
+                                </h5>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-    
+            </div>
 
         </div>
 

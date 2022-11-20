@@ -39,7 +39,6 @@ namespace Superleague.Controllers
 
             model.GlobalStats = new GlobalStats();
 
-
             await CalculateGlobalStatsAsync(model);
 
             if (ModelState.IsValid)
@@ -70,8 +69,16 @@ namespace Superleague.Controllers
 
             model.GlobalStats.TotalGoals = homeGoals + awayGoals;
 
-            // goal average
-            model.GlobalStats.GoalAverage = model.GlobalStats.TotalGoals / model.GlobalStats.TotalMatches;
+
+            // goal average (if totalMatches = 0, the quocient will be always 0)
+            if (model.GlobalStats.TotalMatches == 0)
+            {
+                model.GlobalStats.GoalAverage = 0;
+            }
+            else
+            {
+                model.GlobalStats.GoalAverage = model.GlobalStats.TotalGoals / model.GlobalStats.TotalMatches;
+            }
 
             // total yellow cards
             var homeYellows = _resultRepository.GetAll().Sum(u => u.HomeYellowCards);

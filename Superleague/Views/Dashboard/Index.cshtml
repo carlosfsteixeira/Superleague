@@ -11,7 +11,7 @@
         <div class="row">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                <h1 class="h5 mb-0 text-gray-800">Dashboard</h1>
             </div>
 
         </div>
@@ -94,7 +94,7 @@
 
         <div class="row">
 
-            <div class="card shadow mb-4 py-3 col-xl-5">
+            <div class="card shadow mb-4 py-3 col-md-4 ml-4">
                 <div class="card-header">
                     <h5 class="text-dark">Rounds</h5>
                 </div>
@@ -148,9 +148,63 @@
                     </div>
                 </div>
             </div>
-        </div>
 
+            <div class="card shadow mb-4 py-3 col-md-7 ml-5">
+                <div class="card-header">
+                    <h5 class="text-dark">Matches</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tableMatches" class="table table-striped" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Round</th>
+                                    <th>Home Team</th>
+                                    <th>Away Team</th>
+                                    <th>Status</th>
+                                    <th>Result</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0" width="100%">
+                                @foreach (var item in Model.Matches)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Round.Description
+                                        </td>
+                                        <td>
+                                            @item.HomeTeam.Name
+                                        </td>
+                                        <td>
+                                            @item.AwayTeam.Name
+                                        </td>
+                                        <td>
+                                            @if (item.Played)
+                                            {
+                                                <span class="badge badge-info">Played</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-warning">Upcoming</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.HasResult)
+                                            {
+                                                <span class="badge badge-success">Added</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
+
 
     <div id="confirmDialog" class="modal fade">
         <div class="modal-dialog modal-sm">
@@ -178,9 +232,12 @@
             $('#tableRounds').DataTable();
                 "info" : false
             } );
-    </script>
 
-    <script>
+            $(document).ready(function () {
+                $('#tableMatches').DataTable();
+                "info" : false
+            });
+
         function Close(id) {
             var url = "Dashboard/CloseRound/" + id;
             event.preventDefault();

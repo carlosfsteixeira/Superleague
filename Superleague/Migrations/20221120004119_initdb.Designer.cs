@@ -10,8 +10,8 @@ using Superleague.Data;
 namespace Superleague.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221110224110_stats_table_added_totalGoals")]
-    partial class stats_table_added_totalGoals
+    [Migration("20221120004119_initdb")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -485,6 +485,9 @@ namespace Superleague.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Closed")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("Complete")
                         .HasColumnType("bit");
 
@@ -565,13 +568,13 @@ namespace Superleague.Migrations
                     b.Property<int?>("TeamId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalCards")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalGoals")
-                        .HasColumnType("int");
-
                     b.Property<int>("TotalMatches")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalReds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalYellows")
                         .HasColumnType("int");
 
                     b.Property<int>("Wins")

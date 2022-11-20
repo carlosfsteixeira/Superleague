@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Vereyon.Web;
 
 namespace Superleague.Controllers
@@ -31,32 +29,6 @@ namespace Superleague.Controllers
             return View(_context.GetAll().OrderBy(e => e.Description));
         }
 
-        // GET: Positions API
-        public IActionResult GetAll()
-        {
-            var positions = _context.GetAll().OrderBy(e => e.Description);
-
-            return Json(new { data = positions });
-        }
-
-        // GET: Positions/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("PositionNotFound");
-            }
-
-            var country = await _context.GetByIdAsync(id.Value);
-
-            if (country == null)
-            {
-                return new NotFoundViewResult("PositionNotFound");
-            }
-
-            return View(country);
-        }
-
         // GET: Positions/Create
         public IActionResult Create()
         {
@@ -64,8 +36,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Positions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Position position)
@@ -141,34 +111,15 @@ namespace Superleague.Controllers
             return View(position);
         }
 
-        // GET: Positions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("PositionNotFound");
-            }
-
-            var country = await _context.GetByIdAsync(id.Value);
-
-            if (country == null)
-            {
-                return new NotFoundViewResult("PositionNotFound");
-            }
-
-            return View(country);
-        }
-
         // POST: Positions/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var position = await _context.GetByIdAsync(id);
 
             try
             {
-
                 await _context.DeleteAsync(position);
 
                 TempData["success"] = $"Position removed";

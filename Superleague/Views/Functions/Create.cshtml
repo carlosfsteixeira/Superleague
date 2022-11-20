@@ -27,10 +27,6 @@
 
         <div class="container-fluid">
 
-            <div class="d-sm-flex align-items-center justify-content-between">
-                <h1 class="h3 mb-0 text-gray-800">Functions <i class="fa-solid fa-angle-right"></i> Add New</h1>
-            </div>
-
             <div class="row py-5">
 
                 <div class="col-lg-4">
@@ -38,7 +34,7 @@
                     <div class="card shadow border-left-success mb-4">
 
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Info</h6>
+                            <h6 class="m-0 font-weight-bold text-success">New Function</h6>
                         </div>
 
                         <div class="card-body">
@@ -48,7 +44,7 @@
                                 <div class="col-lg-12 col-lg-4 mb-4">
 
                                     <div class="form-group col-md-12">
-                                        <input asp-for="Description" class="form-control" placeholder="Name" />
+                                        <input asp-for="Description" class="form-control" placeholder="Description" />
                                         <span asp-validation-for="Description" class="text-danger"></span>
                                     </div>
 

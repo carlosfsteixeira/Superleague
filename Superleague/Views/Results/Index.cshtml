@@ -15,7 +15,7 @@
         @if (Model.Any())
         {
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800 pt-5">Results</h1>
+                <h1 class="h5 mb-0 text-gray-800 pt-5">Results</h1>
             </div>
 
             <div class="container-fluid d-flex justify-content-center mb-4">
@@ -130,7 +130,7 @@
                                                     <td class="text-center">
                                                         @item.HomeTeam.Venue
                                                     </td>
-                                                    @if (User.IsInRole("Admin"))
+                                                    @if (item.Round.Closed == false && User.IsInRole("Admin"))
                                                     {
                                                         <td>
                                                         <div class="text-center">
@@ -140,11 +140,37 @@
                                                         </div>
                                                         </td>
                                                          <td class="text-center">
-                                                            <form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">
-                                                                <button type="submit" class="btn" onclick="Delete(@item.Id)">
-                                                                    <i class="fa-regular fa-trash-can" style="color: red"></i>
-                                                                </button>
-                                                            </form>
+                                                            <button class="deleteTask btn text-danger" data-id="@item.Id" data-toggle="modal" data-target="#deleteTaskModal">
+                                                                <i class="fa-regular fa-trash-can" style="color: red"></i>
+                                                            </button>
+
+                                                             <!--Modal-->
+                                                            <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true" role="dialog" style="display:none">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title text-danger" id="exampleModalLabel1">Delete Result</h5>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <div class="row">
+                                                                                <div class="container-fluid d-flex justify-content-center">
+                                                                                    <div class="mb-3">
+                                                                                        <h5 class="text-center">You are about to delete this result</h5>
+                                                                                        <h6 class="text-center">Are you sure?</h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                            <form method="post" asp-controller="Results" asp-action="Delete" asp-route-id="@item.Id">
+                                                                                <input type="submit" value="Yes, Delete" class="btn btn-danger" />
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--Modal-->
                                                         </td>
                                                     }
                                                 </tr>
@@ -200,10 +226,8 @@
                         type: 'DELETE',
                         success: function (data) {
                             if (data.success) {
+                                window.location.reload();
                                 toastr.success(data.message);
-                            }
-                            else {
-                                toastr.error(data.message);
                             }
                         }
                     })

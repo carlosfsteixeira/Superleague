@@ -20,5 +20,6 @@ namespace Superleague.Data
         //{
         //    return _context.Teams.Include(e => e.Country);
         //}
+
     }
 }

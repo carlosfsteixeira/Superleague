@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Superleague.Data;
-using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
 using System;
@@ -75,8 +73,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Staffs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(StaffViewModel model, IFormFile? file, int id)
@@ -111,7 +107,7 @@ namespace Superleague.Controllers
                     {
                         if (function.Description == "Manager")
                         {
-                            var managerExists = _staffRepository.GetAll().Where(t => t.Function.Id == function.Id);
+                            var managerExists = _staffRepository.GetAll().Where(t => t.TeamId == model.Staff.TeamId).Where(t => t.Function.Id == function.Id);
 
                             if (managerExists.Any())
                             {
@@ -184,7 +180,7 @@ namespace Superleague.Controllers
 
                 TempData["success"] = $"New staff member added";
 
-                return RedirectToAction("Index", new { id = model.Staff.TeamId });
+                return RedirectToAction("Edit", "Teams", new { id = model.Staff.TeamId });
             }
 
             return View(model);
@@ -225,13 +221,11 @@ namespace Superleague.Controllers
         }
 
         // POST: Staffs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(StaffViewModel model, IFormFile? file)
         {
-           
+
             if (ModelState.IsValid)
             {
                 try
@@ -374,33 +368,27 @@ namespace Superleague.Controllers
                         throw;
                     }
                 }
-              
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Edit", "Teams", new { id = model.Staff.TeamId });
             }
             return View(model);
         }
 
-        // GET: Staffs/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("StaffNotFound");
-            }
-
-            var staff = await _staffRepository.GetByIdAsync(id.Value);
-
-            if (staff == null)
-            {
-                return new NotFoundViewResult("StaffNotFound");
-            }
-
-            return View(staff);
-        }
-
         // POST: Staffs/Delete/5
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int staffid)
+        {
+            var staff = await _staffRepository.GetByIdAsync(staffid);
+
+            await _staffRepository.DeleteAsync(staff);
+
+            TempData["success"] = $"{staff.Name} removed";
+
+            return RedirectToAction("Edit", "Teams", new { id = staff.TeamId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteFromTable(int id)
         {
             var staff = await _staffRepository.GetByIdAsync(id);
 
@@ -408,29 +396,8 @@ namespace Superleague.Controllers
 
             TempData["success"] = $"{staff.Name} removed";
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var staff = await _staffRepository.GetByIdAsync(id);
-
-            await _staffRepository.DeleteAsync(staff);
-
-            TempData["success"] = $"{staff.Name} removed";
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var players = _staffRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Function).Include(p => p.Team);
-
-            return Json(new { data = players });
-        }
-
 
         public IActionResult StaffNotFound()
         {

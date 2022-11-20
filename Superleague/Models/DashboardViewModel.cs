@@ -23,6 +23,10 @@ namespace Superleague.Models
 
         public IEnumerable<Round> Rounds { get; set; }
 
+        public int TotalMatches { get; set; }
+
+        public IEnumerable<Match> Matches { get; set; }
+
 
     }
 }

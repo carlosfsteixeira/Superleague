@@ -1,16 +1,13 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
+using System;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 using Vereyon.Web;
 
 namespace Superleague.Controllers
@@ -34,32 +31,6 @@ namespace Superleague.Controllers
 
         }
 
-        // GET: Countries
-        public IActionResult GetAll()
-        {
-            var countries = _context.GetAll();
-
-            return Json(new { data = countries });
-        }
-
-        // GET: Countries/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("CountryNotFound");
-            }
-
-            var country = await _context.GetByIdAsync(id.Value);
-
-            if (country == null)
-            {
-                return new NotFoundViewResult("CountryNotFound");
-            }
-
-            return View(country);
-        }
-
         // GET: Countries/Create
         public IActionResult Create()
         {
@@ -67,8 +38,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Countries/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Country country)
@@ -110,8 +79,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Countries/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Country country)
@@ -125,11 +92,11 @@ namespace Superleague.Controllers
             {
                 try
                 {
-                   await _context.UpdateAsync(country);
+                    await _context.UpdateAsync(country);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (! await _context.ExistAsync(country.Id))
+                    if (!await _context.ExistAsync(country.Id))
                     {
                         return NotFound();
                     }
@@ -143,27 +110,9 @@ namespace Superleague.Controllers
             return View(country);
         }
 
-        // GET: Countries/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("CountryNotFound");
-            }
-
-            var country = await _context.GetByIdAsync(id.Value);
-
-            if (country == null)
-            {
-                return new NotFoundViewResult("CountryNotFound");
-            }
-
-            return View(country);
-        }
-
         // POST: Countries/Delete/5
         [HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var country = await _context.GetByIdAsync(id);
@@ -172,7 +121,7 @@ namespace Superleague.Controllers
             {
                 await _context.DeleteAsync(country);
 
-                TempData["success"] = $"Function removed";
+                TempData["success"] = "Country removed";
 
                 return RedirectToAction(nameof(Index));
             }

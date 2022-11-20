@@ -1,4 +1,4 @@
-﻿@*@model IEnumerable<Superleague.Data.Entities.Player>*@
+﻿@model IEnumerable<Superleague.Data.Entities.Player>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,23 +9,34 @@
         background-color: black;
         color: #ffffff;
     }
+
+    .image1 {
+        width: 50px;
+        height: 60px;
+    }
+
+    .image2 {
+        width: 50px;
+        height: 50px;
+    }
 </style>
 
 <body id="page-top">
 
-    <div class="container-fluid pt-5">
+    <div class="container-fluid">
 
-        <div class="d-sm-flex align-items-center justify-content-between">
-            <h1 class="h3 mb-0 text-gray-800 my-2">Players</h1>
+        <div class="d-sm-flex align-items-center justify-content-between mb-4 py-4">
+            <h1 class="h5 mb-0 text-gray-800">Players</h1>
         </div>
 
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
 
+            <div class="card-header">
             </div>
+
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="tblPlayer" class="table styled-table table-striped" width="100%" cellspacing="0">
+                    <table id="tablePlayers" class="table styled-table table-striped" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th></th>
@@ -34,10 +45,72 @@
                                 <th>Position</th>
                                 <th></th>
                                 <th>Team</th>
-                                <th>Country</th>
-                                <th></th>
+                                <th>Nationality</th>
+                                <th class="text-center">Actions</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td style="width: 25px">
+                                        <img src="@Url.Content(item.ImageURL)" alt="Image" class="image1" />
+                                    </td>
+                                    <td style="width: 200px">
+                                        @item.Name
+                                    </td>
+                                    <td style="width: 150px">
+                                        @item.Number
+                                    </td>
+                                    <td style="width: 150px">
+                                        @item.Position.Description
+                                    </td>
+                                    <td style="width: 100px">
+                                        <img src="@Url.Content(item.Team.ImageURL)" alt="Image" class="image2" />
+                                    </td>
+                                    <td style="width: 150px">
+                                        @item.Team.Name
+                                    </td>
+                                    <td style="width: 200px">
+                                        @item.Country.Name
+                                    </td>
+                                    <td class="text-center" style="width: 150px">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn text-primary"> <i class="fa-solid fa-pen-to-square"></i> </a>
+                                        <button class="deleteTask btn text-danger" data-id="@item.Id" data-toggle="modal" data-target="#deleteTaskModal">
+                                            <i class="fa-solid fa-trash-can"></i> 
+                                        </button>
+
+                                        <!--Modal-->
+                                        <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true" role="dialog" style="display:none">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-danger" id="exampleModalLabel1">Delete Player</h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="container-fluid d-flex justify-content-center">
+                                                                <div class="mb-3">
+                                                                    <h5 class="text-center">You are about to delete this player</h5>
+                                                                    <h6 class="text-center">Are you sure?</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <form method="post" asp-controller="Players" asp-action="DeleteFromTable" asp-route-id="@item.Id">
+                                                            <input type="submit" value="Yes, Delete" class="btn btn-danger" />
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Modal-->
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -47,7 +120,35 @@
 </body>
 
 @section Scripts{
-    <script src="~/js/playerGetAll.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tablePlayers').DataTable();
+        });
+
+        $("#deleteTaskModal").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) //Button that triggered the modal
+            var id = button.find('button').data('id') //need to find the button and get id
+            var url = '/delete/' + id; //url
+
+            //Click delete task in modal
+            $(document).on('click', '.delete_task', function () {
+                if (confirm('Delete task')) {
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        success: function (result) {
+                            $('#deleteTaskModal').modal('hide') //hide modal on success
+                            console.log("Deleting...");
+                            window.location.href = '/';
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+                }
+            })
+        })
+    </script>
     
 }
 

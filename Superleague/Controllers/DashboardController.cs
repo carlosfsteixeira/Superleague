@@ -63,6 +63,8 @@ namespace Superleague.Controllers
                 TotalStaffs = _staffRepository.GetAll().Count(),
 
                 Rounds = _roundRepository.GetAll().OrderBy(e => e.Description),
+
+                Matches = _matchRepository.GetAll().Include("Round").Include("HomeTeam").Include("AwayTeam").OrderByDescending(e => e.Round.Description),
             };
 
             return View(dashboardViewModel);

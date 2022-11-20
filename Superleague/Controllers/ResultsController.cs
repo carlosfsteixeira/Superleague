@@ -31,34 +31,6 @@ namespace Superleague.Controllers
             return View(results);
         }
 
-        // GET: Results/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("ResultNotFound");
-            }
-
-            ResultViewModel resultViewModel = new()
-            {
-                Result = new(),
-
-                Match = new(),
-
-            };
-
-            resultViewModel.Result = await _resultRepository.GetByIdAsync(id.Value);
-
-            resultViewModel.Result.Match = await _matchRepository.GetByIdAsync(resultViewModel.Result.MatchId.Value);
-
-            if (resultViewModel == null)
-            {
-                return new NotFoundViewResult("ResultNotFound");
-            }
-
-            return View(resultViewModel);
-        }
-
         // GET: Results/Create
         public IActionResult Create(int id)
         {
@@ -73,8 +45,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Results/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ResultViewModel model, int id)
@@ -132,8 +102,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Results/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ResultViewModel model, int id)

@@ -15,26 +15,18 @@
         @if (Model.Any())
         {
             <div class="d-sm-flex align-items-center justify-content-between mb-4 pt-5">
-                <h1 class="h3 mb-0 text-gray-800">Season Fixtures</h1>
-                @if (User.IsInRole("Admin"))
-                {
-                    @if (Model.Count() < 28)
-                    {
-                        <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
-                        </a>
-                    }
-                }
+                <h1 class="h5 mb-0 text-gray-800">Season Fixtures</h1>
+
             </div>
             <div class="container-fluid d-flex justify-content-center mb-4">
                 <div class="row py-1">
            
                     <div class="col-lg-12 col-md-4">
                     
-
                         <div class="row">
-
+                       
                             <div class="col-md-12 py-3">
+                       
                                 <div class="optionsDiv" style="color: black; font-weight: bold;">
                                     Filter By Round
                                     <select type="search" class="select-table-filter select" data-table="order-table">
@@ -47,6 +39,17 @@
                                         <option value="Round 6">Round 6</option>
                                         <option value="Round 7">Round 7</option>
                                     </select>
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        @if (Model.Count() < 28)
+                                        {
+                                            <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm float-lg-right">
+                                                <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
+                                            </a>
+                                        }
+                                    }
+
                                 </div>
                             </div>
               
@@ -152,11 +155,38 @@
                                                         </a>
                                                     </td>
                                                     <td class="text-center">
-                                                        @*<form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">*@
-                                                        <button type="submit" class="btn" onclick="Delete(@item.Id)">
+                                                        <button class="deleteTask btn text-danger" data-id="@item.Id" data-toggle="modal" data-target="#deleteTaskModal">
                                                             <i class="fa-regular fa-trash-can" style="color: red"></i>
                                                         </button>
-                                                        @*</form>*@
+
+                                                        <!--Modal-->
+                                                        <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true" role="dialog" style="display:none">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title text-danger" id="exampleModalLabel1">Delete Fixture</h5>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="row">
+                                                                            <div class="container-fluid d-flex justify-content-center">
+                                                                                <div class="mb-3">
+                                                                                    <h5 class="text-center">You are about to delete this fixture</h5>
+                                                                                    <h6 class="text-center">Are you sure?</h6>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                        <form method="post" asp-controller="Matches" asp-action="Delete" asp-route-id="@item.Id">
+                                                                            <input type="submit" value="Yes, Delete" class="btn btn-danger" />
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--Modal-->
+
                                                     </td>
                                                     <td class="text-center">
                                                         @if (item.Played == true && item.HasResult == false)
@@ -205,37 +235,33 @@
 
 @section Scripts {
     <script>
-        function Delete(id) {
-            var url = "Matches/Delete/" + id;
-            event.preventDefault();
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('form').submit();
+        $(document).ready(function () {
+            $('#tableFunctions').DataTable();
+        });
+
+        $("#deleteTaskModal").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) //Button that triggered the modal
+            var id = button.find('button').data('id') //need to find the button and get id
+            var url = '/delete/' + id; //url
+
+            //Click delete task in modal
+            $(document).on('click', '.delete_task', function () {
+                if (confirm('Delete task')) {
                     $.ajax({
                         url: url,
-                        type: 'POST',
-                        success: function (data) {
-                            if (data.success) {
-                                window.location.reload();
-                                toastr.success(data.message);
-                            }
-                            else {
-                                window.location.reload();
-                                toastr.success(data.message);
-                            }
+                        type: "DELETE",
+                        success: function (result) {
+                            $('#deleteTaskModal').modal('hide') //hide modal on success
+                            console.log("Deleting...");
+                            window.location.href = '/';
+                        },
+                        error: function (err) {
+                            console.log(err);
                         }
                     })
                 }
             })
-        }
+        })
     </script>
     <script src="~/js/matchFilter.js"></script>
 }

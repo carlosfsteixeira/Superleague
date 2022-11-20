@@ -8,13 +8,12 @@
     <link rel="stylesheet" href="~/css/teamCards.css" />
 </head>
 
-<div class="container-fluid">
+<div class="container-fluid py-3">
     @if (Model.Any())
     {
         @if (User.Identity.IsAuthenticated)
         {
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Clubs <i class="fa-solid fa-angle-right"></i> All</h1>
                 @if (Model.Count() < 8)
                 {
                     <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
@@ -24,7 +23,7 @@
             </div>
         }
            
-        <div class="row py-5">
+        <div class="row py-3">
         @foreach (var item in Model)
         {
             <div class="col-xl-3 col-md-6 mb-4 align-items-center justify-content-between d-sm-flex">
@@ -51,23 +50,50 @@
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary w-100">Edit</a>
                                     </div>
                                 </div>
+                            }
 
+                            @if (User.IsInRole("Admin"))
+                            {
                                 <div class="row justify-content-center">
                                     <div class="col-md-12">
-                                       @* <form asp-action="Delete" asp-route-id="@item.Id" id="form" method="post">*@
-                                            <button type="submit" class="btn btn-sm btn-outline-danger w-100" onclick="Delete(@item.Id)">Delete</button>
-                                       @* </form>*@
+                                        <button class="deleteTask btn-sm btn-outline-danger w-100" data-id="@item.Id" data-toggle="modal" data-target="#deleteTaskModal">Delete</button>
                                     </div>
                                 </div>
                             }
                             
                         </div>
-                        
                     </div>
                     <br />
                 </div>
             </div>
-            
+
+            <!--Modal-->
+            <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true" role="dialog" style="display:none">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-danger" id="exampleModalLabel1">Delete Function</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="container-fluid d-flex justify-content-center">
+                                    <div class="mb-3">
+                                        <h5 class="text-center">You are about to delete this Club</h5>
+                                        <h6 class="text-center">Are you sure?</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <form method="post" asp-controller="Teams" asp-action="Delete" asp-route-id="@item.Id">
+                                <input type="submit" value="Yes, Delete" class="btn btn-danger" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Modal-->
         }
         </div>
     }
@@ -89,43 +115,35 @@
             </div>
         </div>
     }
-       
 
+    
 </div>
 
 @section Scripts{
     <script>
-        function Delete(id) {
-            var url = "Teams/Delete/" + id;
-            event.preventDefault();
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('form').submit();
+        $("#deleteTaskModal").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) //Button that triggered the modal
+            var id = button.find('button').data('id') //need to find the button and get id
+            var url = '/delete/' + id; //url
+
+            //Click delete task in modal
+            $(document).on('click', '.delete_task', function () {
+                if (confirm('Delete task')) {
                     $.ajax({
                         url: url,
-                        type: 'POST',
-                        success: function (data) {
-                            if (data.success) {
-                                window.location.reload();
-                                toastr.success(data.message);
-                            }
-                            else {
-                                window.location.reload();
-                                toastr.success(data.message);
-                            }
+                        type: "DELETE",
+                        success: function (result) {
+                            $('#deleteTaskModal').modal('hide') //hide modal on success
+                            console.log("Deleting...");
+                            window.location.href = '/';
+                        },
+                        error: function (err) {
+                            console.log(err);
                         }
                     })
                 }
             })
-        }
+        })
     </script>
 }
 

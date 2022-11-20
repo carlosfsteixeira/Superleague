@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
+using System;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 using Vereyon.Web;
 
 namespace Superleague.Controllers
@@ -32,32 +30,6 @@ namespace Superleague.Controllers
             return View(_context.GetAll().OrderBy(e => e.Description));
         }
 
-        // GET: Functions API
-        public IActionResult GetAll()
-        {
-            var functions = _context.GetAll().OrderBy(e => e.Description);
-
-            return Json(new { data = functions });
-        }
-
-        // GET: Functions/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("FunctionNotFound");
-            }
-
-            var country = await _context.GetByIdAsync(id.Value);
-
-            if (country == null)
-            {
-                return new NotFoundViewResult("FunctionNotFound");
-            }
-
-            return View(country);
-        }
-
         // GET: Functions/Create
         public IActionResult Create()
         {
@@ -65,8 +37,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Functions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Function function)
@@ -107,8 +77,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Functions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Function function)
@@ -142,27 +110,9 @@ namespace Superleague.Controllers
             return View(function);
         }
 
-        // GET: Functions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("FunctionNotFound");
-            }
-
-            var function = await _context.GetByIdAsync(id.Value);
-
-            if (function == null)
-            {
-                return new NotFoundViewResult("FunctionNotFound");
-            }
-
-            return View(function);
-        }
-
         // POST: Functions/Delete/5
         [HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var function = await _context.GetByIdAsync(id);

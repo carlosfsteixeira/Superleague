@@ -27,8 +27,5 @@ namespace Superleague.Models
         [ValidateNever]
         public int TeamId { get; set; }
 
-        //public Statistics Statistics { get; set; }
-
-
     }
 }

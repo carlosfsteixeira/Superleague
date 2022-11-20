@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
-using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
+using System;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Superleague.Controllers
 {
@@ -29,9 +27,9 @@ namespace Superleague.Controllers
         private readonly IResultRepository _resultsRepository;
         private readonly IUserHelper _userHelper;
 
-        public TeamsController(ITeamRepository teamRepository, 
-                               ICountryRepository countryRepository, 
-                               IPlayerRepository playerRepository, 
+        public TeamsController(ITeamRepository teamRepository,
+                               ICountryRepository countryRepository,
+                               IPlayerRepository playerRepository,
                                IStaffRepository staffRepository,
                                IStatisticsRepository statisticsRepository,
                                IImageHelper imageHelper,
@@ -102,6 +100,13 @@ namespace Superleague.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
+            var teamCount = _teamRepository.GetAll().Count();
+
+            if (teamCount >= 8)
+            {
+                return View("TeamCount");
+            }
+
             TeamViewModel teamViewModel = new TeamViewModel
             {
                 CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
@@ -168,7 +173,7 @@ namespace Superleague.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-  
+
             return View(model);
         }
 
@@ -206,12 +211,12 @@ namespace Superleague.Controllers
             };
 
             teamViewModel.Team = await _teamRepository.GetByIdAsync(id.Value);
-            
+
             if (teamViewModel == null)
             {
                 return new NotFoundViewResult("TeamNotFound");
             }
-            
+
             return View(teamViewModel);
         }
 
@@ -318,25 +323,6 @@ namespace Superleague.Controllers
             return View(model);
         }
 
-        // GET: Teams/Delete/5
-        //[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new NotFoundViewResult("TeamNotFound");
-        //    }
-
-        //    var team = await _teamRepository.GetByIdAsync(id.Value);
-
-        //    if (team == null)
-        //    {
-        //        return new NotFoundViewResult("TeamNotFound");
-        //    }
-
-        //    return View(team);
-        //}
-
         // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin")]
@@ -356,6 +342,7 @@ namespace Superleague.Controllers
             {
                 ViewBag.ErrorTitle = "This Club is in use";
                 ViewBag.ErrorMessage = "Consider deleting all Matches appended and try again.";
+
                 return View("Error");
             }
         }

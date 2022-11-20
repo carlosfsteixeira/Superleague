@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Superleague.Migrations
 {
-    public partial class initDb : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -97,7 +97,8 @@ namespace Superleague.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Complete = table.Column<bool>(type: "bit", nullable: false)
+                    Complete = table.Column<bool>(type: "bit", nullable: false),
+                    Closed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -305,7 +306,8 @@ namespace Superleague.Migrations
                     GoalsConceded = table.Column<int>(type: "int", nullable: false),
                     TotalMatches = table.Column<int>(type: "int", nullable: false),
                     Position = table.Column<int>(type: "int", nullable: false),
-                    TotalCards = table.Column<int>(type: "int", nullable: false),
+                    TotalYellows = table.Column<int>(type: "int", nullable: false),
+                    TotalReds = table.Column<int>(type: "int", nullable: false),
                     GoalAverage = table.Column<int>(type: "int", nullable: false),
                     TeamId = table.Column<int>(type: "int", nullable: true)
                 },

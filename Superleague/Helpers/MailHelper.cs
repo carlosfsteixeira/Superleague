@@ -48,7 +48,6 @@ namespace Superleague.Helpers
             }
             catch (Exception ex)
             {
-
                 return new Response
                 {
                     IsSuccess = false,

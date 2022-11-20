@@ -1,0 +1,36 @@
+﻿@model ErrorViewModel
+
+@{
+    ViewData["Title"] = "Request Error";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:500,800" rel="stylesheet">
+</head>
+    <body>
+
+        <div class="container-xxl container-p-y d-flex justify-content-center">
+    <div class="misc-wrapper justify-content-center">
+
+        <h3 class="mb-2 mx-2 text-center">The Super League is restricted to eight clubs</h3>
+        <p class="mb-4 mx-2 text-center">Consider deleting one or more and try again</p>
+        <div class="text-center">
+        <a asp-controller="Teams" asp-action="Index" class="btn btn-primary">Take me back</a>
+        </div>
+        <div class="mt-3 py-5 text-center">
+                <img src="~/images/archive/error.png"
+                     alt="page-misc-error-light"
+                     width="400"
+                     class="img-fluid" />
+        </div>
+    </div>
+</div>
+    </body>
+</html>
+
+

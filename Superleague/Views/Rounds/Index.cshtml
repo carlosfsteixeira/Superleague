@@ -14,30 +14,85 @@
 <body id="page-top">
 
     <div class="container-fluid">
-
         <div class="d-sm-flex align-items-center justify-content-between">
-            <h1 class="h3 mb-0 text-gray-800 my-2">Management <i class="fa-solid fa-angle-right"></i> Rounds <i class="fa-solid fa-angle-right"></i> View All</h1>
-            @if (Model.Count() < 7)
-            {
-                <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
-                </a>
-            }
+            <h1 class="h5 mb-0 text-gray-800 my-2">Rounds</h1>
+
         </div>
 
         <div class="card shadow mb-4 py-3">
-            <div class="card-header py-3">
+            <div class="card-header">
+                @if (Model.Count() < 7)
+                {
+                    <a asp-action="Create" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New
+                    </a>
+                }
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="tblRounds" class="table styled-table table-striped" width="100%" cellspacing="0">
+                    <table id="tableRounds" class="table styled-table table-striped" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>Description</th>
-                                <th>Complete</th>
-                                <th></th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Delete</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td style="width: 20%">@item.Description</td>
+                                    <td class="text-center" style="width: 70%">
+
+                                        @if (item.Complete)
+                                        {
+                                            <span class="badge badge-info">Completed</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-danger">Not Completed</span>
+                                        }
+
+                                    </td>
+                                    <td class="text-center" style="width: 10%">
+                                        <div class="btn btn-sm btn-group" role="group">
+                                            <button class="deleteTask btn text-danger" data-id="@item.Id" data-toggle="modal" data-target="#deleteTaskModal">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </div>
+
+                                        <!--Modal-->
+                                        <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true" role="dialog" style="display:none">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title text-danger" id="exampleModalLabel1">Delete Round</h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="container-fluid d-flex justify-content-center">
+                                                                <div class="mb-3">
+                                                                    <h5 class="text-center">You are about to delete this round</h5>
+                                                                    <h6 class="text-center">Are you sure?</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <form method="post" asp-controller="Rounds" asp-action="Delete" asp-route-id="@item.Id">
+                                                            <input type="submit" value="Yes, Delete" class="btn btn-danger" />
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--Modal-->
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -47,5 +102,33 @@
 </body>
 
 @section Scripts{
-    <script src="~/js/rounds.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tableRounds').DataTable();
+        });
+
+        $("#deleteTaskModal").on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) //Button that triggered the modal
+            var id = button.find('button').data('id') //need to find the button and get id
+            var url = '/delete/' + id; //url
+
+            //Click delete task in modal
+            $(document).on('click', '.delete_task', function () {
+                if (confirm('Delete task')) {
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        success: function (result) {
+                            $('#deleteTaskModal').modal('hide') //hide modal on success
+                            console.log("Deleting...");
+                            window.location.href = '/';
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    })
+                }
+            })
+        })
+    </script>
 }

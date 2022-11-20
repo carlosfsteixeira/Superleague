@@ -43,11 +43,9 @@ namespace Superleague.Controllers
         // GET: Players
         public IActionResult Index()
         {
-            return View(_playerRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Position).Include(p => p.Team));
+            var players = _playerRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Position).Include(p => p.Team);
 
-            //var playerList = _playerRepository.GetAll().Include("Country.Position.Team").OrderBy(e => e.Name);
-
-            //return View(playerList);
+            return View(players);
         }
 
         // GET: Players/Create
@@ -80,8 +78,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Players/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PlayerViewModel model, IFormFile? file, int id)
@@ -114,7 +110,23 @@ namespace Superleague.Controllers
                 {
                     ModelState.AddModelError("Player.Number", "This number is already in use");
 
-                    return View(model);
+                    PlayerViewModel playerViewModel = new()
+                    {
+                        Player = new(),
+
+                        PositionList = _positionRepository.GetAll().Select(i => new SelectListItem
+                        {
+                            Text = i.Description,
+                            Value = i.Id.ToString(),
+                        }),
+                        CountryList = _countryRepository.GetAll().Select(i => new SelectListItem
+                        {
+                            Text = i.Name,
+                            Value = i.Id.ToString(),
+                        }),
+                    };
+
+                    return View(playerViewModel);
                 }
                 else
                 {
@@ -122,7 +134,9 @@ namespace Superleague.Controllers
 
                     TempData["success"] = $"New player added";
 
-                    return RedirectToAction("Index", new { id = model.TeamId });
+                    var idiscas = model.Player.TeamId;
+
+                    return RedirectToAction("Edit", "Teams", new { id = model.Player.TeamId });
                 }
             }
 
@@ -160,16 +174,10 @@ namespace Superleague.Controllers
                 return new NotFoundViewResult("PlayerNotFound");
             }
 
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "Id", "Name", player.CountryId);
-            //ViewData["PositionId"] = new SelectList(_context.Positions, "Id", "Description", player.PositionId);
-            //ViewData["TeamId"] = new SelectList(_context.Teams, "Id", "Name", player.TeamId);
-
             return View(playerViewModel);
         }
 
         // POST: Players/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(PlayerViewModel model, IFormFile? file)
@@ -257,7 +265,7 @@ namespace Superleague.Controllers
 
                     TempData["success"] = $"{model.Player.Name} updated";
 
-                    return RedirectToAction("Index", new { id = model.TeamId });
+                    return RedirectToAction("Edit", "Teams", new { id = model.Player.TeamId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -276,27 +284,22 @@ namespace Superleague.Controllers
             return View(model);
         }
 
-        // GET: Players/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: Players/Delete/5
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int playerid)
         {
-            if (id == null)
-            {
-                return new NotFoundViewResult("PlayerNotFound");
-            }
+            var player = await _playerRepository.GetByIdAsync(playerid);
 
-            var player = await _playerRepository.GetByIdAsync(id.Value);
+            await _playerRepository.DeleteAsync(player);
 
-            if (player == null)
-            {
-                return new NotFoundViewResult("PlayerNotFound");
-            }
+            TempData["success"] = $"{player.Name} removed";
 
-            return View(player);
+            return RedirectToAction("Edit", "Teams", new { id = player.TeamId });
         }
 
         // POST: Players/Delete/5
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public async Task<IActionResult> DeleteFromTable(int id)
         {
             var player = await _playerRepository.GetByIdAsync(id);
 
@@ -304,28 +307,7 @@ namespace Superleague.Controllers
 
             TempData["success"] = $"{player.Name} removed";
 
-            return RedirectToAction(nameof(Index));
-        }
-
-        //POST: Players/Delete/5
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var player = await _playerRepository.GetByIdAsync(id);
-
-            await _playerRepository.DeleteAsync(player);
-
-            TempData["success"] = $"{player.Name} removed";
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var players = _playerRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Position).Include(p => p.Team);
-
-            return Json(new { data = players });
+            return RedirectToAction("Index");
         }
 
         public IActionResult PlayerNotFound()

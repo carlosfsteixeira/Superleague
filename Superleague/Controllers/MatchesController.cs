@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Superleague.Data;
 using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Superleague.Controllers
 {
@@ -31,72 +28,28 @@ namespace Superleague.Controllers
         // GET: Matches
         public async Task<IActionResult> Index()
         {
-            var matches = await _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round).ToListAsync();
+            var matches = await _matchRepository.GetAllMatchesAsync();
 
-            await VerifyIfMatchPlayed(matches);
+            await _matchRepository.VerifyIfMatchPlayedAsync(matches);
 
             return View(matches);
-        }
-
-        public async Task VerifyIfMatchPlayed(List<Match> matches)
-        {
-            foreach (var match in matches)
-            {
-                if (match.MatchDate <= DateTime.Now)
-                {
-                    match.Played = true;
-                    _matchRepository.UpdateAsync(match);
-                }
-            }
-        }
-
-        // GET: Matches/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("MatchNotFound");
-            }
-
-            MatchViewModel matchViewModel = new()
-            {
-                Match = new(),
-
-                RoundsList = _roundRepository.GetAll().Select(a =>
-                            new SelectListItem
-                            {
-                                Text = a.Description,
-                                Value = a.Id.ToString()
-                            }),
-
-                TeamNamesList = _teamRepository.GetAll().Select(a =>
-                            new SelectListItem
-                            {
-                                Text = a.Name,
-                                Value = a.Id.ToString()
-                            }),
-            };
-
-            matchViewModel.Match = await _matchRepository.GetByIdAsync(id.Value);
-
-            matchViewModel.Match.Round = await _roundRepository.GetByIdAsync(matchViewModel.Match.RoundId.Value);
-
-            if (matchViewModel == null)
-            {
-                return new NotFoundViewResult("MatchNotFound");
-            }
-
-            return View(matchViewModel);
         }
 
         // GET: Matches/Create
         public IActionResult Create()
         {
+            var matchCount = _matchRepository.GetAll().Count();
+
+            if (matchCount >= 28)
+            {
+                return View("MatchCount");
+            }
+
             MatchViewModel matchViewModel = new()
             {
                 Match = new(),
 
-                RoundsList =  _roundRepository.GetAll().Where(t => t.Complete == false).Select(a =>
+                RoundsList = _roundRepository.GetAll().Where(t => t.Complete == false).Select(a =>
                             new SelectListItem
                             {
                                 Text = a.Description,
@@ -115,8 +68,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Matches/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MatchViewModel model)
@@ -127,13 +78,13 @@ namespace Superleague.Controllers
             {
                 await _matchRepository.CreateAsync(model.Match);
 
-                foreach(var round in model.Rounds)
+                foreach (var round in model.Rounds)
                 {
                     if (round.Id == model.Match.RoundId)
                     {
                         var countMatchsRound = _matchRepository.GetAll().Where(t => t.RoundId == model.Match.RoundId).Count();
 
-                        if(countMatchsRound == 4)
+                        if (countMatchsRound == 4)
                         {
                             round.Complete = true;
                             await _roundRepository.UpdateAsync(round);
@@ -199,8 +150,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Matches/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MatchViewModel model)
@@ -231,27 +180,9 @@ namespace Superleague.Controllers
             return View(model);
         }
 
-        //// GET: Matches/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new NotFoundViewResult("MatchNotFound");
-        //    }
-
-        //    var match = await _matchRepository.GetByIdAsync(id.Value);
-
-        //    if (match == null)
-        //    {
-        //        return new NotFoundViewResult("MatchNotFound");
-        //    }
-
-        //    return View(match);
-        //}
-
         // POST: Matches/Delete/5
         [HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             int matchId = id;
@@ -264,7 +195,7 @@ namespace Superleague.Controllers
             {
                 await _matchRepository.DeleteAsync(match);
 
-                TempData["success"] = $"Fixture removed";
+                TempData["success"] = "Fixture removed";
 
                 foreach (var round in rounds)
                 {

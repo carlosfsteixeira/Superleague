@@ -63,7 +63,7 @@
                         <a class="nav-link" asp-area="" asp-controller="Players" asp-action="Index">Players</a>
                     </li>
                     <li class="nav-item">
-                        
+                        <a class="nav-link" asp-area="" asp-controller="Staffs" asp-action="Index">Staff</a>
                     </li>
                 </ul>
             </div>
@@ -81,16 +81,15 @@
                 <partial name="_Notification" />
                 @RenderBody()
             </main>
-
         </div>
     </div>
 
-    <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
+    <footer class="sticky-footer bg-white fixed-bottom">
+        @*<div class="container my-auto">*@
             <div class="copyright text-center my-auto">
                 <span>Copyright &copy; 2022 - The Super League</span>
             </div>
-        </div>
+        @*</div>*@
     </footer>
 
 

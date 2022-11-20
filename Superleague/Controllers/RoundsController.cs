@@ -33,13 +33,6 @@ namespace Superleague.Controllers
             return View(_roundRepository.GetAll().OrderBy(e => e.Description));
         }
 
-        // GET: Rounds API
-        public IActionResult GetAll()
-        {
-            var rounds = _roundRepository.GetAll().OrderBy(e => e.Description);
-
-            return Json(new { data = rounds });
-        }
         // GET: Rounds/Create
         public IActionResult Create()
         {
@@ -71,25 +64,6 @@ namespace Superleague.Controllers
             return View(round);
         }
 
-        
-        // GET: Rounds/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("RoundNotFound");
-            }
-
-            var round = await _roundRepository.GetByIdAsync(id.Value);
-
-            if (round == null)
-            {
-                return new NotFoundViewResult("RoundNotFound");
-            }
-
-            return View(round);
-        }
-
         // POST: Rounds/Delete/5
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -100,11 +74,11 @@ namespace Superleague.Controllers
             {
                 await _roundRepository.DeleteAsync(round);
 
-                TempData["success"] = $"Round removed";
+                TempData["success"] = "Round removed";
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 ViewBag.ErrorTitle = "This Round is in use";
                 ViewBag.ErrorMessage = "Consider deleting all Matches appended and try again.";
