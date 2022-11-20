@@ -324,9 +324,8 @@ namespace Superleague.Controllers
         }
 
         // POST: Teams/Delete/5
-        [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var team = await _teamRepository.GetByIdAsync(id);
 

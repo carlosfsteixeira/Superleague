@@ -112,8 +112,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Positions/Delete/5
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             var position = await _context.GetByIdAsync(id);
@@ -122,7 +120,7 @@ namespace Superleague.Controllers
             {
                 await _context.DeleteAsync(position);
 
-                TempData["success"] = $"Position removed";
+                TempData["success"] = "Position removed";
 
                 return RedirectToAction(nameof(Index));
             }

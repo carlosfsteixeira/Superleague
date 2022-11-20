@@ -19,21 +19,18 @@ namespace Superleague.Controllers
         private readonly ITeamRepository _teamRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly IFunctionRepository _functionRepository;
-        private readonly IImageHelper _imageHelper;
         private readonly IWebHostEnvironment _hostEnvironment;
 
         public StaffsController(IStaffRepository staffRepository,
                                     ITeamRepository teamRepository,
                                     ICountryRepository countryRepository,
                                     IFunctionRepository functionRepository,
-                                    IImageHelper imageHelper,
                                     IWebHostEnvironment hostEnvironment)
         {
             _staffRepository = staffRepository;
             _teamRepository = teamRepository;
             _countryRepository = countryRepository;
             _functionRepository = functionRepository;
-            _imageHelper = imageHelper;
             _hostEnvironment = hostEnvironment;
         }
 
@@ -375,8 +372,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Staffs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int staffid)
+        public async Task<IActionResult> Delete(int staffid)
         {
             var staff = await _staffRepository.GetByIdAsync(staffid);
 
@@ -387,7 +383,6 @@ namespace Superleague.Controllers
             return RedirectToAction("Edit", "Teams", new { id = staff.TeamId });
         }
 
-        [HttpPost]
         public async Task<IActionResult> DeleteFromTable(int id)
         {
             var staff = await _staffRepository.GetByIdAsync(id);

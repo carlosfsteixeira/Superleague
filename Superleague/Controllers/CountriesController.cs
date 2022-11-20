@@ -111,9 +111,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Countries/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var country = await _context.GetByIdAsync(id);
 

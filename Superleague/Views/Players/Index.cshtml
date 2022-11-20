@@ -74,44 +74,35 @@
                                     <td style="width: 200px">
                                         @item.Country.Name
                                     </td>
-                                    <td class="text-center" style="width: 150px">
+                                    <td class="text-center" id="@item.Id" style="width: 150px">
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn text-primary"> <i class="fa-solid fa-pen-to-square"></i> </a>
-                                        <button class="deleteTask btn text-danger" data-id="@item.Id" data-toggle="modal" data-target="#deleteTaskModal">
-                                            <i class="fa-solid fa-trash-can"></i> 
-                                        </button>
-
-                                        <!--Modal-->
-                                        <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true" role="dialog" style="display:none">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title text-danger" id="exampleModalLabel1">Delete Player</h5>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="container-fluid d-flex justify-content-center">
-                                                                <div class="mb-3">
-                                                                    <h5 class="text-center">You are about to delete this player</h5>
-                                                                    <h6 class="text-center">Are you sure?</h6>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <form method="post" asp-controller="Players" asp-action="DeleteFromTable" asp-route-id="@item.Id">
-                                                            <input type="submit" value="Yes, Delete" class="btn btn-danger" />
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--Modal-->
+                                        <a asp-action="DeleteFromTable" asp-route-id="@item.Id" class="btn text-danger" id="btnDeleteItem"><i class="fa-solid fa-trash-can"></i></a>
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
+
+                    <!--Modal-->
+                    <div id="deleteDialog" class="modal fade">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title text-danger">Delete</h4>
+                                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h5 class="text-center">Are you sure?</h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" id="btnYesDelete">Yes, Delete</button>
+                                    <button type="button" class="btn btn-outline-secondary" id="btnNoDelete">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Modal-->
+
                 </div>
             </div>
         </div>
@@ -125,29 +116,28 @@
             $('#tablePlayers').DataTable();
         });
 
-        $("#deleteTaskModal").on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) //Button that triggered the modal
-            var id = button.find('button').data('id') //need to find the button and get id
-            var url = '/delete/' + id; //url
+    </script>
 
-            //Click delete task in modal
-            $(document).on('click', '.delete_task', function () {
-                if (confirm('Delete task')) {
-                    $.ajax({
-                        url: url,
-                        type: "DELETE",
-                        success: function (result) {
-                            $('#deleteTaskModal').modal('hide') //hide modal on success
-                            console.log("Deleting...");
-                            window.location.href = '/';
-                        },
-                        error: function (err) {
-                            console.log(err);
-                        }
-                    })
-                }
-            })
-        })
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var id = 0;
+
+            $("a[id*=btnDeleteItem]").click(function () {
+                //debugger;
+                id = $(this).parent()[0].id;
+                $("#deleteDialog").modal("show");
+                return false;
+            });
+
+            $("#btnNoDelete").click(function () {
+                $("#deleteDialog").modal("hide");
+                return false;
+            });
+
+            $("#btnYesDelete").click(function () {
+                window.location.href = "/Players/DeleteFromTable/" + id;
+            });
+        });
     </script>
     
 }

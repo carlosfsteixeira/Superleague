@@ -10,7 +10,7 @@ using Superleague.Data;
 namespace Superleague.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221120004119_initdb")]
+    [Migration("20221120165846_initdb")]
     partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

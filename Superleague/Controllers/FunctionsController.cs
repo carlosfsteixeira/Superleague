@@ -111,9 +111,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Functions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var function = await _context.GetByIdAsync(id);
 
@@ -121,7 +119,7 @@ namespace Superleague.Controllers
             {
                 await _context.DeleteAsync(function);
 
-                TempData["success"] = $"Function removed";
+                TempData["success"] = "Function removed";
 
                 return RedirectToAction(nameof(Index));
             }

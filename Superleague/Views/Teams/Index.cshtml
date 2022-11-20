@@ -55,8 +55,8 @@
                             @if (User.IsInRole("Admin"))
                             {
                                 <div class="row justify-content-center">
-                                    <div class="col-md-12">
-                                        <button class="deleteTask btn-sm btn-outline-danger w-100" data-id="@item.Id" data-toggle="modal" data-target="#deleteTaskModal">Delete</button>
+                                        <div class="col-md-12" id="@item.Id">
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" id="btnDeleteItem">Delete</a>
                                     </div>
                                 </div>
                             }
@@ -66,36 +66,29 @@
                     <br />
                 </div>
             </div>
+        }
+        </div>
 
-            <!--Modal-->
-            <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-hidden="true" role="dialog" style="display:none">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title text-danger" id="exampleModalLabel1">Delete Function</h5>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="container-fluid d-flex justify-content-center">
-                                    <div class="mb-3">
-                                        <h5 class="text-center">You are about to delete this Club</h5>
-                                        <h6 class="text-center">Are you sure?</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <form method="post" asp-controller="Teams" asp-action="Delete" asp-route-id="@item.Id">
-                                <input type="submit" value="Yes, Delete" class="btn btn-danger" />
-                            </form>
-                        </div>
+        <!--Modal-->
+        <div id="deleteDialog" class="modal fade">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-danger">Delete</h4>
+                        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 class="text-center">Are you sure?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" id="btnYesDelete">Yes, Delete</button>
+                        <button type="button" class="btn btn-outline-secondary" id="btnNoDelete">Cancel</button>
                     </div>
                 </div>
             </div>
-            <!--Modal-->
-        }
         </div>
+        <!--Modal-->
+
     }
     else
     {
@@ -120,30 +113,26 @@
 </div>
 
 @section Scripts{
-    <script>
-        $("#deleteTaskModal").on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) //Button that triggered the modal
-            var id = button.find('button').data('id') //need to find the button and get id
-            var url = '/delete/' + id; //url
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var id = 0;
 
-            //Click delete task in modal
-            $(document).on('click', '.delete_task', function () {
-                if (confirm('Delete task')) {
-                    $.ajax({
-                        url: url,
-                        type: "DELETE",
-                        success: function (result) {
-                            $('#deleteTaskModal').modal('hide') //hide modal on success
-                            console.log("Deleting...");
-                            window.location.href = '/';
-                        },
-                        error: function (err) {
-                            console.log(err);
-                        }
-                    })
-                }
-            })
-        })
+            $("a[id*=btnDeleteItem]").click(function () {
+                //debugger;
+                id = $(this).parent()[0].id;
+                $("#deleteDialog").modal("show");
+                return false;
+            });
+
+            $("#btnNoDelete").click(function () {
+                $("#deleteDialog").modal("hide");
+                return false;
+            });
+
+            $("#btnYesDelete").click(function () {
+                window.location.href = "/Teams/Delete/" + id;
+            });
+        });
     </script>
 }
 

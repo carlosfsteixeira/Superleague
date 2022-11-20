@@ -65,8 +65,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Rounds/Delete/5
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var round = await _roundRepository.GetByIdAsync(id);
 

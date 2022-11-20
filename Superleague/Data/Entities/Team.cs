@@ -31,7 +31,7 @@ namespace Superleague.Data.Entities
         [ValidateNever]
         public Country Country { get; set; }
 
-        public List<Match> HomeMatches { get; set; }
-        public List<Match> AwayMatches { get; set; }
+        public List<Match>? HomeMatches { get; set; }
+        public List<Match>? AwayMatches { get; set; }
     }
 }

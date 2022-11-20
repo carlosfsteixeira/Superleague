@@ -134,28 +134,8 @@ namespace Superleague.Controllers
             return View(model);
         }
 
-        // GET: Results/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new NotFoundViewResult("ResultNotFound");
-            }
-
-            var result = await _resultRepository.GetByIdAsync(id.Value);
-
-            if (result == null)
-            {
-                return new NotFoundViewResult("ResultNotFound");
-            }
-
-            return View(result);
-        }
-
         // POST: Results/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var result = await _resultRepository.GetByIdAsync(id);
 

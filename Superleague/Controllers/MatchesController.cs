@@ -181,9 +181,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Matches/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             int matchId = id;
 
@@ -220,22 +218,6 @@ namespace Superleague.Controllers
 
             return RedirectToAction("Index");
 
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var matchProperties = _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round);
-
-            return Json(new { data = matchProperties });
-        }
-
-        [HttpGet]
-        public IActionResult GetMatchId(int id)
-        {
-            var matchProperties = _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round).Where(t => t.Id == id);
-
-            return Json(new { data = matchProperties });
         }
 
         public IActionResult MatchNotFound()

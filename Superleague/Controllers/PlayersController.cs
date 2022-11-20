@@ -22,21 +22,18 @@ namespace Superleague.Controllers
         private readonly ITeamRepository _teamRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly IPositionRepository _positionRepository;
-        private readonly IImageHelper _imageHelper;
         private readonly IWebHostEnvironment _hostEnvironment;
 
         public PlayersController(IPlayerRepository playerRepository,
                                     ITeamRepository teamRepository,
                                     ICountryRepository countryRepository,
                                     IPositionRepository positionRepository,
-                                    IImageHelper imageHelper,
                                     IWebHostEnvironment hostEnvironment)
         {
             _playerRepository = playerRepository;
             _teamRepository = teamRepository;
             _countryRepository = countryRepository;
             _positionRepository = positionRepository;
-            _imageHelper = imageHelper;
             _hostEnvironment = hostEnvironment;
         }
 
@@ -285,8 +282,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Players/Delete/5
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int playerid)
+        public async Task<IActionResult> Delete(int playerid)
         {
             var player = await _playerRepository.GetByIdAsync(playerid);
 
@@ -298,7 +294,6 @@ namespace Superleague.Controllers
         }
 
         // POST: Players/Delete/5
-        [HttpPost]
         public async Task<IActionResult> DeleteFromTable(int id)
         {
             var player = await _playerRepository.GetByIdAsync(id);
