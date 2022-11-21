@@ -67,35 +67,10 @@
                                     <td style="width: 200px">
                                         @item.Country.Name
                                     </td>
-                                    <td class="text-center" style="width: 100px" id="@item.Id">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn text-primary"> <i class="fa-solid fa-pen-to-square"></i> </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn text-danger" id="btnDeleteItem"><i class="fa-solid fa-trash-can"></i></a>
-                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-
-                    <!--Modal-->
-                    <div id="deleteDialog" class="modal fade">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title text-danger">Delete</h4>
-                                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
-                                </div>
-                                <div class="modal-body">
-                                    <h5 class="text-center">Are you sure?</h5>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" id="btnYesDelete">Yes, Delete</button>
-                                    <button type="button" class="btn btn-outline-secondary" id="btnNoDelete">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Modal-->
-
                 </div>
             </div>
         </div>
@@ -109,27 +84,5 @@
             $('#tableStaff').DataTable();
         });
 
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var id = 0;
-
-            $("a[id*=btnDeleteItem]").click(function () {
-                //debugger;
-                id = $(this).parent()[0].id;
-                $("#deleteDialog").modal("show");
-                return false;
-            });
-
-            $("#btnNoDelete").click(function () {
-                $("#deleteDialog").modal("hide");
-                return false;
-            });
-
-            $("#btnYesDelete").click(function () {
-                window.location.href = "/Staffs/DeleteFromTable/" + id;
-            });
-        });
     </script>
 }

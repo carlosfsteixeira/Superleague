@@ -18,6 +18,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Vereyon.Web;
 
 namespace Superleague.Controllers
 {
@@ -30,6 +31,7 @@ namespace Superleague.Controllers
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
         private readonly IMailHelper _mailHelper;
+        private readonly IFlashMessage _flashMessage;
 
         public AccountController(IUserHelper userHelper, 
             RoleManager<IdentityRole> roleManager, 
@@ -37,7 +39,8 @@ namespace Superleague.Controllers
             ITeamRepository teamRepository, 
             IWebHostEnvironment hostEnvironment, 
             IConfiguration configuration, 
-            IMailHelper mailHelper)
+            IMailHelper mailHelper,
+            IFlashMessage flashMessage)
         {
             _userHelper = userHelper;
             _roleManager = roleManager;
@@ -46,6 +49,7 @@ namespace Superleague.Controllers
             _hostEnvironment = hostEnvironment;
             _configuration = configuration;
             _mailHelper = mailHelper;
+            _flashMessage = flashMessage;
         }
 
         [AllowAnonymous]
@@ -77,18 +81,18 @@ namespace Superleague.Controllers
                         return Redirect(this.Request.Query["ReturnUrl"].First());
                     }
 
-                    TempData["success"] = $"Welcome back, {user.FirstName} {user.LastName}";
+                    _flashMessage.Info($"Hello, {user.FirstName} {user.LastName}. Welcome back!");
 
-                    //if (await _userHelper.IsUserInRoleAsync(user, "Club"))
-                    //{
-                    //    model.TeamId = (int)user.TeamId;
+                    if (await _userHelper.IsUserInRoleAsync(user, "Club"))
+                    {
+                        model.TeamId = (int)user.TeamId;
 
-                    //    return RedirectToAction("Edit", "Teams", new { id = model.TeamId });
-                    //}
-                    //else
-                    //{
+                        return RedirectToAction("Edit", "Teams", new { id = model.TeamId });
+                    }
+                    else
+                    {
                         return RedirectToAction("Index", "Dashboard");
-                    //}
+                    }
                 }
             }
 
@@ -243,6 +247,7 @@ namespace Superleague.Controllers
             return View(users);
         }
 
+        [Authorize]
         public async Task<IActionResult> UserProfile()
         {
             var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
@@ -293,6 +298,7 @@ namespace Superleague.Controllers
 
 
         // Password
+        [Authorize]
         public IActionResult ChangePassword()
         {
             return View();
@@ -386,8 +392,6 @@ namespace Superleague.Controllers
         {
             return View();
         }
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

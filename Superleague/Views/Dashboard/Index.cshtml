@@ -16,81 +16,85 @@
 
         </div>
 
-        <div class="row">
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="row">
 
-            <div class="col-xl-3 col-md-4 mb-4">
-                <div class="card border-left-dark shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                    Users
+                <div class="col-xl-3 col-md-4 mb-4">
+                    <div class="card border-left-dark shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                        Users
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers.ToString()</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalUsers.ToString()</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="<i fa-solid fa-user fa-2x text-gray-300"></i>
+                                <div class="col-auto">
+                                    <i class="<i fa-solid fa-user fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-3 col-md-4 mb-4">
-                <div class="card border-left-dark shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                    Clubs
+                <div class="col-xl-3 col-md-4 mb-4">
+                    <div class="card border-left-dark shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                        Clubs
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalTeams.ToString()</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalTeams.ToString()</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="<i fa-solid fa-people-group fa-2x text-gray-300"></i>
+                                <div class="col-auto">
+                                    <i class="<i fa-solid fa-people-group fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-3 col-md-4 mb-4">
-                <div class="card border-left-dark shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                    Players
+                <div class="col-xl-3 col-md-4 mb-4">
+                    <div class="card border-left-dark shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                        Players
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPlayers.ToString()</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalPlayers.ToString()</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="<i fa-solid fa-person-running fa-2x text-gray-300"></i>
+                                <div class="col-auto">
+                                    <i class="<i fa-solid fa-person-running fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-xl-3 col-md-4 mb-4">
-                <div class="card border-left-dark shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
-                                    Staff Members
+                <div class="col-xl-3 col-md-4 mb-4">
+                    <div class="card border-left-dark shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                        Staff Members
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalStaffs.ToString()</div>
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalStaffs.ToString()</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="<i fa-solid fa-person fa-2x text-gray-300"></i>
+                                <div class="col-auto">
+                                    <i class="<i fa-solid fa-person fa-2x text-gray-300"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
+            </div>
+        }
+       
 
         <div class="row">
 
@@ -125,15 +129,24 @@
                                             }
                                             
                                         </td>
-                                        <td>
-                                            @if (@item.Complete == true && @item.Closed == false)
+                                        <td class="text-center" id="@item.Id">
+                                            @if (item.Complete == true && item.Closed == false)
                                             {
-                                                <button type="submit" class="btn w-100" onclick="Close(@item.Id)"><i class="fa-solid fa-lock-open"></i></button>
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <a asp-action="CloseRound" asp-route-id="@item.Id" class="btn text-success" id="btnDeleteItem" data-toggle="tooltip" data-placement="bottom" title="Ready to Close">
+                                                        <i class="fa-solid fa-lock-open text-success"></i>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                     <h6 class="text-center pt-1"><i class="fa-solid fa-lock-open" data-toggle="tooltip" data-placement="bottom" title="Round Open"></i></h6>
+                                                }
                                             }
 
-                                            @if (@item.Complete == true && @item.Closed == true)
+                                            @if (item.Complete == true && item.Closed == true)
                                             {
-                                                <h6 class="text-center pt-1"><i class="fa-solid fa-lock"></i></h6>
+                                                <h6 class="text-center pt-1" data-toggle="tooltip" data-placement="bottom" title="Round Closed"><i class="fa-solid fa-lock"></i></h6>
                                             }
 
                                             @if (@item.Complete == false && @item.Closed == false)
@@ -145,6 +158,27 @@
                                 }
                             </tbody>
                         </table>
+
+                        <!--Modal-->
+                        <div id="deleteDialog" class="modal fade">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title text-primary">Close Round</h4>
+                                        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5 class="text-center">Are you sure?</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" id="btnYesDelete">Yes, Close</button>
+                                        <button type="button" class="btn btn-outline-secondary" id="btnNoDelete">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Modal-->
+
                     </div>
                 </div>
             </div>
@@ -206,24 +240,9 @@
     </div>
 
 
-    <div id="confirmDialog" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Close Round</h4>
-                    <button type="button" class="close" data-dismiss="modal"><i class="fa fa-window-close"></i></button>
-                </div>
-                <div class="modal-body">
-                    <p>Close this round?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="btnYesConfirm">Yes</button>
-                    <button type="button" class="btn btn-outline-secondary" id="btnNoConfirm">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
+
+</body>
 
 @section Scripts
     {
@@ -231,46 +250,35 @@
         $(document).ready( function () {
             $('#tableRounds').DataTable();
                 "info" : false
-            } );
+        } );
 
-            $(document).ready(function () {
-                $('#tableMatches').DataTable();
-                "info" : false
+        $(document).ready(function () {
+            $('#tableMatches').DataTable();
+            "info" : false
+        });
+    </script>
+    <script type="text/javascript" >
+        $(document).ready(function () {
+            var id = 0;
+
+            $("a[id*=btnDeleteItem]").click(function () {
+                //debugger;
+                id = $(this).parent()[0].id;
+                $("#deleteDialog").modal("show");
+                return false;
             });
 
-        function Close(id) {
-            var url = "Dashboard/CloseRound/" + id;
-            event.preventDefault();
-            Swal.fire({
-                title: 'Close this round',
-                text: "Are you sure?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('form').submit();
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        success: function (data) {
-                            if (data.success) {
-                                window.location.reload();
-                                toastr.success(data.message);
-                            }
-                            else {
-                                window.location.reload();
-                                toastr.success(data.message);
-                            }
-                        }
-                    })
-                }
-            })
-        }
+            $("#btnNoDelete").click(function () {
+                $("#deleteDialog").modal("hide");
+                return false;
+            });
+
+            $("#btnYesDelete").click(function () {
+                window.location.href = "/Dashboard/CloseRound/" + id;
+            });
+        });
     </script>
 }
 
-</body>
+
 

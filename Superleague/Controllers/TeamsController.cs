@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
+using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
 using System;
@@ -66,6 +67,13 @@ namespace Superleague.Controllers
                 return new NotFoundViewResult("TeamNotFound");
             }
 
+            var statistics = _statisticsRepository.GetAll().Where(p => p.TeamId == id).Count();
+
+            if (statistics == 0)
+            {
+                return View("DataEmpty");
+            }
+
             TeamViewModel teamViewModel = new()
             {
                 Team = new(),
@@ -94,7 +102,6 @@ namespace Superleague.Controllers
 
             return View(teamViewModel);
         }
-
 
         // GET: Teams/Create
         [Authorize(Roles = "Admin")]
@@ -178,7 +185,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Teams/Edit/5
-
+        [Authorize(Roles = "Club")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -188,10 +195,10 @@ namespace Superleague.Controllers
 
             var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
-            //if (id != user.TeamId)
-            //{
-            //    return RedirectToAction("NotAuthorized", "Account");
-            //}
+            if (id != user.TeamId)
+            {
+                return RedirectToAction("NotAuthorized", "Account");
+            }
 
             TeamViewModel teamViewModel = new()
             {
@@ -206,8 +213,6 @@ namespace Superleague.Controllers
                     Text = i.Name,
                     Value = i.Id.ToString(),
                 }),
-
-                //Statistics = _context.Statistics.GetFirstOrDefault(u => u.Team.Id == id),
             };
 
             teamViewModel.Team = await _teamRepository.GetByIdAsync(id.Value);
@@ -221,10 +226,9 @@ namespace Superleague.Controllers
         }
 
         // POST: Teams/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Club")]
         public async Task<IActionResult> Edit(TeamViewModel model, IFormFile? file, int id)
         {
             if (ModelState.IsValid)

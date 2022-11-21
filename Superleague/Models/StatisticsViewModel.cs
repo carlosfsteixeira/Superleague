@@ -6,14 +6,10 @@ namespace Superleague.Models
 {
     public class StatisticsViewModel
     {
-        [ValidateNever]
         public Statistics Statistics { get; set; }
 
-        [ValidateNever]
         public GlobalStats GlobalStats { get; set; }
 
-
-        [ValidateNever]
         public Result Results { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Superleague.Controllers
 {
-    
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly ITeamRepository _teamRepository;
@@ -42,6 +42,7 @@ namespace Superleague.Controllers
             _playerRepository = playerRepository;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             DashboardViewModel dashboardViewModel = new()
@@ -70,7 +71,6 @@ namespace Superleague.Controllers
             return View(dashboardViewModel);
         }
 
-        [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CloseRound(int id)
         {

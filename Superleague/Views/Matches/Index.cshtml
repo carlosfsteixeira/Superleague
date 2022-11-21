@@ -40,7 +40,7 @@
                                         <option value="Round 7">Round 7</option>
                                     </select>
 
-                                    @if (User.IsInRole("Admin"))
+                                    @if (User.IsInRole("Employee"))
                                     {
                                         @if (Model.Count() < 28)
                                         {
@@ -88,7 +88,7 @@
                                                 <b>Status</b>
                                             </th>
 
-                                            @if (User.IsInRole("Admin"))
+                                            @if (User.IsInRole("Employee"))
                                             {
                                                 <th>
                                                     <b>Edit</b>
@@ -147,7 +147,7 @@
                                                         <span class="badge badge-danger text-white">NOT PLAYED</span>
                                                     }
                                                 </td>
-                                                @if (item.Round.Closed == false && User.IsInRole("Admin"))
+                                                @if (item.Round.Closed == false && User.IsInRole("Employee"))
                                                 {
                                                     <td class="text-center">
                                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn">
@@ -160,7 +160,7 @@
                                                     <td class="text-center">
                                                         @if (item.Played == true && item.HasResult == false)
                                                         {
-                                                            <a asp-controller="Results" asp-action="Create" asp-route-id="@item.Id" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="bottom" title="Add Result">
+                                                            <a asp-controller="Results" asp-action="Create" asp-route-id="@item.Id" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="bottom" title="Add Result">
                                                                 Add Result
                                                             </a>
                                                         }                                                    
@@ -209,11 +209,14 @@
                             <h5 class="text-dark pl-3"><i class="fa-solid fa-circle-exclamation"></i> No fixtures yet</h5>
                         </div>
                         <hr />
-                        <div class="form-group col-md-12 text-center">
-                            <a asp-controller="Matches" asp-action="Create" class="btn btn-sm btn-success">
-                                <i class="bi bi-circle-plus"></i> Add New
-                            </a>
-                        </div>
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <div class="form-group col-md-12 text-center">
+                                <a asp-controller="Matches" asp-action="Create" class="btn btn-sm btn-success">
+                                    <i class="bi bi-circle-plus"></i> Add New
+                                </a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

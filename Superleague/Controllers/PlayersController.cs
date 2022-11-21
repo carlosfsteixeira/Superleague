@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using static System.Net.WebRequestMethods;
 
 namespace Superleague.Controllers
 {
+    [Authorize(Roles = "Club")]
     public class PlayersController : Controller
     {
         private readonly IPlayerRepository _playerRepository;
@@ -38,6 +40,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Players
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var players = _playerRepository.GetAll().OrderBy(e => e.Name).Include(p => p.Country).Include(p => p.Position).Include(p => p.Team);
@@ -46,6 +49,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Players/Create
+        [Authorize(Roles = "Club")]
         public IActionResult Create()
         {
             PlayerViewModel playerViewModel = new()
@@ -77,6 +81,7 @@ namespace Superleague.Controllers
         // POST: Players/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Club")]
         public async Task<IActionResult> Create(PlayerViewModel model, IFormFile? file, int id)
         {
             model.Player.TeamId = id;
@@ -141,6 +146,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Players/Edit/5
+        [Authorize(Roles = "Club")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -177,6 +183,7 @@ namespace Superleague.Controllers
         // POST: Players/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Club")]
         public async Task<IActionResult> Edit(PlayerViewModel model, IFormFile? file)
         {
             if (ModelState.IsValid)
@@ -282,6 +289,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Players/Delete/5
+        [Authorize(Roles = "Club")]
         public async Task<IActionResult> Delete(int playerid)
         {
             var player = await _playerRepository.GetByIdAsync(playerid);
@@ -291,18 +299,6 @@ namespace Superleague.Controllers
             TempData["success"] = $"{player.Name} removed";
 
             return RedirectToAction("Edit", "Teams", new { id = player.TeamId });
-        }
-
-        // POST: Players/Delete/5
-        public async Task<IActionResult> DeleteFromTable(int id)
-        {
-            var player = await _playerRepository.GetByIdAsync(id);
-
-            await _playerRepository.DeleteAsync(player);
-
-            TempData["success"] = $"{player.Name} removed";
-
-            return RedirectToAction("Index");
         }
 
         public IActionResult PlayerNotFound()

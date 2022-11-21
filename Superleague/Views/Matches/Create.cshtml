@@ -17,16 +17,33 @@
         justify-content: center;
     }
 
-        .select:focus {
-            border-color: black;
-            box-shadow: 0 0 4px black;
-        }
+    .select:focus {
+        border-color: black;
+        box-shadow: 0 0 4px black;
+    }
 
-        .styled-table thead tr {
+    .round {
+        width: 100%;
+        border: 2px solid #aaa;
+        border-radius: 4px;
+        margin: 8px 0;
+        outline: none;
+        padding: 8px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+    }
+
+    .round:focus {
+        border-color: black;
+        box-shadow: 0 0 4px black;
+    }
+
+    .styled-table thead tr {
     background-color: black;
     color: #ffffff;
     text-align: left;
-}
+    }
 </style>
 
 <head>
@@ -56,7 +73,7 @@
                         <div class="row">
 
                             <div class="container form-group col-md-12">
-                                <select asp-for="Match.RoundId" asp-items="@Model.RoundsList" class="select">
+                                <select asp-for="Match.RoundId" asp-items="@Model.RoundsList" class="round">
                                     <option disabled selected> Round </option>
                                 </select>
                                 <span asp-validation-for="Match.RoundId" class="text-danger"></span>
@@ -67,13 +84,13 @@
                                 <h5 class="col-md-12 ml-3">Teams</h5>
                             </div>
                             <div class="container form-group col-md-12">
-                                <select asp-for="Match.HomeTeamId" asp-items="@Model.TeamNamesList" id="home" class="combo select">
+                                    <select asp-for="Match.HomeTeamId" asp-items="@Model.TeamNamesList" class="combo select dependency">
                                     <option disabled selected> Home Team</option>
                                 </select>
                                 <span asp-validation-for="Match.HomeTeamId" class="text-danger"></span>
                             </div>
                             <div class="container form-group col-md-12">
-                                <select asp-for="Match.AwayTeamId" asp-items="@Model.TeamNamesList" id="away" class="combo select">
+                                    <select asp-for="Match.AwayTeamId" asp-items="@Model.TeamNamesList" class="combo select dependency">
                                     <option disabled selected> Away Team </option>
                                 </select>
                                 <span asp-validation-for="Match.AwayTeamId" class="text-danger"></span>
@@ -83,7 +100,7 @@
                                 <h5 class="col-md-12 ml-3">Match Date</h5>
                             </div>
                             <div class="container form-group col-md-12">
-                                <input type="datetime-local" asp-for="Match.MatchDate" class="form-control select" />
+                                <input type="datetime-local" asp-for="Match.MatchDate" class="form-control select" value="dd/mm/yyyy" />
                                 <span asp-validation-for="Match.MatchDate" class="text-danger"></span>
                             </div>
 
@@ -151,12 +168,23 @@
                 Swal.fire({
                     icon: 'warning',
                     title: 'Oops...',
-                    text: 'Home Team and Away must be different',
+                    text: 'Home and Away Teams must be different',
                 });
                 return false;
             }
             return true;
         }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.dependency').on('change', function (event) {
+                var prevValue = $(this).data('previous');
+                $('.dependency').not(this).find('option[value="' + prevValue + '"]').show();
+                var value = $(this).val();
+                $(this).data('previous', value); $('.dependency').not(this).find('option[value="' + value + '"]').hide();
+            });
+        });
     </script>
 }
 

@@ -12,7 +12,7 @@ namespace Superleague.Data.Entities
 
         [Required]
         [Display(Name = "Match Date")]
-        [DisplayFormat(ApplyFormatInEditMode = false, DataFormatString = "{0:dd/MMMM/yyy HH:mm}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MMMM/yyy HH:mm}")]
         public DateTime MatchDate { get; set; }
 
         [Required]

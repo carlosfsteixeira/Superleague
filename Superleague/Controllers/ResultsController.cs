@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Helpers;
 using Superleague.Models;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,6 +25,7 @@ namespace Superleague.Controllers
             _teamRepository = teamRepository;
         }
 
+        [AllowAnonymous]
         // GET: Results
         public IActionResult Index()
         {
@@ -32,6 +35,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Results/Create
+        [Authorize(Roles = "Employee")]
         public IActionResult Create(int id)
         {
             ResultViewModel model = new()
@@ -47,6 +51,7 @@ namespace Superleague.Controllers
         // POST: Results/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Create(ResultViewModel model, int id)
         {
             var getMatchResult = _resultRepository.GetAll().Where(u => u.MatchId == id).FirstOrDefault();
@@ -77,6 +82,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Results/Edit/5
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,6 +110,7 @@ namespace Superleague.Controllers
         // POST: Results/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Edit(ResultViewModel model, int id)
         {
             model.Result = _resultRepository.GetAll().Include(r => r.Match).Include(e => e.Round).Include(e => e.HomeTeam).Include(e => e.AwayTeam).Where(u => u.Id == id).FirstOrDefaultAsync().Result;
@@ -135,6 +142,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Results/Delete/5
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _resultRepository.GetByIdAsync(id);

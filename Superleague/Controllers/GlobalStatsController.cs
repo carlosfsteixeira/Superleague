@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using Superleague.Models;
 
 namespace Superleague.Controllers
 {
+    [AllowAnonymous]
     public class GlobalStatsController : Controller
     {
         private readonly IGlobalStatsRepository _globalStatsRepository;
@@ -60,56 +62,62 @@ namespace Superleague.Controllers
 
         private async Task CalculateGlobalStatsAsync(GlobalStatsViewModel model)
         {
-            model.GlobalStats.TotalMatches = _resultRepository.GetAll().Count();
+            var results = _resultRepository.GetAll();
 
-            // total goals
-            var homeGoals = _resultRepository.GetAll().Sum(u => u.HomeGoals);
-
-            var awayGoals = _resultRepository.GetAll().Sum(u => u.AwayGoals);
-
-            model.GlobalStats.TotalGoals = homeGoals + awayGoals;
-
-
-            // goal average (if totalMatches = 0, the quocient will be always 0)
-            if (model.GlobalStats.TotalMatches == 0)
+            if (results.Any())
             {
-                model.GlobalStats.GoalAverage = 0;
+                model.GlobalStats.TotalMatches = _resultRepository.GetAll().Count();
+
+                // total goals
+                var homeGoals = _resultRepository.GetAll().Sum(u => u.HomeGoals);
+
+                var awayGoals = _resultRepository.GetAll().Sum(u => u.AwayGoals);
+
+                model.GlobalStats.TotalGoals = homeGoals + awayGoals;
+
+
+                // goal average (if totalMatches = 0, the quocient will be always 0)
+                if (model.GlobalStats.TotalMatches == 0)
+                {
+                    model.GlobalStats.GoalAverage = 0;
+                }
+                else
+                {
+                    model.GlobalStats.GoalAverage = model.GlobalStats.TotalGoals / model.GlobalStats.TotalMatches;
+                }
+
+                // total yellow cards
+                var homeYellows = _resultRepository.GetAll().Sum(u => u.HomeYellowCards);
+
+                var awayYellows = _resultRepository.GetAll().Sum(u => u.AwayYellowCards);
+
+                model.GlobalStats.TotalYellowCards = homeYellows + awayYellows;
+
+                // total red cards
+                var homeReds = _resultRepository.GetAll().Sum(u => u.HomeRedCards);
+
+                var awayReds = _resultRepository.GetAll().Sum(u => u.AwayRedCards);
+
+                model.GlobalStats.TotalRedCards = homeReds + awayReds;
+
+                // results divided
+                model.GlobalStats.HomeWins = _resultRepository.GetAll().Where(u => u.HomeGoals > u.AwayGoals).Count();
+
+                model.GlobalStats.AwayWins = _resultRepository.GetAll().Where(u => u.AwayGoals > u.HomeGoals).Count();
+
+                model.GlobalStats.Draws = _resultRepository.GetAll().Where(u => u.AwayGoals == u.HomeGoals).Count();
+
+                await getBestAndWorstAttack(model);
+
+                await getBestAndWorstDefense(model);
+
+                await getMostAndLessWins(model);
+
+                await getMostAndLessDraws(model);
+
+                await getMostAndLessLosses(model);
             }
-            else
-            {
-                model.GlobalStats.GoalAverage = model.GlobalStats.TotalGoals / model.GlobalStats.TotalMatches;
-            }
 
-            // total yellow cards
-            var homeYellows = _resultRepository.GetAll().Sum(u => u.HomeYellowCards);
-
-            var awayYellows = _resultRepository.GetAll().Sum(u => u.AwayYellowCards);
-
-            model.GlobalStats.TotalYellowCards = homeYellows + awayYellows;
-
-            // total red cards
-            var homeReds = _resultRepository.GetAll().Sum(u => u.HomeRedCards);
-
-            var awayReds = _resultRepository.GetAll().Sum(u => u.AwayRedCards);
-
-            model.GlobalStats.TotalRedCards = homeReds + awayReds;
-
-            // results divided
-            model.GlobalStats.HomeWins = _resultRepository.GetAll().Where(u => u.HomeGoals > u.AwayGoals).Count();
-
-            model.GlobalStats.AwayWins = _resultRepository.GetAll().Where(u => u.AwayGoals > u.HomeGoals).Count();
-
-            model.GlobalStats.Draws = _resultRepository.GetAll().Where(u => u.AwayGoals == u.HomeGoals).Count();
-
-            await getBestAndWorstAttack(model);
-
-            await getBestAndWorstDefense(model);
-
-            await getMostAndLessWins(model);
-
-            await getMostAndLessDraws(model);
-
-            await getMostAndLessLosses(model);
         }
 
         public async Task getBestAndWorstAttack(GlobalStatsViewModel model)

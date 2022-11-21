@@ -79,7 +79,7 @@
                                                 <th class="text-center">
                                                     <b>Venue</b>
                                                 </th>
-                                                @if (User.IsInRole("Admin"))
+                                                @if (User.IsInRole("Employee"))
                                                 {
                                                     <th class="text-center">
                                                         <b>Edit</b>
@@ -130,7 +130,7 @@
                                                     <td class="text-center">
                                                         @item.HomeTeam.Venue
                                                     </td>
-                                                    @if (item.Round.Closed == false && User.IsInRole("Admin"))
+                                                    @if (item.Round.Closed == false && User.IsInRole("Employee"))
                                                     {
                                                         <td>
                                                         <div class="text-center">
@@ -177,16 +177,25 @@
         }
         else
         {
-            <div class="container-fluid d-flex justify-content-center py-5">
-                <div class="row col-6">
-                    <div class="col-md-12 py-3">
-                        <div class="form-group col-md-12 py-1 text-center">
-                            <h5 class="text-dark pl-3"><i class="fa-solid fa-circle-exclamation"></i> No results yet</h5>
-                        </div>
-                        <hr />
+            <div class="container-xxl container-p-y d-flex justify-content-center">
+                <div class="misc-wrapper justify-content-center py-5">
+
+                    <h3 class="mb-2 mx-2 text-center">The Super League</h3>
+                    @if (User.IsInRole("Employee"))
+                    {
                         <div class="form-group col-md-12 text-center">
                             <h6>Add a result to a match in the fixtures menu</h6>
                         </div>
+                    }
+                    else
+                    {
+                        <p class="mb-4 mx-2 text-center">No data available yet</p>
+                    }
+                    <div class="mt-3 py-5 text-center">
+                        <img src="~/images/archive/error.png"
+                         alt="page-misc-error-light"
+                         width="400"
+                         class="img-fluid" />
                     </div>
                 </div>
             </div>

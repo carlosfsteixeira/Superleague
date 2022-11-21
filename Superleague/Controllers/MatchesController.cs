@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
-using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,6 +24,7 @@ namespace Superleague.Controllers
             _roundRepository = roundRepository;
         }
 
+        [AllowAnonymous]
         // GET: Matches
         public async Task<IActionResult> Index()
         {
@@ -35,6 +35,15 @@ namespace Superleague.Controllers
             return View(matches);
         }
 
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var matchProperties = _matchRepository.GetAll().Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round);
+
+            return Json(new { data = matchProperties });
+        }
+
+        [Authorize(Roles = "Employee")]
         // GET: Matches/Create
         public IActionResult Create()
         {
@@ -70,6 +79,7 @@ namespace Superleague.Controllers
         // POST: Matches/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Create(MatchViewModel model)
         {
             model.Rounds = await _roundRepository.GetAll().ToListAsync();
@@ -101,6 +111,7 @@ namespace Superleague.Controllers
         }
 
         // GET: Matches/Edit/5
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -133,11 +144,16 @@ namespace Superleague.Controllers
 
             matchViewModel.Match.Round = getRound;
 
-            var getHomeTeam = await _teamRepository.GetByIdAsync(matchViewModel.Match.HomeTeamId.Value);
+            //var getHomeTeam = await _teamRepository.GetByIdAsync(matchViewModel.Match.HomeTeamId.Value);
+
+            var getHomeTeam = _teamRepository.GetAll().Include("Country").Where(t => t.Id == matchViewModel.Match.HomeTeamId.Value).First();
 
             matchViewModel.Match.HomeTeam = getHomeTeam;
 
-            var getAwayTeam = await _teamRepository.GetByIdAsync(matchViewModel.Match.AwayTeamId.Value);
+            //var getAwayTeam = await _teamRepository.GetByIdAsync(matchViewModel.Match.AwayTeamId.Value);
+
+
+            var getAwayTeam = _teamRepository.GetAll().Include("Country").Where(t => t.Id == matchViewModel.Match.AwayTeamId.Value).First();
 
             matchViewModel.Match.AwayTeam = getAwayTeam;
 
@@ -152,6 +168,7 @@ namespace Superleague.Controllers
         // POST: Matches/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Edit(MatchViewModel model)
         {
             if (ModelState.IsValid)
@@ -181,6 +198,7 @@ namespace Superleague.Controllers
         }
 
         // POST: Matches/Delete/5
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Delete(int id)
         {
             int matchId = id;

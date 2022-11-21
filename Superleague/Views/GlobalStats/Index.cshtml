@@ -58,64 +58,64 @@
                 </div>
 
                 <div class="col-xl-2 col-md-2 mb-4 mr-4">
-                        <div class="card border-bottom-success shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Goals Scored</div>
-                                </div>
-                                <div class="row">
-                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                        @Model.GlobalStats.TotalGoals
-                                    </div>
+                    <div class="card border-bottom-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Goals Scored</div>
+                            </div>
+                            <div class="row">
+                                <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                    @Model.GlobalStats.TotalGoals
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
                 <div class="col-xl-2 col-md-2 mb-4 mr-4">
-                        <div class="card border-bottom-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Goal avg/match</div>
-                                </div>
-                                <div class="row">
-                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                        @Model.GlobalStats.GoalAverage
-                                    </div>
+                    <div class="card border-bottom-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Goal avg/match</div>
+                            </div>
+                            <div class="row">
+                                <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                    @Model.GlobalStats.GoalAverage
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
                 <div class="col-xl-2 col-md-2 mb-4 mr-4">
-                        <div class="card border-bottom-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Yellow Cards</div>
-                                </div>
-                                <div class="row">
-                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                        @Model.GlobalStats.TotalYellowCards
-                                    </div>
+                    <div class="card border-bottom-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Yellow Cards</div>
+                            </div>
+                            <div class="row">
+                                <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                    @Model.GlobalStats.TotalYellowCards
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
                 <div class="col-xl-2 col-md-2 mb-4 mr-4">
-                        <div class="card border-bottom-danger shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Red Cards</div>
-                                </div>
-                                <div class="row">
-                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                        @Model.GlobalStats.TotalRedCards
-                                    </div>
+                    <div class="card border-bottom-danger shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Red Cards</div>
+                            </div>
+                            <div class="row">
+                                <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                    @Model.GlobalStats.TotalRedCards
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
             </div>
 
@@ -131,12 +131,12 @@
                         <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-chart-pie"></i> Matches Won</h6>
                     </div>
                     <div class="card-body">
-                        <div class="row py-3">
+                        <div class="row py-2">
                             <div class="col-sm-4 col-md-4 col-lg-4">
                                 <div class="text-center font-weight-bold text-success text-uppercase mb-1">
                                     Home
                                 </div>
-                                <h2 class="text-center pt-3">
+                                <h2 class="text-center pt-2">
                                     @Model.GlobalStats.HomeWins
                                 </h2>
                             </div>
@@ -144,7 +144,7 @@
                                 <div class="text-center font-weight-bold text-info text-uppercase mb-1">
                                     Draws
                                 </div>
-                                <h2 class="text-center pt-3">
+                                <h2 class="text-center pt-2">
                                     @Model.GlobalStats.Draws
                                 </h2>
                             </div>
@@ -152,7 +152,7 @@
                                 <div class="text-center font-weight-bold text-danger text-uppercase mb-1">
                                     Away
                                 </div>
-                                <h2 class="text-center pt-3">
+                                <h2 class="text-center pt-2">
                                     @Model.GlobalStats.AwayWins
                                 </h2>
                             </div>
@@ -164,7 +164,6 @@
 
             <div class="col-xl-4 col-md-4 mb-4">
 
-                <!-- Attack -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-crosshairs"></i> Attack</h6>
@@ -195,7 +194,6 @@
 
             <div class="col-xl-4 col-md-4 mb-4">
 
-                <!-- Attack -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-dark"><i class="fa-solid fa-hand-dots"></i> Defense</h6>

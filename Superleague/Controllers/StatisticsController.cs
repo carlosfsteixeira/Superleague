@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
 using Superleague.Data.Entities;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Superleague.Controllers
 {
+    [AllowAnonymous]
     public class StatisticsController : Controller
     {
         private readonly IStatisticsRepository _statisticsRepository;
@@ -57,46 +59,50 @@ namespace Superleague.Controllers
 
                 var results = _resultRepository.GetAll().Where(u => u.AwayTeamId == statistics.TeamId || u.HomeTeamId == statistics.TeamId);
 
-                //calculate statistics of team (visiting each result)
-                foreach (Result result in results)
+                if(results.Any())
                 {
-                    //if team is HomeTeam (plays at home)
-                    if (result.HomeTeamId == statistics.TeamId)
+                    //calculate statistics of team (visiting each result)
+                    foreach (Result result in results)
                     {
-                        statistics.GoalsScored += result.HomeGoals;
-                        statistics.TotalYellows += result.HomeYellowCards;
-                        statistics.TotalReds += result.HomeRedCards;
-                    }
-                    else if (result.AwayTeamId == statistics.TeamId)
-                    {
-                        statistics.GoalsScored += result.AwayGoals;
-                        statistics.TotalYellows += result.AwayYellowCards;
-                        statistics.TotalReds += result.AwayRedCards;
+                        //if team is HomeTeam (plays at home)
+                        if (result.HomeTeamId == statistics.TeamId)
+                        {
+                            statistics.GoalsScored += result.HomeGoals;
+                            statistics.TotalYellows += result.HomeYellowCards;
+                            statistics.TotalReds += result.HomeRedCards;
+                        }
+                        else if (result.AwayTeamId == statistics.TeamId)
+                        {
+                            statistics.GoalsScored += result.AwayGoals;
+                            statistics.TotalYellows += result.AwayYellowCards;
+                            statistics.TotalReds += result.AwayRedCards;
+                        }
+
+                        statistics.GoalsConceded += (result.HomeGoals + result.AwayGoals) - statistics.GoalsScored;
+
+                        if (statistics.GoalsConceded < statistics.GoalsScored)
+                        {
+                            statistics.Wins++;
+                            statistics.Points += 3;
+                        }
+                        else if (statistics.GoalsConceded == statistics.GoalsScored)
+                        {
+                            statistics.Draws++;
+                            statistics.Points += 1;
+                        }
+                        else
+                        {
+                            statistics.Losses++;
+                        }
+
+                        statistics.TotalMatches++;
+
+                        statistics.GoalAverage = statistics.GoalsScored / statistics.TotalMatches;
                     }
 
-                    statistics.GoalsConceded += (result.HomeGoals + result.AwayGoals) - statistics.GoalsScored;
-
-                    if (statistics.GoalsConceded < statistics.GoalsScored)
-                    {
-                        statistics.Wins++;
-                        statistics.Points += 3;
-                    }
-                    else if (statistics.GoalsConceded == statistics.GoalsScored)
-                    {
-                        statistics.Draws++;
-                        statistics.Points += 1;
-                    }
-                    else
-                    {
-                        statistics.Losses++;
-                    }
-
-                    statistics.TotalMatches++;
-
-                    statistics.GoalAverage = statistics.GoalsScored / statistics.TotalMatches;
+                    await _statisticsRepository.CreateAsync(statistics);
                 }
-
-                await _statisticsRepository.CreateAsync(statistics);
+                
             }
         }
 
