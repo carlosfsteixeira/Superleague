@@ -26,6 +26,8 @@ namespace Superleague.Models
 
         public List<Result> Results { get; set; }
 
+        public int TeamUserId { get; set; }
+
 
     }
 }

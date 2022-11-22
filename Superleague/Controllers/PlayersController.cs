@@ -106,7 +106,7 @@ namespace Superleague.Controllers
                     model.Player.ImageURL = @"\images\players\" + fileName + extension;
                 }
 
-                var playerNumberExists = _playerRepository.GetAll().Where(t => t.Number == model.Player.Number).Count();
+                var playerNumberExists = _playerRepository.GetAll().Where(t => t.TeamId == model.Player.TeamId).Where(t => t.Number == model.Player.Number).Count();
 
                 if (playerNumberExists >= 1)
                 {

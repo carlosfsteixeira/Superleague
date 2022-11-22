@@ -76,8 +76,9 @@ label {
 }
 
 .image1 {
-    width: 40px;
+    width: 50px;
     height: 50px;
+    padding-left: 5px;
 }
 
 .tbl-container {
@@ -88,7 +89,7 @@ label {
 .tbl-fixed {
     overflow-y: scroll;
     overflow-x: auto;
-    max-height: 500px;
+    max-height: 450px;
 }
 
 table {
@@ -101,13 +102,13 @@ table {
         position: sticky;
         top: 0px;
         background-color: lightgray;
-        text-align: center;
+        text-align: left;
         border: 1px;
         color: black;
     }
 
     table td {
-        text-align: center;
+        text-align: left;
     }
 
     table tr:nth-child(even):hover {

@@ -32,10 +32,12 @@
                         <div class="card-body">
                             <center>
                                 <a asp-action="Details" asp-route-id="@item.Id">
-                                    <img src="@Url.Content(item.ImageURL)" alt="Image" class="img-fluid w-50 mb-3 text-center p-2" style="width:100px; height:120px" />
+                                    <img src="@Url.Content(item.ImageURL)" alt="Image" class="img-fluid w-50 mb-3 text-center p-2" style="width:100px; height:120px" data-toggle="tooltip" data-placement="bottom" title="Details" />
                                 </a>
                             </center>
-                            <h2><b>@item.Name</b></h2>
+                            <h2>
+                                <b>@item.Name</b>
+                            </h2>
                             <div class="p-1">
                                 <h4>@item.Venue</h4>
                                 <h6>@item.Country.Name</h6>
@@ -99,6 +101,7 @@
                 @if (User.IsInRole("Admin"))
                 {
                     <div class="form-group col-md-12 text-center">
+                        <p class="mb-4 mx-2 text-center">No clubs available yet</p>
                         <a asp-action="Create" class="btn btn-sm btn-success">
                             <i class="bi bi-circle-plus"></i> Add New
                         </a>

@@ -144,7 +144,7 @@ namespace Superleague.Controllers
                         }
                         else if (function.Description == "President")
                         {
-                            var presidentExists = _staffRepository.GetAll().Where(t => t.Function.Id == function.Id);
+                            var presidentExists = _staffRepository.GetAll().Where(t => t.TeamId == model.Staff.TeamId).Where(t => t.Function.Id == function.Id);
 
                             if (presidentExists.Any())
                             {

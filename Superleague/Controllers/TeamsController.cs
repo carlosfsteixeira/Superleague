@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
-using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
 using System;

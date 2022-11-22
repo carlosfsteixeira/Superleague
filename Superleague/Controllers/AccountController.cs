@@ -121,7 +121,7 @@ namespace Superleague.Controllers
                     Value = i,
                 }),
 
-                ClubList = _teamRepository.GetAll().Select(i => new SelectListItem
+                ClubList = _teamRepository.GetAll().OrderBy(e => e.Name).Select(i => new SelectListItem
                 {
                     Text = i.Name,
                     Value = i.Id.ToString(),
@@ -194,8 +194,8 @@ namespace Superleague.Controllers
                     }, protocol: HttpContext.Request.Scheme);
 
                     Response response = _mailHelper.SendEmail(model.Email, "Account confirmation", $"<h2>Welcome to the Super League</h2>" +
-                        $"Before logging in, click the link below:</br></br><a href = \"{tokenLink}\"> --> Confirm my account <-- </a></br></br>" +
-                        $"</br>Your default password is <b>.Temp123#</b> <h5> -> IMPORTANT: Don't forget to reset it to one of your choosing</h5>");
+                        $"Before logging in, click the link below:</br></br><a href = \"{tokenLink}\"><h3> --> Confirm my account <-- </a></h3></br></br>" +
+                        $"</br>Your default password is <b>.Temp123#</b> <h4> -> IMPORTANT: Don't forget to reset it to one of your choosing</h4>");
 
                     if (response.IsSuccess)
                     {
@@ -242,7 +242,7 @@ namespace Superleague.Controllers
         [HttpGet]
         public IActionResult ListUsers()
         {
-            var users = _userManager.Users.Include(e => e.Team);
+            var users = _userManager.Users.OrderBy(e => e.Role).Include(e => e.Team);
 
             return View(users);
         }
