@@ -12,7 +12,9 @@
 
     <form method="post" asp-action="Create" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input asp-for="Result.MatchId" hidden />
+        @*<input type="hidden" asp-for="Result.MatchId" />*@
+        <input type="hidden" asp-for="Match.HomeTeamId" />
+        <input type="hidden" asp-for="Match.AwayTeamId" />
 
         <div class="col-lg-8">
 
@@ -62,7 +64,7 @@
                                     </div>
                                     <div class="col-lg-2 col-md-4 mb-3">
                                         <h5 class="py-4">
-                                            <input asp-for="Result.HomeGoals" type="number" min="0" class="form-control goalshome" />
+                                            <input asp-for="Result.HomeGoals" type="number" value="0" min="0" class="form-control goalshome" />
                                             <span asp-validation-for="Result.HomeGoals" class="text-danger"></span>
                                         </h5>
                                     </div>
@@ -73,7 +75,7 @@
                                     </div>
                                     <div class="col-lg-2 col-md-4 mb-3">
                                         <h5 class="py-4">
-                                            <input asp-for="Result.AwayGoals" type="number" min="0" class="form-control goalsaway" />
+                                            <input asp-for="Result.AwayGoals" type="number" value="0" min="0" class="form-control goalsaway" />
                                             <span asp-validation-for="Result.AwayGoals" class="text-danger"></span>
                                         </h5>
                                     </div>
@@ -101,12 +103,12 @@
 
                                     </div>
                                     <div class="col-lg-2 col-md-4">
-                                        <input asp-for="Result.HomeYellowCards" type="number" min="0" class="form-control homeyellow" />
+                                        <input asp-for="Result.HomeYellowCards" value="0" type="number" min="0" class="form-control homeyellow" />
                                     </div>
                                     <div class="col-lg-2 col-md-4 text-left">
                                     </div>
                                     <div class="col-lg-2 col-md-4">
-                                        <input asp-for="Result.AwayYellowCards" type="number" min="0" class="form-control awayyellow" />
+                                        <input asp-for="Result.AwayYellowCards" value="0" type="number" min="0" class="form-control awayyellow" />
                                     </div>
                                     <div class="col-lg-3 col-md-4 text-center">
 
@@ -130,14 +132,14 @@
 
                                     </div>
                                     <div class="col-lg-2 col-md-4 mb-3">
-                                        <input asp-for="Result.HomeRedCards" type="number" min="0" class="form-control homered" />
+                                        <input asp-for="Result.HomeRedCards" value="0" type="number" min="0" class="form-control homered" />
                                     </div>
                                     <div class="col-lg-2 col-md-4 text-center">
                                         <h4 class="py-1">
                                         </h4>
                                     </div>
                                     <div class="col-lg-2 col-md-4 mb-3">
-                                        <input asp-for="Result.AwayRedCards" type="number" min="0" class="form-control awayred" />
+                                        <input asp-for="Result.AwayRedCards" value="0" type="number" min="0" class="form-control awayred" />
                                     </div>
                                     <div class="col-lg-3 col-md-4 text-center">
 

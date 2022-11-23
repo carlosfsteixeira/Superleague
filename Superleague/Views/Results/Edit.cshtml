@@ -12,7 +12,11 @@
 
     <form method="post" asp-action="Edit" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input asp-for="Result.Id" hidden />
+        <input type="hidden" asp-for="Result.Id" />
+        <input type="hidden" asp-for="Result.MatchId" />
+        <input type="hidden" asp-for="Result.RoundId" />
+        <input type="hidden" asp-for="Result.HomeTeamId" />
+        <input type="hidden" asp-for="Result.AwayTeamId" />
 
         <div class="container-fluid">
 

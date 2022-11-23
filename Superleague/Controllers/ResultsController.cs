@@ -40,8 +40,6 @@ namespace Superleague.Controllers
         {
             ResultViewModel model = new()
             {
-                Result = new(),
-
                 Match = _matchRepository.GetAll().Include(p => p.HomeTeam).Include(p => p.AwayTeam).Include(p => p.Round).Where(u => u.Id == id).FirstOrDefault(),
             };
 
@@ -54,6 +52,8 @@ namespace Superleague.Controllers
         [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Create(ResultViewModel model, int id)
         {
+
+
             var getMatchResult = _resultRepository.GetAll().Where(u => u.MatchId == id).FirstOrDefault();
 
             if (getMatchResult == null)
@@ -113,8 +113,6 @@ namespace Superleague.Controllers
         [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Edit(ResultViewModel model, int id)
         {
-            model.Result = _resultRepository.GetAll().Include(r => r.Match).Include(e => e.Round).Include(e => e.HomeTeam).Include(e => e.AwayTeam).Where(u => u.Id == id).FirstOrDefaultAsync().Result;
-
             if (ModelState.IsValid)
             {
                 try

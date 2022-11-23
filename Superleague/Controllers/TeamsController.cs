@@ -89,7 +89,6 @@ namespace Superleague.Controllers
             {
                 teamViewModel.Statistics = _statisticsRepository.GetAll().Where(p => p.TeamId == id).First();
             }
-                
 
             teamViewModel.Team = await _teamRepository.GetByIdAsync(id.Value);
 

@@ -15,9 +15,9 @@ namespace Superleague.Data
 
         public async Task RefreshGlobalStatisticsTableAsync()
         {
-            var globalStats = await _context.GlobalStatistics.FirstAsync();
+            var globalStats = await _context.GlobalStatistics.ToListAsync();
 
-            _context.GlobalStatistics.Remove(globalStats);
+            _context.GlobalStatistics.RemoveRange(globalStats);
         }
 
     }

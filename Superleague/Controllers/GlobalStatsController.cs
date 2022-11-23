@@ -55,7 +55,6 @@ namespace Superleague.Controllers
             model.Teams = teams;
 
             return View(model);
-
         }
 
         private async Task<GlobalStats> CalculateGlobalStatsAsync()

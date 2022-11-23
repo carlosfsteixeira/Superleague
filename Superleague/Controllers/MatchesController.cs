@@ -177,6 +177,7 @@ namespace Superleague.Controllers
                 {
                     await _matchRepository.UpdateAsync(model.Match);
 
+
                     TempData["success"] = $"Fixture updated";
 
                     return RedirectToAction(nameof(Index));

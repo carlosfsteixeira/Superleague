@@ -34,15 +34,6 @@
     <form method="post" asp-action="Edit" enctype="multipart/form-data">
         <input type="hidden" asp-for="Match.Id" />
         <input type="hidden" asp-for="Match.RoundId" />
-        <input type="hidden" asp-for="Match.HomeTeam.CountryId" />
-        <input type="hidden" asp-for="Match.HomeTeam.Name" />
-        <input type="hidden" asp-for="Match.AwayTeam.CountryId" />
-        <input type="hidden" asp-for="Match.AwayTeam.Name" />
-        <input type="hidden" asp-for="Match.Round.Description" />
-        <input type="hidden" asp-for="Match.HomeTeam.Venue" />
-        <input type="hidden" asp-for="Match.HomeTeam.ImageURL" />
-        <input type="hidden" asp-for="Match.AwayTeam.ImageURL" />
-        <input type="hidden" asp-for="Match.AwayTeam.Venue" />
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
