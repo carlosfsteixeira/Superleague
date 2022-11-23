@@ -227,7 +227,7 @@ namespace Superleague.Controllers
 
                     if (playerFromBD.Number != model.Player.Number)
                     {
-                        var playerNumberExists = _playerRepository.GetAll().Where(t => t.Number == model.Player.Number).Count();
+                        var playerNumberExists = _playerRepository.GetAll().Where(t => t.TeamId == model.Player.TeamId).Where(t => t.Number == model.Player.Number).Count();
 
                         if (playerNumberExists >= 1)
                         {

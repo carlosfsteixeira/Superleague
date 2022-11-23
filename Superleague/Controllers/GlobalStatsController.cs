@@ -50,7 +50,7 @@ namespace Superleague.Controllers
 
             var globalStatistics = await _globalStatsRepository.GetAll().FirstAsync();
 
-            var teams = await _teamRepository.GetAll().ToListAsync();
+            var teams = await _teamRepository.GetAll().OrderBy(e => e.Name).ToListAsync();
 
             model.GlobalStats = globalStatistics;
 
