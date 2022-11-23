@@ -17,8 +17,6 @@ namespace Superleague.Data
             _context = context;
         }
 
-
-
         public async Task<List<Match>> GetAllMatchesAsync()
         {
             return await _context.Matches.Include(m => m.AwayTeam).Include(m => m.HomeTeam).Include(m => m.Round).ToListAsync();

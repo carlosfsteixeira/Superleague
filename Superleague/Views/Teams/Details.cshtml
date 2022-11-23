@@ -17,6 +17,7 @@
 
         <div class="container-fluid">
 
+
             <div class="row">
 
                 <div class="col-xl-2 col-md-4 mb-4">
@@ -34,7 +35,7 @@
                         <div class="py-3">
                             <h1 class="mb-0 text-gray-900">@Model.Team.Name</h1>
                         </div>
-                         <div class="py-3">
+                        <div class="py-3">
                             <h5 class="mb-0 text-gray-800"><i class="fa-solid fa-house-user"></i> @Model.Team.Venue</h5>
                         </div>
                         <div class="py-1">
@@ -45,147 +46,153 @@
 
                 </div>
 
-                <div class="col-xl-2 col-md-4 mb-4 py-5">
-                    <div class="card border-left-success shadow h-100">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="font-weight-bold text-success text-uppercase mb-1">
-                                        Won
+                @if (Model.Statistics != null)
+                {
+                    <div class="col-xl-2 col-md-4 mb-4 py-5">
+                        <div class="card border-left-success shadow h-100">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-success text-uppercase mb-1">
+                                            Won
+                                        </div>
+                                        <div class="h2 my-2 font-weight-bold text-gray-800 text-center">@Model.Statistics.Wins</div>
                                     </div>
-                                    <div class="h2 my-2 font-weight-bold text-gray-800 text-center">@Model.Statistics.Wins</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fa fa-star fa-2x text-gray-300"></i>
+                                    <div class="col-auto">
+                                        <i class="fa fa-star fa-2x text-gray-300"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                
+                    <div class="col-xl-2 col-md-4 mb-4 py-5">
+                        <div class="card border-left-warning shadow h-100">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-warning text-uppercase mb-1">
+                                            Drawn
+                                        </div>
+                                        <div class="h2 my-2 font-weight-bold text-gray-800 text-center">@Model.Statistics.Draws</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fa-solid fa-star-half-stroke fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="col-xl-2 col-md-4 mb-4 py-5">
-                    <div class="card border-left-warning shadow h-100">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="font-weight-bold text-warning text-uppercase mb-1">
-                                        Drawn
+                    <div class="col-xl-2 col-md-4 mb-4 py-5">
+                        <div class="card border-left-danger shadow h-100">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="font-weight-bold text-danger text-uppercase mb-1">
+                                            Lost
+                                        </div>
+                                        <div class="h2 my-2 font-weight-bold text-gray-800 text-center">@Model.Statistics.Losses</div>
                                     </div>
-                                    <div class="h2 my-2 font-weight-bold text-gray-800 text-center">@Model.Statistics.Draws</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fa-solid fa-star-half-stroke fa-2x text-gray-300"></i>
+                                    <div class="col-auto">
+                                        <i class="fa-regular fa-star fa-2x text-gray-300" aria-hidden="true"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-xl-2 col-md-4 mb-4 py-5">
-                    <div class="card border-left-danger shadow h-100">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
-                                    <div class="font-weight-bold text-danger text-uppercase mb-1">
-                                        Lost
-                                    </div>
-                                    <div class="h2 my-2 font-weight-bold text-gray-800 text-center">@Model.Statistics.Losses</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fa-regular fa-star fa-2x text-gray-300" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                }
 
             </div>
 
-            <div class="row">
+            @if (Model.Statistics != null)
+            {
+                <div class="row">
 
-                <div class="container-fluid d-flex justify-content-center">
-                <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow py-2">
-                        <div class="card-body">
-                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Matches Played</div>
-                            </div>
-                            <div class="row">
-                                <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                    @Model.Statistics.TotalMatches
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow py-2">
-                        <div class="card-body">
-                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Scored</div>
-                            </div>
-                            <div class="row">
-                                <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                    @Model.Statistics.GoalsScored
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow py-2">
-                        <div class="card-body">
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Goal AVG/Match</div>
-                                </div>
-                                <div class="row">
-                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                        @Model.Statistics.GoalAverage
+                    <div class="container-fluid d-flex justify-content-center">
+                        <div class="col-xl-2 col-md-4 mb-4">
+                            <div class="card border-left-dark shadow py-2">
+                                <div class="card-body">
+                                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                        <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Matches Played</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                            @Model.Statistics.TotalMatches
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow py-2">
-                        <div class="card-body">
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Yellow Cards</div>
-                                </div>
-                                <div class="row">
-                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                        @Model.Statistics.TotalYellows
+                        <div class="col-xl-2 col-md-4 mb-4">
+                            <div class="card border-left-dark shadow py-2">
+                                <div class="card-body">
+                                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                        <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Scored</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                            @Model.Statistics.GoalsScored
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-xl-2 col-md-4 mb-4">
-                    <div class="card border-left-dark shadow py-2">
-                        <div class="card-body">
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Red Cards</div>
-                                </div>
-                                <div class="row">
-                                    <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
-                                        @Model.Statistics.TotalReds
+                        <div class="col-xl-2 col-md-4 mb-4">
+                            <div class="card border-left-dark shadow py-2">
+                                <div class="card-body">
+                                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                        <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Goal AVG/Match</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                            @Model.Statistics.GoalAverage
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 mb-4">
+                            <div class="card border-left-dark shadow py-2">
+                                <div class="card-body">
+                                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                        <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Yellow Cards</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                            @Model.Statistics.TotalYellows
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 mb-4">
+                            <div class="card border-left-dark shadow py-2">
+                                <div class="card-body">
+                                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                        <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Red Cards</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="h4 col-md-12 mb-0 font-weight-bold text-gray-800 text-center">
+                                            @Model.Statistics.TotalReds
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                </div>
-            </div>
+            }
 
             <div class="row">
 
                 <div class="col-lg-6">
 
-                    <!-- Basic Card Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header bg-primary py-3">
                             <h6 class="m-0 font-weight-bold text-white">Players</h6>
@@ -197,7 +204,7 @@
                                     <div class="container tbl-container">
                                         <div class="row tbl-fixed">
 
-                                            <table id="" class="table-striped table-sortable">
+                                            <table id="myTable" class="table-striped table-sortable">
                                                 <thead>
                                                     <tr>
                                                         <th>
@@ -259,7 +266,6 @@
 
                 <div class="col-lg-6">
 
-                    <!-- Basic Card Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header bg-primary py-3">
                             <h6 class="m-0 font-weight-bold text-white">Staff</h6>
@@ -271,7 +277,7 @@
                                     <div class="container tbl-container">
                                         <div class="row tbl-fixed">
 
-                                            <table id="" class="table-striped table-sortable">
+                                            <table id="myTable1" class="table-striped table-sortable">
                                                 <thead>
                                                     <tr>
                                                         <th></th>
@@ -323,7 +329,10 @@
 
 </body>
 
-<script src="~/js/tablesort.js"></script>
+@section Scripts {
+    <script src="~/js/tablesort.js"></script>
+    <script src="~/js/searchInTeams.js"></script>
+}
 
 
 

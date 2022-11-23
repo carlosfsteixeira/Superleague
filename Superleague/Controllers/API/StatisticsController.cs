@@ -8,7 +8,7 @@ namespace Superleague.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StatisticsController : ControllerBase
     {
         private readonly IStatisticsRepository _statisticsRepository;
@@ -19,7 +19,7 @@ namespace Superleague.Controllers.API
         }
 
         [HttpGet]
-        public IActionResult GetTeams()
+        public IActionResult GetStatistics()
         {
             return Ok(_statisticsRepository.GetAll().Include("Team"));
         }

@@ -35,15 +35,13 @@ namespace Superleague.Controllers
         // GET: GlobalStats
         public async Task<IActionResult> Index()
         {
-            await RefreshGlobalStatisticsTableAsync();
+            await _globalStatsRepository.RefreshGlobalStatisticsTableAsync();
 
             GlobalStatsViewModel model = new() { };
 
-            model.GlobalStats = new GlobalStats();
+            model.GlobalStats = await CalculateGlobalStatsAsync();
 
-            await CalculateGlobalStatsAsync(model);
-
-            if (ModelState.IsValid)
+            if (model.GlobalStats != null)
             {
                 await _globalStatsRepository.CreateAsync(model.GlobalStats);
             }
@@ -60,30 +58,31 @@ namespace Superleague.Controllers
 
         }
 
-        private async Task CalculateGlobalStatsAsync(GlobalStatsViewModel model)
+        private async Task<GlobalStats> CalculateGlobalStatsAsync()
         {
+            GlobalStats globalStats = new GlobalStats();
+
             var results = _resultRepository.GetAll();
 
             if (results.Any())
             {
-                model.GlobalStats.TotalMatches = _resultRepository.GetAll().Count();
+                globalStats.TotalMatches = _resultRepository.GetAll().Count();
 
                 // total goals
                 var homeGoals = _resultRepository.GetAll().Sum(u => u.HomeGoals);
 
                 var awayGoals = _resultRepository.GetAll().Sum(u => u.AwayGoals);
 
-                model.GlobalStats.TotalGoals = homeGoals + awayGoals;
-
+                globalStats.TotalGoals = homeGoals + awayGoals;
 
                 // goal average (if totalMatches = 0, the quocient will be always 0)
-                if (model.GlobalStats.TotalMatches == 0)
+                if (globalStats.TotalMatches == 0)
                 {
-                    model.GlobalStats.GoalAverage = 0;
+                    globalStats.GoalAverage = 0;
                 }
                 else
                 {
-                    model.GlobalStats.GoalAverage = model.GlobalStats.TotalGoals / model.GlobalStats.TotalMatches;
+                    globalStats.GoalAverage = globalStats.TotalGoals / globalStats.TotalMatches;
                 }
 
                 // total yellow cards
@@ -91,105 +90,99 @@ namespace Superleague.Controllers
 
                 var awayYellows = _resultRepository.GetAll().Sum(u => u.AwayYellowCards);
 
-                model.GlobalStats.TotalYellowCards = homeYellows + awayYellows;
+                globalStats.TotalYellowCards = homeYellows + awayYellows;
 
                 // total red cards
                 var homeReds = _resultRepository.GetAll().Sum(u => u.HomeRedCards);
 
                 var awayReds = _resultRepository.GetAll().Sum(u => u.AwayRedCards);
 
-                model.GlobalStats.TotalRedCards = homeReds + awayReds;
+                globalStats.TotalRedCards = homeReds + awayReds;
 
                 // results divided
-                model.GlobalStats.HomeWins = _resultRepository.GetAll().Where(u => u.HomeGoals > u.AwayGoals).Count();
+                globalStats.HomeWins = _resultRepository.GetAll().Where(u => u.HomeGoals > u.AwayGoals).Count();
 
-                model.GlobalStats.AwayWins = _resultRepository.GetAll().Where(u => u.AwayGoals > u.HomeGoals).Count();
+                globalStats.AwayWins = _resultRepository.GetAll().Where(u => u.AwayGoals > u.HomeGoals).Count();
 
-                model.GlobalStats.Draws = _resultRepository.GetAll().Where(u => u.AwayGoals == u.HomeGoals).Count();
+                globalStats.Draws = _resultRepository.GetAll().Where(u => u.AwayGoals == u.HomeGoals).Count();
 
-                await getBestAndWorstAttack(model);
+                await getBestAndWorstAttack(globalStats);
 
-                await getBestAndWorstDefense(model);
+                await getBestAndWorstDefense(globalStats);
 
-                await getMostAndLessWins(model);
+                await getMostAndLessWins(globalStats);
 
-                await getMostAndLessDraws(model);
+                await getMostAndLessDraws(globalStats);
 
-                await getMostAndLessLosses(model);
+                await getMostAndLessLosses(globalStats);
             }
 
+            return globalStats;
         }
 
-        public async Task getBestAndWorstAttack(GlobalStatsViewModel model)
+        public async Task getBestAndWorstAttack(GlobalStats globalStats)
         {
             // stats by team -> BEST ATTACK
             var maxGoalsScored = await _statisticsRepository.GetAll().MaxAsync(t => t.GoalsScored);
             var teamBestAttack = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.GoalsScored == maxGoalsScored).FirstAsync();
-            model.GlobalStats.BestAttack = teamBestAttack.Team.Name;
+            globalStats.BestAttack = teamBestAttack.Team.Name;
 
             // stats by team -> WORST ATTACK
             var minGoalsScored = await _statisticsRepository.GetAll().MinAsync(t => t.GoalsScored);
             var teamWorstAttack = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.GoalsScored == minGoalsScored).FirstAsync();
-            model.GlobalStats.WorstAttack = teamWorstAttack.Team.Name;
+            globalStats.WorstAttack = teamWorstAttack.Team.Name;
         }
 
-        public async Task getBestAndWorstDefense(GlobalStatsViewModel model)
+        public async Task getBestAndWorstDefense(GlobalStats globalStats)
         {
             // stats by team -> BEST DEFENSE
             var minGoalsConceeded = await _statisticsRepository.GetAll().MinAsync(t => t.GoalsConceded);
             var teamBestDefense = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.GoalsConceded == minGoalsConceeded).FirstAsync();
-            model.GlobalStats.BestDefence = teamBestDefense.Team.Name;
+            globalStats.BestDefence = teamBestDefense.Team.Name;
 
             // stats by team -> WORST DEFENSE
             int maxGoalsConceeded = _statisticsRepository.GetAll().MaxAsync(t => t.GoalsConceded).Result;
             var teamWorstDefense = _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.GoalsConceded == maxGoalsConceeded).First();
-            model.GlobalStats.WorstDefence = teamWorstDefense.Team.Name;
+            globalStats.WorstDefence = teamWorstDefense.Team.Name;
         }
 
-        public async Task getMostAndLessWins(GlobalStatsViewModel model)
+        public async Task getMostAndLessWins(GlobalStats globalStats)
         {
             // stats by team -> MOST WINS
             var maxWins = await _statisticsRepository.GetAll().MaxAsync(t => t.Wins);
             var teamMostWins = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Wins == maxWins).FirstAsync();
-            model.GlobalStats.MostWins = teamMostWins.Team.Name;
+            globalStats.MostWins = teamMostWins.Team.Name;
 
             // stats by team -> LESS WINS
             var minWins = await _statisticsRepository.GetAll().MinAsync(t => t.Wins);
             var teamMinWins = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Wins == minWins).FirstAsync();
-            model.GlobalStats.LessWins = teamMinWins.Team.Name;
+            globalStats.LessWins = teamMinWins.Team.Name;
         }
 
-        public async Task getMostAndLessDraws(GlobalStatsViewModel model)
+        public async Task getMostAndLessDraws(GlobalStats globalStats)
         {
             // stats by team -> LESS DRAWS
             var lessDraws = await _statisticsRepository.GetAll().MinAsync(t => t.Draws);
             var teamlessDraws = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Draws == lessDraws).FirstAsync();
-            model.GlobalStats.LessDraws = teamlessDraws.Team.Name;
+            globalStats.LessDraws = teamlessDraws.Team.Name;
 
             // stats by team -> MOST DRAWS
             var mostDraws = await _statisticsRepository.GetAll().MaxAsync(t => t.Draws);
             var teamMostDraws = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Draws == mostDraws).FirstAsync();
-            model.GlobalStats.MostDraws = teamMostDraws.Team.Name;
+            globalStats.MostDraws = teamMostDraws.Team.Name;
         }
 
-        public async Task getMostAndLessLosses(GlobalStatsViewModel model)
+        public async Task getMostAndLessLosses(GlobalStats globalStats)
         {
             // stats by team -> LESS LOSSES
             var lessLosses = await _statisticsRepository.GetAll().MinAsync(t => t.Losses);
             var teamlessLosses = await _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Losses == lessLosses).FirstAsync();
-            model.GlobalStats.LessDefeats = teamlessLosses.Team.Name;
+            globalStats.LessDefeats = teamlessLosses.Team.Name;
 
             // stats by team -> MOST LOSSES
             int mostLosses = _statisticsRepository.GetAll().MaxAsync(t => t.Losses).Result;
             var teamMostLosses = _statisticsRepository.GetAll().Include(t => t.Team).Where(t => t.Losses == mostLosses).First();
-            model.GlobalStats.MostDefeats = teamMostLosses.Team.Name;
-        }
-
-        private async Task RefreshGlobalStatisticsTableAsync()
-        {
-            var globalStats = await _globalStatsRepository.GetAll().ToListAsync();
-
-            await _globalStatsRepository.RemoveRangeAsync(globalStats);
+            globalStats.MostDefeats = teamMostLosses.Team.Name;
         }
     }
 }

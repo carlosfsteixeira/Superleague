@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Superleague.Data;
+using Superleague.Data.Entities;
 using Superleague.Helpers;
 using Superleague.Models;
 using System;
@@ -66,13 +67,6 @@ namespace Superleague.Controllers
                 return new NotFoundViewResult("TeamNotFound");
             }
 
-            var statistics = _statisticsRepository.GetAll().Where(p => p.TeamId == id).Count();
-
-            if (statistics == 0)
-            {
-                return View("DataEmpty");
-            }
-
             TeamViewModel teamViewModel = new()
             {
                 Team = new(),
@@ -87,8 +81,15 @@ namespace Superleague.Controllers
                     Value = i.Id.ToString(),
                 }),
 
-                Statistics = _statisticsRepository.GetAll().Where(p => p.TeamId == id).First(),
             };
+
+            var statistics = _statisticsRepository.GetAll().Where(p => p.TeamId == id).Count();
+
+            if (statistics != 0)
+            {
+                teamViewModel.Statistics = _statisticsRepository.GetAll().Where(p => p.TeamId == id).First();
+            }
+                
 
             teamViewModel.Team = await _teamRepository.GetByIdAsync(id.Value);
 

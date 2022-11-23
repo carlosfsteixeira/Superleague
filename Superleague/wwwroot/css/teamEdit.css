@@ -66,15 +66,6 @@ label {
         cursor: pointer;
     }
 
-
-.nav-pills .nav-link.active {
-    font: 700;
-}
-
-.nav-pills .nav-link {
-    color: black;
-}
-
 .image1 {
     width: 50px;
     height: 50px;
