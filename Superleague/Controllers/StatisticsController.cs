@@ -68,37 +68,53 @@ namespace Superleague.Controllers
                         if (result.HomeTeamId == statistics.TeamId)
                         {
                             statistics.GoalsScored += result.HomeGoals;
+                            statistics.GoalsConceded += result.AwayGoals;
                             statistics.TotalYellows += result.HomeYellowCards;
                             statistics.TotalReds += result.HomeRedCards;
+
+                            if (result.HomeGoals > result.AwayGoals)
+                            {
+                                statistics.Wins++;
+                                statistics.Points += 3;
+                            }
+                            else if (result.HomeGoals == result.AwayGoals)
+                            {
+                                statistics.Draws++;
+                                statistics.Points += 1;
+                            }
+                            else
+                            {
+                                statistics.Losses++;
+                            }
+
                         }
                         else if (result.AwayTeamId == statistics.TeamId)
                         {
                             statistics.GoalsScored += result.AwayGoals;
+                            statistics.GoalsConceded += result.HomeGoals;
                             statistics.TotalYellows += result.AwayYellowCards;
                             statistics.TotalReds += result.AwayRedCards;
-                        }
 
-                        statistics.GoalsConceded += (result.HomeGoals + result.AwayGoals) - statistics.GoalsScored;
-
-                        if (statistics.GoalsConceded < statistics.GoalsScored)
-                        {
-                            statistics.Wins++;
-                            statistics.Points += 3;
+                            if (result.AwayGoals > result.HomeGoals)
+                            {
+                                statistics.Wins++;
+                                statistics.Points += 3;
+                            }
+                            else if (result.AwayGoals == result.HomeGoals)
+                            {
+                                statistics.Draws++;
+                                statistics.Points += 1;
+                            }
+                            else
+                            {
+                                statistics.Losses++;
+                            }
                         }
-                        else if (statistics.GoalsConceded == statistics.GoalsScored)
-                        {
-                            statistics.Draws++;
-                            statistics.Points += 1;
-                        }
-                        else
-                        {
-                            statistics.Losses++;
-                        }
-
+                        
                         statistics.TotalMatches++;
-
-                        statistics.GoalAverage = statistics.GoalsScored / statistics.TotalMatches;
                     }
+
+                    statistics.GoalAverage = statistics.GoalsScored / statistics.TotalMatches;
 
                     await _statisticsRepository.CreateAsync(statistics);
                 }
